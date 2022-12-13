@@ -27,7 +27,7 @@ public class HelloApplication extends Application {
             rectangle.setWidth(20);
             root.add(rectangle, k, k);
         }
-        stage.setTitle("Hello!");
+        stage.setTitle("Hello World!");
         stage.setScene(scene);
         stage.show();
 
