@@ -1,7 +1,7 @@
 module com.example.warcabydobre {
-    requires javafx.controls;
+    requires transitive javafx.controls;
 
 
-    opens com.example.warcabydobre to javafx.fxml;
+    opens com.example.warcabydobre;
     exports com.example.warcabydobre;
 }
