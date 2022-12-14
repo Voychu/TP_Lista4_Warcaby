@@ -9,7 +9,8 @@ public class BlackSquare extends Square{
     BlackSquare(){
         rectangle = new Rectangle();
         rectangle.setFill(Color.BLACK);
-        rectangle.setWidth(30);
-        rectangle.setHeight(30);
+        rectangle.setWidth(80);
+        rectangle.setHeight(80);
     }
+
 }

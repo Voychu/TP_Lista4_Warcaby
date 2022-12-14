@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 public class CheckersGame extends Application{
 	
@@ -52,6 +54,15 @@ public class CheckersGame extends Application{
     	Scene windowScene = new Scene(vBox, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
     	choosingGameStage.setScene(windowScene);
     	choosingGameStage.show();
+
+		EventHandler<ActionEvent> eventHandler_classicalcheckers = new EventHandler<ActionEvent>()
+			{
+			public void handle(ActionEvent event)
+				{
+				choosingGameStage.setScene(ClassicCheckersBoard.CCscene);
+				ClassicCheckersBoard ccb = new ClassicCheckersBoard();
+				}
+			};
     }
     
     

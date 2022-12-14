@@ -11,8 +11,8 @@ public class WhiteSquare extends Square{
 
         rectangle = new Rectangle();
         rectangle.setFill(Color.WHITE);
-        rectangle.setWidth(30);
-        rectangle.setHeight(30);
+        rectangle.setWidth(80);
+        rectangle.setHeight(80);
     }
 
 }
