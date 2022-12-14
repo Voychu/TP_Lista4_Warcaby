@@ -5,7 +5,8 @@ import javafx.scene.paint.Color;
 
 public class WhiteSquare extends Square{
 
-    //na tych polach nie gramy
+    //na tych polach nie gramy//
+
     WhiteSquare()
     {
 

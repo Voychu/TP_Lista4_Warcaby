@@ -55,6 +55,7 @@ public class CheckersGame extends Application{
     	choosingGameStage.setScene(windowScene);
     	choosingGameStage.show();
 
+		//zamysl
 		EventHandler<ActionEvent> eventHandler_classicalcheckers = new EventHandler<ActionEvent>()
 			{
 			public void handle(ActionEvent event)

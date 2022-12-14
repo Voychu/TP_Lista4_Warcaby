@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 public class BlackSquare extends Square{
 
-    //na tych polach gramy
+    //na tych polach gramy//
     BlackSquare(){
         rectangle = new Rectangle();
         rectangle.setFill(Color.BLACK);
