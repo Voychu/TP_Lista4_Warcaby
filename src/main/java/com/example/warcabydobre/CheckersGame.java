@@ -60,10 +60,12 @@ public class CheckersGame extends Application{
 			{
 			public void handle(ActionEvent event)
 				{
-				choosingGameStage.setScene(ClassicCheckersBoard.CCscene);
 				ClassicCheckersBoard ccb = new ClassicCheckersBoard();
+				choosingGameStage.setScene(ClassicCheckersBoard.CCscene);
+				choosingGameStage.show();
 				}
 			};
+		classicalCheckersButton.setOnAction(eventHandler_classicalcheckers);
     }
     
     
