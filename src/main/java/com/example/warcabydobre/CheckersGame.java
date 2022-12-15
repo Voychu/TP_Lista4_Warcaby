@@ -20,12 +20,8 @@ import javafx.event.ActionEvent;
 public class CheckersGame extends Application{
 	
     
-    private static final int GAP_SIZE = 1;
-    private static final int RECT_SIZE_X = 30;
-    private static final int RECT_SIZE_Y = 30;
     private static int MARGIN_X = 30;
     private static int MARGIN_Y = 30;
-    private Rectangle[][] rectList;
     private Stage choosingGameStage;
     private Stage boardStage;
     
@@ -59,14 +55,11 @@ public class CheckersGame extends Application{
     	choosingGameStage.setScene(windowScene);
     	choosingGameStage.show();
 
-		//zamysl
+
 		EventHandler<ActionEvent> eventHandler_classicalcheckers = new EventHandler<ActionEvent>()
 			{
 			public void handle(ActionEvent event)
 				{
-				//ClassicCheckersBoard ccb = new ClassicCheckersBoard();
-				//choosingGameStage.setScene(ClassicCheckersBoard.CCscene);
-				//choosingGameStage.show();
 				initBoardStage();
 				}
 			};
@@ -83,18 +76,11 @@ public class CheckersGame extends Application{
     	
     	BorderPane borderPane = new BorderPane();
     	GridPane gPane = new GridPane();
-    	/*for (int i = 0; i < numCols; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / numCols);
-            gPane.getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < numRows; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / numRows);
-            gPane.getRowConstraints().add(rowConst);
-        }*/
-
-        //boolean help = true;
+    	gPane.setVgap(Config.BOARD_GAP);
+    	gPane.setHgap(Config.BOARD_GAP);
+    	
+    	
+    	
         for (int y = 0; y < numRows; y++) {
             for (int x = 0; x < numCols; x++) {
                 if((x+y)%2 ==0) {
@@ -107,11 +93,22 @@ public class CheckersGame extends Application{
                 			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
                     gPane.add(bSquare,y,x);
                 }
-            //help=!help;
             }
-            //help=!help;
         }
         borderPane.setCenter(gPane);
+        
+        VBox vBox = new VBox();
+        Label textLabel = new Label("Gra: test");
+        HBox labelHBox = new HBox(textLabel);
+        labelHBox.setAlignment(Pos.CENTER);
+        labelHBox.setSpacing(Config.GAP);
+        vBox.getChildren().addAll(labelHBox);
+        vBox.setAlignment(Pos.CENTER);
+    	vBox.setSpacing(Config.GAP);
+        
+        borderPane.setLeft(vBox);
+        
+        
         boardStage.setResizable(true);
     	Scene windowScene = new Scene(borderPane, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
     	boardStage.setScene(windowScene);
@@ -128,35 +125,6 @@ public class CheckersGame extends Application{
     
     
     
-	
-	
-	/*GridPane grid = new GridPane();
-    grid.setHgap(GAP_SIZE);
-    grid.setVgap(GAP_SIZE);
-    grid.setPadding(new Insets(0, m, 0, n));
-
-    int width = m*RECT_SIZE_X + (m-1)*GAP_SIZE + MARGIN_X;
-    int height = n*RECT_SIZE_Y + (n-1)*GAP_SIZE + MARGIN_Y;
-    Scene scene = new Scene(grid, width, height);
-    primaryStage.setScene(scene);
-    
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
-            rectList[j][i] = new Rectangle(RECT_SIZE_X,RECT_SIZE_Y);
-            //rectList[j][i].setFill(c);
-            grid.add(rectList[j][i], j, i);
-            
-            
-        }
-    }
-    //Rectangle rect = new Rectangle(RECT_SIZE_X, RECT_SIZE_Y);
-    //grid.add(rect,0,0);
-    
-    
-    
-    primaryStage.sizeToScene();
-    primaryStage.setTitle(PROGRAM_TITLE_TXT);
-    primaryStage.show();*/
 	
 	
     @Override

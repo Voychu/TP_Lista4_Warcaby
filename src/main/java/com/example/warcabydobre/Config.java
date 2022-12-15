@@ -20,6 +20,7 @@ public class Config {
 	public static final int BOARD_WINDOWS_HEIGHT = 1000;
 	public static final double SQUARE_CLASSIC_WIDTH = 40;
 	public static final double SQUARE_CLASSIC_HEIGHT = 40;
+	public static final double BOARD_GAP = 1;
 	
 	
 	
