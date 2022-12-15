@@ -7,13 +7,11 @@ public class WhiteSquare extends Square{
 
     //na tych polach nie gramy//
 
-    WhiteSquare()
+    public WhiteSquare(double width, double height)
     {
-
-        rectangle = new Rectangle();
-        rectangle.setFill(Color.WHITE);
-        rectangle.setWidth(80);
-        rectangle.setHeight(80);
+        super(width, height);
+        this.setFill(Color.WHITE);
     }
+    
 
 }
