@@ -10,7 +10,7 @@ public class BlackSquare extends Square{
     public BlackSquare(double width, double height)
     {
         super(width, height);
-        this.setFill(Color.WHITE);
+        this.setFill(Color.BLACK);
     }
 
 }
