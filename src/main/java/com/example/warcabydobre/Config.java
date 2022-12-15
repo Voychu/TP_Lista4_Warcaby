@@ -14,6 +14,13 @@ public class Config {
 	public static final String SECOND_CHECKERS_BUTTON_TXT 
 	= "Zagraj";
 	public static final int GAP = 10;
+	public static final int CLASSICAL_CHECKERS_BOARD_WIDTH = 8;
+	public static final int CLASSICAL_CHECKERS_BOARD_HEIGHT = 8;
+	public static final int BOARD_WINDOWS_WIDTH = 1000;
+	public static final int BOARD_WINDOWS_HEIGHT = 1000;
+	public static final double SQUARE_CLASSIC_WIDTH = 40;
+	public static final double SQUARE_CLASSIC_HEIGHT = 40;
+	
 	
 	
 

@@ -6,8 +6,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -24,6 +27,7 @@ public class CheckersGame extends Application{
     private static int MARGIN_Y = 30;
     private Rectangle[][] rectList;
     private Stage choosingGameStage;
+    private Stage boardStage;
     
     
     
@@ -60,12 +64,64 @@ public class CheckersGame extends Application{
 			{
 			public void handle(ActionEvent event)
 				{
-				ClassicCheckersBoard ccb = new ClassicCheckersBoard();
-				choosingGameStage.setScene(ClassicCheckersBoard.CCscene);
-				choosingGameStage.show();
+				//ClassicCheckersBoard ccb = new ClassicCheckersBoard();
+				//choosingGameStage.setScene(ClassicCheckersBoard.CCscene);
+				//choosingGameStage.show();
+				initBoardStage();
 				}
 			};
 		classicalCheckersButton.setOnAction(eventHandler_classicalcheckers);
+    }
+    
+    
+    private void initBoardStage(){
+    	boardStage = new Stage();
+    	boardStage.setTitle(Config.APPLICATION_TITLE_TXT);
+    	
+    	final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
+        final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
+    	
+    	BorderPane borderPane = new BorderPane();
+    	GridPane gPane = new GridPane();
+    	/*for (int i = 0; i < numCols; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / numCols);
+            gPane.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < numRows; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / numRows);
+            gPane.getRowConstraints().add(rowConst);
+        }*/
+
+        //boolean help = true;
+        for (int y = 0; y < numRows; y++) {
+            for (int x = 0; x < numCols; x++) {
+                if((x+y)%2 ==0) {
+                    WhiteSquare wSquare = 
+                    		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                    gPane.add(wSquare,y,x);
+                }
+                else{
+                	BlackSquare bSquare = 
+                			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                    gPane.add(bSquare,y,x);
+                }
+            //help=!help;
+            }
+            //help=!help;
+        }
+        borderPane.setCenter(gPane);
+        boardStage.setResizable(true);
+    	Scene windowScene = new Scene(borderPane, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
+    	boardStage.setScene(windowScene);
+    	boardStage.show();
+        
+    	
+    	
+    	
+    	
+    	
     }
     
     
