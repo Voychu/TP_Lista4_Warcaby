@@ -1,5 +1,12 @@
 package com.example.warcabydobre;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,8 +32,34 @@ public class CheckersGame extends Application{
     private Stage choosingGameStage;
     private Stage boardStage;
     
+    Socket socket = null;
+    PrintWriter out = null;
+    BufferedReader in = null;
+
+   
     
     
+    /*
+    Połaczenie z socketem
+     */
+    public void listenSocket() {
+        try {
+            socket = new Socket("localhost", 4444);
+            // Inicjalizacja wysylania do serwera
+            out = new PrintWriter(socket.getOutputStream(), true);
+            // Inicjalizacja odbierania z serwera
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (UnknownHostException e) {
+            System.out.println("Unknown host: localhost");
+            System.exit(1);
+        } catch (IOException e) {
+            System.out.println("No I/O");
+            System.exit(1);
+        }
+    }
+    
+    
+   
     
     private void initchoosingGameStage() {
     	choosingGameStage = new Stage();
@@ -61,12 +94,13 @@ public class CheckersGame extends Application{
 
 
 		EventHandler<ActionEvent> eventHandler_classicalcheckers = new EventHandler<ActionEvent>()
-			{
+		{
 			public void handle(ActionEvent event)
-				{
+			{
+				listenSocket();
 				initBoardStage();
-				}
-			};
+			}
+		};
 		classicalCheckersButton.setOnAction(eventHandler_classicalcheckers);
     }
     
@@ -78,7 +112,7 @@ public class CheckersGame extends Application{
         
         
         boardStage.setResizable(true);
-        ClassicCheckersBoard ccb = new ClassicCheckersBoard();
+        ClassicCheckersBoard ccb = new ClassicCheckersBoard(in, out);
         Scene windowScene = ccb.getBoardScene();
     	boardStage.setScene(windowScene);
     	boardStage.show();
