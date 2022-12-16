@@ -99,6 +99,7 @@ public class CheckersGame extends Application{
 			{
 				listenSocket();
 				initBoardStage();
+				
 			}
 		};
 		classicalCheckersButton.setOnAction(eventHandler_classicalcheckers);
@@ -116,6 +117,7 @@ public class CheckersGame extends Application{
         Scene windowScene = ccb.getBoardScene();
     	boardStage.setScene(windowScene);
     	boardStage.show();
+    	choosingGameStage.close();
         
     	
     	
