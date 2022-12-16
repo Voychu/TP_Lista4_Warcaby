@@ -35,15 +35,19 @@ public class CheckersGame extends Application{
     	VBox vBox = new VBox();
     	Label classicalCheckersLabel =
     			new Label(Config.CLASSICAL_CHECKERS_LABEL_TXT);
+    	double size1 = classicalCheckersLabel.getMaxWidth();
     	Label secondCheckersLabel =
     			new Label(Config.SECOND_CHECKERS_LABEL_TXT);
+    	double size2 = secondCheckersLabel.getPrefWidth();
     	HBox labelsHBox = new HBox(classicalCheckersLabel, secondCheckersLabel);
     	labelsHBox.setAlignment(Pos.CENTER);
     	labelsHBox.setSpacing(Config.GAP);
     	Button classicalCheckersButton = 
     			new Button(Config.CLASSICAL_CHECKERS_BUTTON_TXT);
+    	classicalCheckersButton.setPrefWidth(size1);
     	Button secondCheckersButton = 
     			new Button(Config.SECOND_CHECKERS_BUTTON_TXT);
+    	secondCheckersButton.setPrefWidth(size2);
     	HBox buttonsHBox = new HBox(classicalCheckersButton, secondCheckersButton);
     	buttonsHBox.setAlignment(Pos.CENTER);
     	buttonsHBox.setSpacing(Config.GAP);
@@ -71,46 +75,11 @@ public class CheckersGame extends Application{
     	boardStage = new Stage();
     	boardStage.setTitle(Config.APPLICATION_TITLE_TXT);
     	
-    	final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
-        final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
-    	
-    	BorderPane borderPane = new BorderPane();
-    	GridPane gPane = new GridPane();
-    	gPane.setVgap(Config.BOARD_GAP);
-    	gPane.setHgap(Config.BOARD_GAP);
-    	
-    	
-    	
-        for (int y = 0; y < numRows; y++) {
-            for (int x = 0; x < numCols; x++) {
-                if((x+y)%2 ==0) {
-                    WhiteSquare wSquare = 
-                    		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                    gPane.add(wSquare,y,x);
-                }
-                else{
-                	BlackSquare bSquare = 
-                			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                    gPane.add(bSquare,y,x);
-                }
-            }
-        }
-        borderPane.setCenter(gPane);
-        
-        VBox vBox = new VBox();
-        Label textLabel = new Label("Gra: test");
-        HBox labelHBox = new HBox(textLabel);
-        labelHBox.setAlignment(Pos.CENTER);
-        labelHBox.setSpacing(Config.GAP);
-        vBox.getChildren().addAll(labelHBox);
-        vBox.setAlignment(Pos.CENTER);
-    	vBox.setSpacing(Config.GAP);
-        
-        borderPane.setLeft(vBox);
         
         
         boardStage.setResizable(true);
-    	Scene windowScene = new Scene(borderPane, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
+        ClassicCheckersBoard ccb = new ClassicCheckersBoard();
+        Scene windowScene = ccb.getBoardScene();
     	boardStage.setScene(windowScene);
     	boardStage.show();
         
