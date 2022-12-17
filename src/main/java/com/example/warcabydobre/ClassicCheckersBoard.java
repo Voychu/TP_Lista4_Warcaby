@@ -21,6 +21,8 @@ public class ClassicCheckersBoard {
 	private GridPane gPane;
     final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
     final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
+    
+    final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
     Label textLabel;
     TextField sendingField;
     Label messageLabel;
@@ -65,6 +67,24 @@ public class ClassicCheckersBoard {
                 }
             }
         }
+        
+        for (int y=0; y<numRowsWithPieces; y++){
+            for(int x = 0; x< numCols; x++) {
+                if((x+y)%2 ==1){
+                    WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                    gPane.add(wPiece,y,x);
+                }
+            }
+        }
+        for (int y=5; y<5+numRowsWithPieces; y++){
+            for(int x = 0; x< numCols; x++) {
+                if((x+y)%2 ==0){
+                    BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
+                    gPane.add(bPiece,y,x);
+                }
+            }
+        }
+        
         borderPane.setCenter(gPane);
         
         VBox vBox = new VBox();
@@ -158,5 +178,7 @@ public class ClassicCheckersBoard {
             System.exit(1);
         }
     }
-    
+
+    public void getSendingText() {
+    }
 }

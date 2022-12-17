@@ -1,8 +1,19 @@
 package com.example.warcabydobre;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.WindowEvent;
+
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class WinClient implements Runnable{
 	
@@ -26,7 +37,7 @@ public class WinClient implements Runnable{
         msg = new Label("Status");
         input = new TextField(20);
         output = new Label();
-        output.setBackground(Color.white);
+        output.setBackground(Color.WHITE);
         send = new Button("Send");
         send.addActionListener(this);
         setLayout(new GridLayout(4, 1));
@@ -198,4 +209,3 @@ public class WinClient implements Runnable{
 
 
 
-}

@@ -12,6 +12,7 @@ public class GameController {
 	private PrintWriter out = null;
     private BufferedReader in = null;
 	private ClassicCheckersBoard board;
+	private String message;
 
 	
 	public GameController(String message, ClassicCheckersBoard board) {

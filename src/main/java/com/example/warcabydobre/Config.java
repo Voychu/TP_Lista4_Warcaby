@@ -21,6 +21,9 @@ public class Config {
 	public static final double SQUARE_CLASSIC_WIDTH = 40;
 	public static final double SQUARE_CLASSIC_HEIGHT = 40;
 	public static final double BOARD_GAP = 1;
+
+	public static final double PIECE_RADIUS = 15;
+	public static final int CLASSICAL_CHECKERS_ROWS_WITH_PIECES = 3;
 	
 	
 	

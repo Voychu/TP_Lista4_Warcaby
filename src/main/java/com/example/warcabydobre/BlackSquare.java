@@ -1,7 +1,7 @@
 package com.example.warcabydobre;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+
 
 public class BlackSquare extends Square{
 
