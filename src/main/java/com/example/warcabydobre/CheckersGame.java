@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -31,6 +32,14 @@ public class CheckersGame extends Application{
     private static int MARGIN_Y = 30;
     private Stage choosingGameStage;
     private Stage boardStage;
+    private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
+    private static final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
+    private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
+    private Label textLabel;
+    private TextField sendingField;
+    Label messageLabel;
+    private Button confirmButton;
+    private int player;
     
     Socket socket = null;
     PrintWriter out = null;
@@ -113,9 +122,83 @@ public class CheckersGame extends Application{
         
         
         boardStage.setResizable(true);
-        ClassicCheckersBoard ccb = new ClassicCheckersBoard(in, out);
-        Scene windowScene = ccb.getBoardScene();
-    	boardStage.setScene(windowScene);
+        // ClassicCheckersBoard ccb = new ClassicCheckersBoard(in, out);
+        //Scene windowScene = ccb.getBoardScene();
+        BorderPane borderPane = new BorderPane();
+    	GridPane gPane = new GridPane();
+    	gPane.setVgap(Config.BOARD_GAP);
+    	gPane.setHgap(Config.BOARD_GAP);
+    	
+    	
+    	
+        for (int y = 0; y < numRows; y++) {
+            for (int x = 0; x < numCols; x++) {
+                if((x+y)%2 ==0) {
+                    WhiteSquare wSquare = 
+                    		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                    gPane.add(wSquare,y,x);
+                }
+                else{
+                	BlackSquare bSquare = 
+                			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                    gPane.add(bSquare,y,x);
+                }
+            }
+        }
+        
+        for (int y=0; y<numRowsWithPieces; y++){
+            for(int x = 0; x< numCols; x++) {
+                if((x+y)%2 ==1){
+                    WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                    gPane.add(wPiece,y,x);
+                }
+            }
+        }
+        for (int y=5; y<5+numRowsWithPieces; y++){
+            for(int x = 0; x< numCols; x++) {
+                if((x+y)%2 ==0){
+                    BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
+                    gPane.add(bPiece,y,x);
+                }
+            }
+        }
+        
+        borderPane.setCenter(gPane);
+        
+        VBox vBox = new VBox();
+        textLabel = new Label("Gra: test");
+        HBox labelHBox = new HBox(textLabel);
+        labelHBox.setAlignment(Pos.CENTER);
+        labelHBox.setSpacing(Config.GAP);
+        vBox.getChildren().addAll(labelHBox);
+        vBox.setAlignment(Pos.CENTER);
+    	vBox.setSpacing(Config.GAP);
+        
+        borderPane.setRight(vBox);
+        
+        
+        VBox lVBox = new VBox();
+        sendingField = new TextField();
+        HBox textFieldHBox = new HBox(sendingField);
+        textFieldHBox.setAlignment(Pos.CENTER);
+        textFieldHBox.setSpacing(Config.GAP);
+        confirmButton = new Button("wyslij");
+        HBox buttonHBox = new HBox(confirmButton);
+        buttonHBox.setAlignment(Pos.CENTER);
+        buttonHBox.setSpacing(Config.GAP);
+        messageLabel = new Label("Status:");
+        HBox messageLabelHBox = new HBox(messageLabel);
+        messageLabelHBox.setAlignment(Pos.CENTER);
+        messageLabelHBox.setSpacing(Config.GAP);
+        lVBox.getChildren().addAll(textFieldHBox, buttonHBox, messageLabelHBox);
+        lVBox.setAlignment(Pos.CENTER);
+    	lVBox.setSpacing(Config.GAP);
+        
+        borderPane.setLeft(lVBox);
+        
+        
+    	Scene boardScene = new Scene(borderPane, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
+    	boardStage.setScene(boardScene);
     	boardStage.show();
     	choosingGameStage.close();
         
