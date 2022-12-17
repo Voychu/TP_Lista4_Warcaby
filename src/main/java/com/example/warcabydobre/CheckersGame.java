@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
-public class CheckersGame extends Application{
+public class CheckersGame extends Application implements Runnable{
 	
     
     private static int MARGIN_X = 30;
@@ -40,6 +40,15 @@ public class CheckersGame extends Application{
     Label messageLabel;
     private Button confirmButton;
     private int player;
+    
+    public final static int PLAYER1 = 1;
+    public final static int PLAYER2 = 2;
+
+    public final static int ACTIVE = 0;
+    public final static int NONACTIVE = 1;
+    private  static int actualPlayer = PLAYER1;
+
+    private static int showing = ACTIVE;
     
     Socket socket = null;
     PrintWriter out = null;
@@ -107,7 +116,11 @@ public class CheckersGame extends Application{
 			public void handle(ActionEvent event)
 			{
 				listenSocket();
+				startThread();
 				initBoardStage();
+				receiveInitFromServer();
+				
+				
 				
 			}
 		};
@@ -201,6 +214,17 @@ public class CheckersGame extends Application{
     	boardStage.setScene(boardScene);
     	boardStage.show();
     	choosingGameStage.close();
+    	
+    	
+    	EventHandler<ActionEvent> sendingMessageHandler = new EventHandler<ActionEvent>()
+		{
+			public void handle(ActionEvent event)
+			{
+				sendMessage();
+				
+			}
+		};
+		confirmButton.setOnAction(sendingMessageHandler);
         
     	
     	
@@ -212,6 +236,102 @@ public class CheckersGame extends Application{
     
     
     
+    public void setLabelText(String text) {
+    	textLabel.setText(text);
+    }
+    
+    /*public String sendMessage() {
+    	return sendingField.getText();
+    }*/
+    
+    public void sendMessage() {
+    	String message = sendingField.getText();
+    	out.println(message);
+        messageLabel.setText("OppositeTurn");
+        //send.setEnabled(false);
+        sendingField.setText("");
+        //input.requestFocus();
+        showing = ACTIVE;
+        actualPlayer = player;
+    }
+    
+    
+    public void receiveMessage() {
+    	 try {
+             // Odbieranie z serwera
+             String str = in.readLine();
+             textLabel.setText(str);
+             messageLabel.setText("My turn");
+             //send.setEnabled(true);
+             sendingField.setText("");
+             //input.requestFocus();
+         }
+         catch (IOException e) {
+             System.out.println("Read failed"); System.exit(1);}
+    }
+    
+    
+    
+    private void receiveInitFromServer() {
+        try {
+            player = Integer.parseInt(in.readLine());
+            if (player== PLAYER1) {
+                messageLabel.setText("My Turn");
+            } else {
+            	messageLabel.setText("Opposite turn");
+                //sendingField.setEnabled(false);
+            }
+        } catch (IOException e) {
+            System.out.println("Read failed");
+            System.exit(1);
+        }
+    }
+
+    public void getSendingText() {
+    }
+    
+    
+    private void startThread() {
+        Thread gTh = new Thread(this);
+        gTh.start();
+    }
+
+    @Override
+    public void run() {
+       /*if (player==PLAYER1) {
+            f1();
+        }
+        else{
+            f2();
+        }*/
+        // Mozna zrobic w jednej metodzie. Zostawiam
+        // dla potrzeb prezentacji
+        f(player);
+    }
+    
+    
+ // Jedna metoda dla kazdego Playera
+    void f(int iPlayer){
+        while(true) {
+            synchronized (this) {
+                if (actualPlayer== iPlayer) {
+                    try {
+                        wait(10);
+                    } catch (InterruptedException e) {
+                    }
+                }
+                if (showing ==ACTIVE){
+                	receiveMessage();
+                    showing =NONACTIVE;
+                }
+                notifyAll();
+            }
+        }
+    }
+
+    
+    
+    
     
 	
 	
@@ -219,11 +339,16 @@ public class CheckersGame extends Application{
 	public void start(Stage arg0) throws Exception {
 		initchoosingGameStage();
 		
+		
+		
 	}
     
     public static void main(String[] args){
-        
+    	
         launch(args);
+        
+        
+        
        
         
         

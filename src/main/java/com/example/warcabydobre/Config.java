@@ -3,7 +3,7 @@ package com.example.warcabydobre;
 public class Config {
 	public static final String APPLICATION_TITLE_TXT =
 			"CheckersGame";
-	public static final int WINDOW_WIDTH = 500;
+	public static final int WINDOW_WIDTH = 700;
 	public static final int WINDOW_HEIGHT = 500;
 	public static final String CLASSICAL_CHECKERS_LABEL_TXT 
 		= "Warcaby klasyczne";
