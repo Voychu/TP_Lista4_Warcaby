@@ -16,8 +16,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class WinClient implements Runnable{
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	Socket socket = null;
+	/*Socket socket = null;
 	PrintWriter out = null;
     BufferedReader in = null;
 
@@ -81,7 +87,7 @@ public class WinClient implements Runnable{
     /*
     Połaczenie z socketem
      */
-    public void listenSocket() {
+    /*public void listenSocket() {
         try {
             socket = new Socket("localhost", 4444);
             // Inicjalizacja wysylania do serwera
@@ -100,7 +106,7 @@ public class WinClient implements Runnable{
     /*
         Poczatkowe ustawienia klienta. Ustalenie ktory socket jest ktorym kliente
     */
-    private void receiveInitFromServer() {
+    /*private void receiveInitFromServer() {
         try {
             player = Integer.parseInt(in.readLine());
             if (player== PLAYER1) {
@@ -203,7 +209,7 @@ public class WinClient implements Runnable{
                 notifyAll();
             }
         }
-    }
+    }*/
 }
 
 
