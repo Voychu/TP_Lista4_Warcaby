@@ -115,10 +115,10 @@ public class CheckersGame extends Application implements Runnable{
 		{
 			public void handle(ActionEvent event)
 			{
-				listenSocket();
-				startThread();
+				//listenSocket();
+				//startThread();
 				initBoardStage();
-				receiveInitFromServer();
+				//receiveInitFromServer();
 				
 				
 				
@@ -163,15 +163,15 @@ public class CheckersGame extends Application implements Runnable{
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
                     WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
-                    gPane.add(wPiece,y,x);
+                    gPane.add(wPiece,x,y);
                 }
             }
         }
         for (int y=5; y<5+numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
-                if((x+y)%2 ==0){
+                if((x+y)%2 ==1){
                     BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
-                    gPane.add(bPiece,y,x);
+                    gPane.add(bPiece,x,y);
                 }
             }
         }
