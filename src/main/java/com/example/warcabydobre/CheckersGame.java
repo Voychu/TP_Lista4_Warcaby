@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,7 +32,7 @@ public class CheckersGame extends Application implements Runnable{
     
     private static int MARGIN_X = 30;
     private static int MARGIN_Y = 30;
-    private Stage choosingGameStage;
+    //private Stage choosingGameStage;
     private Stage boardStage;
     private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
     private static final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
@@ -53,6 +55,11 @@ public class CheckersGame extends Application implements Runnable{
     Socket socket = null;
     PrintWriter out = null;
     BufferedReader in = null;
+    private GameController controller;
+    private Square[][] squaresArray;
+    private LinkedList<WhitePiece> whitePiecesList;
+    private LinkedList<BlackPiece> blackPiecesList;
+    
 
    
     
@@ -79,7 +86,7 @@ public class CheckersGame extends Application implements Runnable{
     
    
     
-    private void initchoosingGameStage() {
+    /*private void initchoosingGameStage() {
     	choosingGameStage = new Stage();
     	
     	choosingGameStage.setTitle(Config.APPLICATION_TITLE_TXT);
@@ -109,26 +116,34 @@ public class CheckersGame extends Application implements Runnable{
     	Scene windowScene = new Scene(vBox, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
     	choosingGameStage.setScene(windowScene);
     	choosingGameStage.show();
+    	
+    	
 
 
 		EventHandler<ActionEvent> eventHandler_classicalcheckers = new EventHandler<ActionEvent>()
 		{
 			public void handle(ActionEvent event)
 			{
-				//listenSocket();
-				//startThread();
-				initBoardStage();
+				listenSocket();
 				//receiveInitFromServer();
+				//startThread();
+				
+				initBoardStage();
+				
 				
 				
 				
 			}
 		};
 		classicalCheckersButton.setOnAction(eventHandler_classicalcheckers);
-    }
+    }*/
     
     
     private void initBoardStage(){
+    	
+    	
+		
+    	
     	boardStage = new Stage();
     	boardStage.setTitle(Config.APPLICATION_TITLE_TXT);
     	
@@ -142,6 +157,10 @@ public class CheckersGame extends Application implements Runnable{
     	gPane.setVgap(Config.BOARD_GAP);
     	gPane.setHgap(Config.BOARD_GAP);
     	
+    	squaresArray = new Square[numCols][numRows];
+    	whitePiecesList = new LinkedList<>();
+    	blackPiecesList = new LinkedList<>();
+    	
     	
     	
         for (int y = 0; y < numRows; y++) {
@@ -149,11 +168,13 @@ public class CheckersGame extends Application implements Runnable{
                 if((x+y)%2 ==0) {
                     WhiteSquare wSquare = 
                     		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                    squaresArray[x][y] = wSquare;
                     gPane.add(wSquare,y,x);
                 }
                 else{
                 	BlackSquare bSquare = 
                 			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                	squaresArray[x][y] = bSquare;
                     gPane.add(bSquare,y,x);
                 }
             }
@@ -163,6 +184,7 @@ public class CheckersGame extends Application implements Runnable{
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
                     WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                    whitePiecesList.add(wPiece);
                     gPane.add(wPiece,x,y);
                 }
             }
@@ -171,6 +193,7 @@ public class CheckersGame extends Application implements Runnable{
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
                     BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
+                    blackPiecesList.add(bPiece);
                     gPane.add(bPiece,x,y);
                 }
             }
@@ -178,6 +201,8 @@ public class CheckersGame extends Application implements Runnable{
         
         borderPane.setCenter(gPane);
         
+        
+    	
         VBox vBox = new VBox();
         textLabel = new Label("Gra: test");
         HBox labelHBox = new HBox(textLabel);
@@ -191,6 +216,7 @@ public class CheckersGame extends Application implements Runnable{
         
         
         VBox lVBox = new VBox();
+        
         sendingField = new TextField();
         HBox textFieldHBox = new HBox(sendingField);
         textFieldHBox.setAlignment(Pos.CENTER);
@@ -199,6 +225,8 @@ public class CheckersGame extends Application implements Runnable{
         HBox buttonHBox = new HBox(confirmButton);
         buttonHBox.setAlignment(Pos.CENTER);
         buttonHBox.setSpacing(Config.GAP);
+        
+        
         messageLabel = new Label("Status:");
         HBox messageLabelHBox = new HBox(messageLabel);
         messageLabelHBox.setAlignment(Pos.CENTER);
@@ -213,7 +241,7 @@ public class CheckersGame extends Application implements Runnable{
     	Scene boardScene = new Scene(borderPane, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
     	boardStage.setScene(boardScene);
     	boardStage.show();
-    	choosingGameStage.close();
+    	//choosingGameStage.close();
     	
     	
     	EventHandler<ActionEvent> sendingMessageHandler = new EventHandler<ActionEvent>()
@@ -276,7 +304,8 @@ public class CheckersGame extends Application implements Runnable{
         try {
             player = Integer.parseInt(in.readLine());
             if (player== PLAYER1) {
-                messageLabel.setText("My Turn");
+            	messageLabel.setText("My Turn");
+            	
             } else {
             	messageLabel.setText("Opposite turn");
                 //sendingField.setEnabled(false);
@@ -337,7 +366,11 @@ public class CheckersGame extends Application implements Runnable{
 	
     @Override
 	public void start(Stage arg0) throws Exception {
-		initchoosingGameStage();
+    	//tworzenie kontrolera
+		initBoardStage();
+		listenSocket();
+		receiveInitFromServer();
+		startThread();
 		
 		
 		
