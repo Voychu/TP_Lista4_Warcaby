@@ -3,10 +3,14 @@ package com.example.warcabydobre;
 import java.io.*;
 import java.net.Socket;
 
+import javafx.scene.control.Alert;
+
 public class Game implements Runnable{
 
     private Socket firstPlayer;
     private Socket secondPlayer;
+    
+    
 
 
     private final static int FIRST=1;
@@ -43,11 +47,16 @@ public class Game implements Runnable{
             outF.println("1");
             outS.println("2");
 
-            String line;
+            String line="";
             do {
                 if (turn==SECOND) {
                     // Odbieranie od socketa
                     line = inS.readLine();
+                    if(line.equals("bye")) {
+                    	//firstPlayer.close();
+                    	//secondPlayer.close();
+                    	outS.println("-> ("+" Rozlaczanie 2 gracza... "+")");
+                    }
                     // Wypisywanie na serwerze
                     System.out.println(line);
                     // Wysylanie do socketa
@@ -58,13 +67,20 @@ public class Game implements Runnable{
                 if (turn==FIRST) {
                     // Odbieranie od socketa
                     line = inF.readLine();
+                    if(line.equals("bye")) {
+                    	outF.println("-> ("+" Rozlaczanie 1 gracza... "+")");
+                    	//firstPlayer.close();
+                    	//secondPlayer.close();
+                    }
                     // Wypisywanie na serwerze
                     System.out.println(line);
                     // Wysylanie do socketa
                     outS.println("-> (" + line + ")");
                     turn=SECOND;
                 }
-            } while (true);
+            } while (!line.equals("bye"));
+            firstPlayer.close();
+        	secondPlayer.close();
 
         } catch (IOException ex) {
             System.err.println("ex");

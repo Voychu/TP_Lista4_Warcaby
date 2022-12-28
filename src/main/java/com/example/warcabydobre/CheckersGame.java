@@ -7,13 +7,16 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
+import java.util.Optional;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
@@ -41,7 +45,9 @@ public class CheckersGame extends Application implements Runnable{
     private TextField sendingField;
     Label messageLabel;
     private Button confirmButton;
+    private Alert endingGameAlert;
     private int player;
+    
     
     public final static int PLAYER1 = 1;
     public final static int PLAYER2 = 2;
@@ -254,6 +260,8 @@ public class CheckersGame extends Application implements Runnable{
 		};
 		confirmButton.setOnAction(sendingMessageHandler);
         
+		
+		boardStage.setOnCloseRequest(event -> out.println("bye"));
     	
     	
     	
@@ -280,6 +288,23 @@ public class CheckersGame extends Application implements Runnable{
         //send.setEnabled(false);
         //sendingField.setText("");
         Platform.runLater(()->sendingField.setText(""));
+        
+        Platform.runLater(()->textLabel.setText(""));
+        
+        
+        Platform.runLater(()->confirmButton.setDisable(true));
+        
+        if(message.equals("bye")) {
+        	try {
+				
+				Platform.runLater(()->System.exit(0));
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
         //input.requestFocus();
         showing = ACTIVE;
         actualPlayer = player;
@@ -290,6 +315,21 @@ public class CheckersGame extends Application implements Runnable{
     	 try {
              // Odbieranie z serwera
              String str = in.readLine();
+             
+             if(str.equals("bye")) {
+            	 /*endingGameAlert.setTitle("Uwaga");
+            	 endingGameAlert.setHeaderText("Rozlaczono z serwerem.");
+            	 endingGameAlert.setContentText("Czy chcesz zamknac okno?");
+            	 endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+                 
+                 Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
+                 if(clickedButton.get() == ButtonType.OK){
+                     System.exit(0);
+                 }*/
+            	//Platform.runLater(()->System.exit(0));
+            	System.exit(0);
+ 				socket.close();
+             }
              //textLabel.setText(str);
              Platform.runLater(()->textLabel.setText(str));
              //messageLabel.setText("My turn");
@@ -297,6 +337,8 @@ public class CheckersGame extends Application implements Runnable{
              //send.setEnabled(true);
              //sendingField.setText("");
              Platform.runLater(()-> sendingField.setText(""));
+             
+             Platform.runLater(()->confirmButton.setDisable(false));
              //input.requestFocus();
          }
          catch (IOException e) {
@@ -315,6 +357,7 @@ public class CheckersGame extends Application implements Runnable{
             } else {
             	//messageLabel.setText("Opposite turn");
             	Platform.runLater(()->messageLabel.setText("Opposite turn"));
+            	Platform.runLater(()->confirmButton.setDisable(true));
                 //sendingField.setEnabled(false);
             }
         } catch (IOException e) {
