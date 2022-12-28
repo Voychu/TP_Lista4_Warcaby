@@ -275,9 +275,11 @@ public class CheckersGame extends Application implements Runnable{
     public void sendMessage() {
     	String message = sendingField.getText();
     	out.println(message);
-        messageLabel.setText("OppositeTurn");
+        //messageLabel.setText("OppositeTurn");
+        Platform.runLater(()->messageLabel.setText("OppositeTurn"));
         //send.setEnabled(false);
-        sendingField.setText("");
+        //sendingField.setText("");
+        Platform.runLater(()->sendingField.setText(""));
         //input.requestFocus();
         showing = ACTIVE;
         actualPlayer = player;
@@ -288,10 +290,13 @@ public class CheckersGame extends Application implements Runnable{
     	 try {
              // Odbieranie z serwera
              String str = in.readLine();
-             textLabel.setText(str);
-             messageLabel.setText("My turn");
+             //textLabel.setText(str);
+             Platform.runLater(()->textLabel.setText(str));
+             //messageLabel.setText("My turn");
+             Platform.runLater(()->messageLabel.setText("My turn"));
              //send.setEnabled(true);
-             sendingField.setText("");
+             //sendingField.setText("");
+             Platform.runLater(()-> sendingField.setText(""));
              //input.requestFocus();
          }
          catch (IOException e) {
@@ -304,10 +309,12 @@ public class CheckersGame extends Application implements Runnable{
         try {
             player = Integer.parseInt(in.readLine());
             if (player== PLAYER1) {
-            	messageLabel.setText("My Turn");
+            	//messageLabel.setText("My Turn");
+            	Platform.runLater(()->messageLabel.setText("My Turn"));
             	
             } else {
-            	messageLabel.setText("Opposite turn");
+            	//messageLabel.setText("Opposite turn");
+            	Platform.runLater(()->messageLabel.setText("Opposite turn"));
                 //sendingField.setEnabled(false);
             }
         } catch (IOException e) {
