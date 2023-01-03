@@ -11,13 +11,13 @@ public class GameController {
 	
 	private PrintWriter out = null;
     private BufferedReader in = null;
-	private ClassicCheckersBoard board;
+	//private ClassicCheckersBoard board;
 	private String message;
+	private BoardModel boardModel;
 
 	
-	public GameController(String message, ClassicCheckersBoard board) {
-		this.message = message;
-		this.board = board;
+	public GameController(BoardModel boardModel) {
+		this.boardModel = boardModel;
 	}
 	
 	
@@ -34,28 +34,28 @@ public class GameController {
 
 
 
-	public ClassicCheckersBoard getBoard() {
+	/*public ClassicCheckersBoard getBoard() {
 		return board;
-	}
+	}*/
 
 
 
 
 
-	public void setBoard(ClassicCheckersBoard board) {
+	/*public void setBoard(ClassicCheckersBoard board) {
 		this.board = board;
-	}
+	}*/
 
 
 
 	
-	public void receiveMessage() {
+	/*public void receiveMessage() {
 		board.setLabelText(message);
 	}
 	
 	public void sendMessage() {
 		board.getSendingText();
-	}
+	}*/
 	
 	
 	
