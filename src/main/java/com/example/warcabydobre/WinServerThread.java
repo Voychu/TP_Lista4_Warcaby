@@ -24,7 +24,7 @@ public class WinServerThread {
                 Thread gTh = new Thread(g);
                 gTh.start();
 
-                // TO DO: Musi byc dokldnie dwoch klientow
+                // TODO: Musi byc dokldnie dwoch klientow
 
             }
 

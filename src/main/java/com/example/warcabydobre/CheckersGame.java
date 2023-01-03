@@ -62,6 +62,7 @@ public class CheckersGame extends Application implements Runnable{
     PrintWriter out = null;
     BufferedReader in = null;
     private GameController controller;
+    private BoardModel boardModel;
     private Square[][] squaresArray;
     private LinkedList<WhitePiece> whitePiecesList;
     private LinkedList<BlackPiece> blackPiecesList;
@@ -176,12 +177,14 @@ public class CheckersGame extends Application implements Runnable{
                     		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
                     squaresArray[x][y] = wSquare;
                     gPane.add(wSquare,y,x);
+                    
                 }
                 else{
                 	BlackSquare bSquare = 
                 			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
                 	squaresArray[x][y] = bSquare;
                     gPane.add(bSquare,y,x);
+                    
                 }
             }
         }
@@ -192,6 +195,7 @@ public class CheckersGame extends Application implements Runnable{
                     WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
                     whitePiecesList.add(wPiece);
                     gPane.add(wPiece,x,y);
+                    
                 }
             }
         }
@@ -201,9 +205,13 @@ public class CheckersGame extends Application implements Runnable{
                     BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
                     blackPiecesList.add(bPiece);
                     gPane.add(bPiece,x,y);
+                   
                 }
             }
         }
+        
+        
+        
         
         borderPane.setCenter(gPane);
         
@@ -349,7 +357,9 @@ public class CheckersGame extends Application implements Runnable{
     
     private void receiveInitFromServer() {
         try {
+        	System.out.println("Oczekiwanie...");
             player = Integer.parseInt(in.readLine());
+            System.out.println("Polaczono");
             if (player== PLAYER1) {
             	//messageLabel.setText("My Turn");
             	Platform.runLater(()->messageLabel.setText("My Turn"));
@@ -411,7 +421,11 @@ public class CheckersGame extends Application implements Runnable{
     
     
     
-    
+    private void initMVC() {
+        this.boardModel = new BoardModel(player);
+        System.out.println(player);
+        this.controller = new GameController(this.boardModel);
+    }
 	
 	
     @Override
@@ -419,8 +433,13 @@ public class CheckersGame extends Application implements Runnable{
     	//tworzenie kontrolera
 		initBoardStage();
 		listenSocket();
+		
 		receiveInitFromServer();
+		initMVC();
 		startThread();
+		
+		
+		
 		
 		
 		

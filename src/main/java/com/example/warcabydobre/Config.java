@@ -25,6 +25,9 @@ public class Config {
 	public static final double PIECE_RADIUS = 15;
 	public static final int CLASSICAL_CHECKERS_ROWS_WITH_PIECES = 3;
 	
+	public static final int FIRST=1;
+    public static final int SECOND=2;
+	
 	
 	
 
