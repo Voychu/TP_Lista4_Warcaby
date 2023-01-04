@@ -8,5 +8,13 @@ public class BlackPiece extends Piece{
     {
         super(radius);
         this.setFill(Color.RED);
+        setOnMousePressed(e -> {
+            mouseX = e.getSceneX();
+            mouseY = e.getSceneY();
+        });
+
+        setOnMouseDragged(e -> {
+            relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
+        });
     }
 }

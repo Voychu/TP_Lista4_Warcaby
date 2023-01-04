@@ -8,5 +8,13 @@ public class WhitePiece extends Piece{
     {
         super(radius);
         this.setFill(Color.WHITE);
+        setOnMousePressed(e -> {
+            mouseX = e.getSceneX();
+            mouseY = e.getSceneY();
+        });
+
+        setOnMouseDragged(e -> {
+            relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
+        });
     }
 }
