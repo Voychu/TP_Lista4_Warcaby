@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -58,9 +59,11 @@ public class CheckersGame extends Application implements Runnable{
     BufferedReader in = null;
     private GameController controller;
     private BoardModel boardModel;
-    private Square[][] squaresArray;
+    /*private Square[][] squaresArray;
     private LinkedList<WhitePiece> whitePiecesList;
-    private LinkedList<BlackPiece> blackPiecesList;
+    private LinkedList<BlackPiece> blackPiecesList;*/
+    private Group squaresGroup;
+    private Group piecesGroup;
     
 
    
@@ -155,60 +158,76 @@ public class CheckersGame extends Application implements Runnable{
         // ClassicCheckersBoard ccb = new ClassicCheckersBoard(in, out);
         //Scene windowScene = ccb.getBoardScene();
         BorderPane borderPane = new BorderPane();
+        squaresGroup = new Group();
+    	piecesGroup = new Group();
     	Pane pane = new Pane();
     	pane.setPrefSize(Config.CLASSICAL_CHECKERS_BOARD_WIDTH*Config.SQUARE_CLASSIC_WIDTH,Config.CLASSICAL_CHECKERS_BOARD_HEIGHT*Config.SQUARE_CLASSIC_HEIGHT);
+    	pane.getChildren().addAll(squaresGroup, piecesGroup);
     	
-    	squaresArray = new Square[numCols][numRows];
+    	/*squaresArray = new Square[numCols][numRows];
     	whitePiecesList = new LinkedList<>();
-    	blackPiecesList = new LinkedList<>();
+    	blackPiecesList = new LinkedList<>();*/
+    	
+    	
 
 
     	double helpw = Config.SQUARE_CLASSIC_WIDTH;
         double helph = Config.SQUARE_CLASSIC_HEIGHT;
-        boolean white = true;
-        int a = 0;
-        int b = 0;
-        for (int y = 0; y < numRows*helph; y+=helph) {
-            for (int x = 0; x < numCols*helpw; x+=helpw) {
-                if(white) {
+        //boolean white = true;
+        //int a = 0;
+        //int b = 0;
+        //y = j * helph
+        //x = i * helw
+        for (int j = 0; j < numRows; j++) {
+            for (int i = 0; i < numCols; i++) {
+            	double x = i * helpw;
+                double y = j * helph;
+                if((i+j)%2 ==0) {
                     WhiteSquare wSquare = 
                     		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                    squaresArray[a][b] = wSquare;
-                    pane.getChildren().addAll(wSquare);
+                    //squaresArray[a][b] = wSquare;
+                    squaresGroup.getChildren().addAll(wSquare);
                     wSquare.relocate(x,y);
-                    a+=1;
+                    //a+=1;
                 }
                 else{
                 	BlackSquare bSquare = 
                 			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                	squaresArray[a][b] = bSquare;
-                    pane.getChildren().addAll(bSquare);
+                	//squaresArray[a][b] = bSquare;
+                    squaresGroup.getChildren().addAll(bSquare);
                     bSquare.relocate(x,y);
-                    a+=1;
+                    //a+=1;
                 }
-                white=!white;
+                //white=!white;
             }
-            white=!white;
-            a=0;
-            b+=1;
+            //white=!white;
+            //a=0;
+            //b+=1;
         }
-        
-        for (int y=0; y<numRowsWithPieces; y++){
-            for(int x = 0; x< numCols; x++) {
-                if((x+y)%2 ==1){
+       //y = j * helph
+       //x = i * helw
+        for (int j=0; j<numRowsWithPieces; j++){
+            for(int i = 0; i< numCols; i++) {
+                if((i+j)%2 ==1){
                     WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
-                    whitePiecesList.add(wPiece);
-                    pane.getChildren().addAll(wPiece);
+                    //whitePiecesList.add(wPiece);
+                   piecesGroup.getChildren().addAll(wPiece);
+                   double x = i * helpw;
+                   double y = j * helph;
+                   wPiece.relocate(x,y);
                     
                 }
             }
         }
-        for (int y=5; y<5+numRowsWithPieces; y++){
-            for(int x = 0; x< numCols; x++) {
-                if((x+y)%2 ==1){
+        for (int j=5; j<5+numRowsWithPieces; j++){
+            for(int i = 0; i< numCols; i++) {
+                if((i+j)%2 ==1){
                     BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
-                    blackPiecesList.add(bPiece);
-                    pane.getChildren().addAll(bPiece);
+                    //blackPiecesList.add(bPiece);
+                    piecesGroup.getChildren().addAll(bPiece);
+                    double x = i * helpw;
+                    double y = j * helph;
+                    bPiece.relocate(x,y);
                    
                 }
             }
