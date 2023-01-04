@@ -2,6 +2,7 @@ package com.example.warcabydobre;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 
 //Klasa kontrolera
 //wzorzec projektowy MVC
@@ -14,13 +15,31 @@ public class GameController {
 	//private ClassicCheckersBoard board;
 	private String message;
 	private BoardModel boardModel;
+	//TODO GameRules
+	private LinkedList<Piece> whitePiecesList;
+	private LinkedList<Piece> blackPiecesList;
 
 	
-	public GameController(BoardModel boardModel) {
+	public GameController(BoardModel boardModel, LinkedList<Piece> whitePiecesList, LinkedList<Piece> blackPiecesList ) {
 		this.boardModel = boardModel;
+		this.whitePiecesList = whitePiecesList;
+		this.blackPiecesList = blackPiecesList;
+		
 	}
 	
 	
+
+	public BoardModel getBoardModel() {
+		return boardModel;
+	}
+
+
+
+	public void setBoardModel(BoardModel boardModel) {
+		this.boardModel = boardModel;
+	}
+
+
 
 	public String getMessage() {
 		return message;

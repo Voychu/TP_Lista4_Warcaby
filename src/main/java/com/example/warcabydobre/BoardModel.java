@@ -6,14 +6,21 @@ public class BoardModel {
 	
 	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
     private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
+    
+    public interface Listener {
+    	void onChange(BoardModel model);
+    }
 	
 
 	private LinkedList<PieceObject> piecesList;
 	private int turn;
 	private PieceColor pieceColor;
+	private LinkedList<Listener> listeners;
+	
 	
 	
 	public BoardModel(int player) {
+		this.listeners = new LinkedList<>();
 		this.piecesList = new LinkedList<>();
 		if(player == 1) {
 			this.pieceColor = PieceColor.WHITE;
@@ -41,6 +48,21 @@ public class BoardModel {
                 }
             }
         }
+	}
+	
+	
+	public void addListener(Listener listener) {
+		listeners.add(listener);
+	}
+	
+	
+	public void setMove() {
+		
+		notifyObservers();
+	}
+	
+	private void notifyObservers() {
+		listeners.stream().forEach(l -> l.onChange(this));
 	}
 	
 	
