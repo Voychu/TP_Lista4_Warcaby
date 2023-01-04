@@ -9,7 +9,7 @@ public class WhitePiece extends Piece{
         super(radius);
         this.setFill(Color.WHITE);
         setOnMousePressed(e -> {
-            mouseX = e.getSceneX();
+            mouseeX = e.getSceneX();
             mouseY = e.getSceneY();
         });
 

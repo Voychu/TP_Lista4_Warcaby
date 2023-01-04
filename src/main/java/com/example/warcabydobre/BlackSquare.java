@@ -2,7 +2,7 @@ package com.example.warcabydobre;
 
 import javafx.scene.paint.Color;
 
-
+//s
 public class BlackSquare extends Square{
 
 	//na tych polach gramy//

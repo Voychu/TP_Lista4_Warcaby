@@ -1,6 +1,6 @@
 /**package com.example.warcabydobre;
 
-import javafx.scene.paint.Color;
+import javafx.scene.paint.Color;s
 
 public class BlackPiece extends Piece{
 

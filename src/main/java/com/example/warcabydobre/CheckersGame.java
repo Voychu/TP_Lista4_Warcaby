@@ -200,7 +200,7 @@ public class CheckersGame extends Application implements Runnable{
                 }
                 //white=!white;
             }
-            //white=!white;
+            //white=!white;t
             //a=0;
             //b+=1;
         }

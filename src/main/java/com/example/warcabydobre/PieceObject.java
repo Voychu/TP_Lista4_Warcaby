@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 public class PieceObject extends StackPane {
 	
 	private PieceColor color;
-	//int x;
+	//int xs;
 	//int y;
 	boolean isQueen;
 

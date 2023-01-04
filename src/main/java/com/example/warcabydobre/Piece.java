@@ -1,6 +1,6 @@
 /*package com.example.warcabydobre;
 
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Circle;s
 
 public abstract class Piece extends Circle{
     public double mouseX, mouseY;
