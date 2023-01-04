@@ -59,9 +59,9 @@ public class CheckersGame extends Application implements Runnable{
     BufferedReader in = null;
     private GameController controller;
     private BoardModel boardModel;
-    /*private Square[][] squaresArray;
+    /*private Square[][] squaresArray;*/
     private LinkedList<WhitePiece> whitePiecesList;
-    private LinkedList<BlackPiece> blackPiecesList;*/
+    private LinkedList<BlackPiece> blackPiecesList;
     private Group squaresGroup;
     private Group piecesGroup;
     
@@ -206,15 +206,18 @@ public class CheckersGame extends Application implements Runnable{
         }
        //y = j * helph
        //x = i * helw
+        double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
         for (int j=0; j<numRowsWithPieces; j++){
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
-                    WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
-                    //whitePiecesList.add(wPiece);
+                   WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                   //whitePiecesList.add(wPiece);
                    piecesGroup.getChildren().addAll(wPiece);
-                   double x = i * helpw;
-                   double y = j * helph;
+                  
+                   double x = i * helpw + offset;
+                   double y = j * helph + offset;
                    wPiece.relocate(x,y);
+                   
                     
                 }
             }
@@ -225,8 +228,8 @@ public class CheckersGame extends Application implements Runnable{
                     BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
                     //blackPiecesList.add(bPiece);
                     piecesGroup.getChildren().addAll(bPiece);
-                    double x = i * helpw;
-                    double y = j * helph;
+                    double x = i * helpw + offset;
+                    double y = j * helph + offset;
                     bPiece.relocate(x,y);
                    
                 }
@@ -447,7 +450,7 @@ public class CheckersGame extends Application implements Runnable{
     private void initMVC() {
         this.boardModel = new BoardModel(player);
         System.out.println(player);
-        this.controller = new GameController(this.boardModel);
+        //this.controller = new GameController(this.boardModel);
     }
 	
 	
