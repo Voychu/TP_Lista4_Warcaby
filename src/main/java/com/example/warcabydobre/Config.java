@@ -27,6 +27,8 @@ public class Config {
 	
 	public static final int FIRST=1;
     public static final int SECOND=2;
+    public static final String CLASSIC_CHECKERS_TYPE = 
+    		"classic";
 	
 	
 	
