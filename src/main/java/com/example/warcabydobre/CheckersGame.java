@@ -60,8 +60,8 @@ public class CheckersGame extends Application implements Runnable{
     private GameController controller;
     private BoardModel boardModel;
     /*private Square[][] squaresArray;*/
-    private LinkedList<WhitePiece> whitePiecesList;
-    private LinkedList<BlackPiece> blackPiecesList;
+    //private LinkedList<WhitePiece> whitePiecesList;
+   //private LinkedList<BlackPiece> blackPiecesList;
     private Group squaresGroup;
     private Group piecesGroup;
     
@@ -210,10 +210,10 @@ public class CheckersGame extends Application implements Runnable{
         for (int j=0; j<numRowsWithPieces; j++){
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
-                   WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                   //WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                   PieceObject wPiece = new PieceObject(PieceColor.WHITE,i,j);
                    //whitePiecesList.add(wPiece);
                    piecesGroup.getChildren().addAll(wPiece);
-                  
                    double x = i * helpw + offset;
                    double y = j * helph + offset;
                    wPiece.relocate(x,y);
@@ -225,7 +225,8 @@ public class CheckersGame extends Application implements Runnable{
         for (int j=5; j<5+numRowsWithPieces; j++){
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
-                    BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
+                    //BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
+                    PieceObject bPiece = new PieceObject(PieceColor.BLACK,i,j);
                     //blackPiecesList.add(bPiece);
                     piecesGroup.getChildren().addAll(bPiece);
                     double x = i * helpw + offset;

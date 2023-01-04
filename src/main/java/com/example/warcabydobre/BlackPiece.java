@@ -1,4 +1,4 @@
-package com.example.warcabydobre;
+/**package com.example.warcabydobre;
 
 import javafx.scene.paint.Color;
 
@@ -17,4 +17,4 @@ public class BlackPiece extends Piece{
             relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
         });
     }
-}
+}*/

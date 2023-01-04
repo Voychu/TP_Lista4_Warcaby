@@ -71,7 +71,7 @@ public class ClassicCheckersBoard {
         for (int y=0; y<numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
-                    WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
+                    PieceObject wPiece = new PieceObject(PieceColor.WHITE,x,y);
                     gPane.add(wPiece,y,x);
                 }
             }
@@ -79,7 +79,7 @@ public class ClassicCheckersBoard {
         for (int y=5; y<5+numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==0){
-                    BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
+                    PieceObject bPiece = new PieceObject(PieceColor.BLACK,x,y);
                     gPane.add(bPiece,y,x);
                 }
             }
