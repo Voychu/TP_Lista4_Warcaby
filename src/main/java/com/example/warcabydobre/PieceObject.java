@@ -2,19 +2,19 @@ package com.example.warcabydobre;
 
 public class PieceObject {
 	
-	private int color;
+	private PieceColor color;
 	int x;
 	int y;
 	boolean isQueen;
 	
-	public PieceObject(int color, int x, int y) {
+	public PieceObject(PieceColor color, int x, int y) {
 		this.color = color;
 		this.x = x;
 		this.y = y;
 		this.isQueen = false;
 	}
 
-	public int getColor() {
+	public PieceColor getColor() {
 		return color;
 	}
 
@@ -30,7 +30,7 @@ public class PieceObject {
 		return isQueen;
 	}
 
-	public void setColor(int color) {
+	public void setColor(PieceColor color) {
 		this.color = color;
 	}
 

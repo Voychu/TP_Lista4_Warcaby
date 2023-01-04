@@ -10,17 +10,23 @@ public class BoardModel {
 
 	private LinkedList<PieceObject> piecesList;
 	private int turn;
-	private int playerColor;
+	private PieceColor pieceColor;
 	
 	
-	public BoardModel(int playerColor) {
+	public BoardModel(int player) {
 		this.piecesList = new LinkedList<>();
-		this.playerColor = playerColor;
+		if(player == 1) {
+			this.pieceColor = PieceColor.WHITE;
+		}
+		else {
+			this.pieceColor = PieceColor.BLACK;
+		}
+		
 		this.turn = 1;
 		for (int y=0; y<numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
-                    PieceObject pieceObject = new PieceObject(Config.FIRST, x, y);
+                    PieceObject pieceObject = new PieceObject(PieceColor.WHITE, x, y);
                     piecesList.add(pieceObject);
                     //System.out.println("x" + x + "y" + y);
                 }
@@ -29,7 +35,7 @@ public class BoardModel {
         for (int y=5; y<5+numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
-                	PieceObject pieceObject = new PieceObject(Config.SECOND, x, y);
+                	PieceObject pieceObject = new PieceObject(PieceColor.BLACK, x, y);
                     piecesList.add(pieceObject);
                     //System.out.println("x" + x + "y" + y);
                 }
