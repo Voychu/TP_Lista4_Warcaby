@@ -19,12 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -160,33 +155,42 @@ public class CheckersGame extends Application implements Runnable{
         // ClassicCheckersBoard ccb = new ClassicCheckersBoard(in, out);
         //Scene windowScene = ccb.getBoardScene();
         BorderPane borderPane = new BorderPane();
-    	GridPane gPane = new GridPane();
-    	gPane.setVgap(Config.BOARD_GAP);
-    	gPane.setHgap(Config.BOARD_GAP);
+    	Pane pane = new Pane();
+    	pane.setPrefSize(Config.CLASSICAL_CHECKERS_BOARD_WIDTH*Config.SQUARE_CLASSIC_WIDTH,Config.CLASSICAL_CHECKERS_BOARD_HEIGHT*Config.SQUARE_CLASSIC_HEIGHT);
     	
     	squaresArray = new Square[numCols][numRows];
     	whitePiecesList = new LinkedList<>();
     	blackPiecesList = new LinkedList<>();
-    	
-    	
-    	
-        for (int y = 0; y < numRows; y++) {
-            for (int x = 0; x < numCols; x++) {
-                if((x+y)%2 ==0) {
+
+
+    	double helpw = Config.SQUARE_CLASSIC_WIDTH;
+        double helph = Config.SQUARE_CLASSIC_HEIGHT;
+        boolean white = true;
+        int a = 0;
+        int b = 0;
+        for (int y = 0; y < numRows*helph; y+=helph) {
+            for (int x = 0; x < numCols*helpw; x+=helpw) {
+                if(white) {
                     WhiteSquare wSquare = 
                     		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                    squaresArray[x][y] = wSquare;
-                    gPane.add(wSquare,y,x);
-                    
+                    squaresArray[a][b] = wSquare;
+                    pane.getChildren().addAll(wSquare);
+                    wSquare.relocate(x,y);
+                    a+=1;
                 }
                 else{
                 	BlackSquare bSquare = 
                 			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                	squaresArray[x][y] = bSquare;
-                    gPane.add(bSquare,y,x);
-                    
+                	squaresArray[a][b] = bSquare;
+                    pane.getChildren().addAll(bSquare);
+                    bSquare.relocate(x,y);
+                    a+=1;
                 }
+                white=!white;
             }
+            white=!white;
+            a=0;
+            b+=1;
         }
         
         for (int y=0; y<numRowsWithPieces; y++){
@@ -194,7 +198,7 @@ public class CheckersGame extends Application implements Runnable{
                 if((x+y)%2 ==1){
                     WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
                     whitePiecesList.add(wPiece);
-                    gPane.add(wPiece,x,y);
+                    pane.getChildren().addAll(wPiece);
                     
                 }
             }
@@ -204,7 +208,7 @@ public class CheckersGame extends Application implements Runnable{
                 if((x+y)%2 ==1){
                     BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
                     blackPiecesList.add(bPiece);
-                    gPane.add(bPiece,x,y);
+                    pane.getChildren().addAll(bPiece);
                    
                 }
             }
@@ -213,7 +217,7 @@ public class CheckersGame extends Application implements Runnable{
         
         
         
-        borderPane.setCenter(gPane);
+        borderPane.setCenter(pane);
         
         
     	
