@@ -46,13 +46,13 @@ public class PieceObject extends StackPane {
 		return color;
 	}
 
-	/*public int getX() {
-		return x;
+	public double getOldX() {
+		return oldX;
 	}
 
-	public int getY() {
-		return y;
-	}*/
+	public double getOldY() {
+		return oldY;
+	}
 
 	public boolean isQueen() {
 		return isQueen;

@@ -64,7 +64,7 @@ public class CheckersGame extends Application implements Runnable{
    //private LinkedList<BlackPiece> blackPiecesList;
     private Group squaresGroup;
     private Group piecesGroup;
-    
+    private BlackSquare[][] board = new BlackSquare[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 
    
     
@@ -191,9 +191,9 @@ public class CheckersGame extends Application implements Runnable{
                     //a+=1;
                 }
                 else{
-                	BlackSquare bSquare = 
-                			new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-                	//squaresArray[a][b] = bSquare;
+                	BlackSquare bSquare =
+                            new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
+                    board[i][j] = bSquare;
                     squaresGroup.getChildren().addAll(bSquare);
                     bSquare.relocate(x,y);
                     //a+=1;
@@ -206,13 +206,16 @@ public class CheckersGame extends Application implements Runnable{
         }
        //y = j * helph
        //x = i * helw
+        PieceObject wPiece;
+        PieceObject bPiece;
         double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
         for (int j=0; j<numRowsWithPieces; j++){
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
                    //WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
-                   PieceObject wPiece = new PieceObject(PieceColor.WHITE,i,j);
+                   wPiece = makePieceObject(PieceColor.WHITE,i,j);
                    //whitePiecesList.add(wPiece);
+                   board[i][j].setPieceObject(wPiece);
                    piecesGroup.getChildren().addAll(wPiece);
                    double x = i * helpw + offset;
                    double y = j * helph + offset;
@@ -226,8 +229,9 @@ public class CheckersGame extends Application implements Runnable{
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
                     //BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
-                    PieceObject bPiece = new PieceObject(PieceColor.BLACK,i,j);
+                    bPiece = makePieceObject(PieceColor.BLACK,i,j);
                     //blackPiecesList.add(bPiece);
+                    board[i][j].setPieceObject(bPiece);
                     piecesGroup.getChildren().addAll(bPiece);
                     double x = i * helpw + offset;
                     double y = j * helph + offset;
@@ -304,8 +308,75 @@ public class CheckersGame extends Application implements Runnable{
     	
     }
     
-    
-    
+    private Move tryMove(PieceObject pieceObject, int newX, int newY)
+        {
+        if(board[newX][newY].isOccupied() || (newX + newY) % 2 == 0)
+            {
+            return new Move(MovementTypes.NONE);
+            }
+        int xp = toBoardCoordinates(pieceObject.getOldX());
+        int yp = toBoardCoordinates(pieceObject.getOldY());
+
+        if(Math.abs(newX - xp) == 1 && newY - yp == pieceObject.getColor().movementDirection)
+            return new Move(MovementTypes.FORWARD);
+        else if (Math.abs(newX - xp) == 2 && newY - yp == pieceObject.getColor().movementDirection* 2)
+            {
+                int x1 = xp + (newX - xp)/2;
+                int y1 = yp + (newY - yp)/2;
+
+                if (board[x1][y1].isOccupied() && board[x1][y1].getPieceObject().getColor() != pieceObject.getColor())
+                    {
+                    return new Move(MovementTypes.CAPTURE_FORWARD, board[x1][y1].getPieceObject());
+                    }
+            }
+        return new Move(MovementTypes.NONE);
+
+        }
+    private int toBoardCoordinates(double pixel)
+        {
+            return (int)(pixel + Config.CLASSICAL_CHECKERS_BOARD_WIDTH / 2) / Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
+        }
+    private PieceObject makePieceObject(PieceColor Color, int x, int y) {
+        PieceObject pieceObject = new PieceObject(Color, x, y);
+
+        pieceObject.setOnMouseReleased(e -> {
+            int newX = toBoardCoordinates(pieceObject.getLayoutX());
+            int newY = toBoardCoordinates(pieceObject.getLayoutY());
+
+            Move result;
+
+            if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH || newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
+                result = new Move(MovementTypes.NONE);
+            } else {
+                result = tryMove(pieceObject, newX, newY);
+            }
+
+            int xp = toBoardCoordinates(pieceObject.getOldX());
+            int yp = toBoardCoordinates(pieceObject.getOldY());
+
+            switch (result.getMovementType()) {
+                case NONE:
+                    pieceObject.abortMove();
+                    break;
+                case FORWARD:
+                    pieceObject.move(newX, newY);
+                    board[xp][yp].setPieceObject(null);
+                    board[newX][newY].setPieceObject(pieceObject);
+                    break;
+                case CAPTURE_FORWARD:
+                    pieceObject.move(newX, newY);
+                    board[xp][yp].setPieceObject(null);
+                    board[newX][newY].setPieceObject(pieceObject);
+
+                    PieceObject otherPiece = result.getPieceObject();
+                    board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setPieceObject(null);
+                    piecesGroup.getChildren().remove(otherPiece);
+                    break;
+            }
+        });
+
+        return pieceObject;
+    }
     
     public void setLabelText(String text) {
     	textLabel.setText(text);
