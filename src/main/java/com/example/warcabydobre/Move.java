@@ -7,14 +7,14 @@ public class Move {
         return type;
     }
 
-    private PieceObject pieceObject;
+    private GraphicalPiece graphicalPiece;
 
-    public PieceObject getPieceObject(){
-        return pieceObject;
+    public GraphicalPiece getPieceObject(){
+        return graphicalPiece;
     }
-    public Move(MovementTypes type, PieceObject pieceObject){
+    public Move(MovementTypes type, GraphicalPiece graphicalPiece){
         this.type = type;
-        this.pieceObject = pieceObject;
+        this.graphicalPiece = graphicalPiece;
     }
     public Move(MovementTypes type){
         this(type,null);

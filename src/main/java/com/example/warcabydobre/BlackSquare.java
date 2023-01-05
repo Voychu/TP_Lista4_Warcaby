@@ -13,16 +13,16 @@ public class BlackSquare extends Square{
         this.setFill(Color.BLACK);
     }
 
-    private PieceObject pieceObject;
+    private GraphicalPiece graphicalPiece;
 
     public boolean isOccupied(){
-        return pieceObject!= null;
+        return graphicalPiece!= null;
     }
-    public PieceObject getPieceObject(){
-        return pieceObject;
+    public GraphicalPiece getPieceObject(){
+        return graphicalPiece;
     }
-    public void setPieceObject(PieceObject pieceObject){
-        this.pieceObject = pieceObject;
+    public void setPieceObject(GraphicalPiece graphicalPiece){
+        this.graphicalPiece = graphicalPiece;
     }
 
 }

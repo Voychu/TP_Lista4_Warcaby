@@ -4,7 +4,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class PieceObject extends StackPane {
+public class GraphicalPiece extends StackPane {
 	
 	private PieceColor color;
 	//int xs;
@@ -14,7 +14,7 @@ public class PieceObject extends StackPane {
 	private double mouseX, mouseY;
 	private double oldX, oldY;
 	
-	public PieceObject(PieceColor color, int x, int y) {
+	public GraphicalPiece(PieceColor color, int x, int y) {
 
 		move(x, y);
 

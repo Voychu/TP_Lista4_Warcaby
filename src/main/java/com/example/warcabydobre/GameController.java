@@ -16,11 +16,11 @@ public class GameController {
 	private String message;
 	private BoardModel boardModel;
 	//TODO GameRules
-	private LinkedList<PieceObject> whitePiecesList;
-	private LinkedList<PieceObject> blackPiecesList;
+	private LinkedList<GraphicalPiece> whitePiecesList;
+	private LinkedList<GraphicalPiece> blackPiecesList;
 
 	
-	public GameController(BoardModel boardModel, LinkedList<PieceObject> whitePiecesList, LinkedList<PieceObject> blackPiecesList ) {
+	public GameController(BoardModel boardModel, LinkedList<GraphicalPiece> whitePiecesList, LinkedList<GraphicalPiece> blackPiecesList ) {
 		this.boardModel = boardModel;
 		this.whitePiecesList = whitePiecesList;
 		this.blackPiecesList = blackPiecesList;

@@ -12,7 +12,7 @@ public class BoardModel {
     }
 	
 
-	private LinkedList<PieceObject> piecesList;
+	private LinkedList<GraphicalPiece> piecesList;
 	private int turn;
 	private PieceColor pieceColor;
 	private LinkedList<Listener> listeners;
@@ -33,8 +33,8 @@ public class BoardModel {
 		for (int y=0; y<numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
-                    PieceObject pieceObject = new PieceObject(PieceColor.WHITE, x, y);
-                    piecesList.add(pieceObject);
+                    GraphicalPiece graphicalPiece = new GraphicalPiece(PieceColor.WHITE, x, y);
+                    piecesList.add(graphicalPiece);
                     //System.out.println("x" + x + "y" + y);
                 }
             }
@@ -42,8 +42,8 @@ public class BoardModel {
         for (int y=5; y<5+numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
-                	PieceObject pieceObject = new PieceObject(PieceColor.BLACK, x, y);
-                    piecesList.add(pieceObject);
+                	GraphicalPiece graphicalPiece = new GraphicalPiece(PieceColor.BLACK, x, y);
+                    piecesList.add(graphicalPiece);
                     //System.out.println("x" + x + "y" + y);
                 }
             }
