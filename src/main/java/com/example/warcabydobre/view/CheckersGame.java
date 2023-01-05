@@ -65,7 +65,8 @@ public class CheckersGame extends Application implements Runnable{
     private GameController controller;
     private BoardModel boardModel;
     /*private Square[][] squaresArray;*/
-    private LinkedList<GraphicalPiece> graphicalPiecesList;
+    //private LinkedList<GraphicalPiece> graphicalPiecesList;
+    private GraphicalPiece[][] piecesArray;//TODO: edytowanie tablicy przy przeuswaniu pionkow
     private Group squaresGroup;
     private Group piecesGroup;
     private BlackSquare[][] board = new BlackSquare[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
@@ -171,8 +172,8 @@ public class CheckersGame extends Application implements Runnable{
     	/*squaresArray = new Square[numCols][numRows];
     	whitePiecesList = new LinkedList<>();
     	blackPiecesList = new LinkedList<>();*/
-    	graphicalPiecesList = new LinkedList<>();
-    	
+    	//graphicalPiecesList = new LinkedList<>();
+    	piecesArray = new GraphicalPiece[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
     	
 
 
@@ -220,7 +221,8 @@ public class CheckersGame extends Application implements Runnable{
                 	 //BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
                     bPiece = makeGraphicalPiece(PieceColor.BLACK,i,j);
                     //blackPiecesList.add(bPiece);
-                    graphicalPiecesList.add(bPiece);
+                    //graphicalPiecesList.add(bPiece);
+                    piecesArray[i][j] = bPiece;
                     board[i][j].setGraphicalPiece(bPiece);
                     piecesGroup.getChildren().addAll(bPiece);
                     double x = i * helpw;
@@ -239,7 +241,8 @@ public class CheckersGame extends Application implements Runnable{
                     //WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
                     wPiece = makeGraphicalPiece(PieceColor.WHITE,i,j);
                     //whitePiecesList.add(wPiece);
-                    graphicalPiecesList.add(wPiece);
+                    //graphicalPiecesList.add(wPiece);
+                    piecesArray[i][j] = wPiece;
                     board[i][j].setGraphicalPiece(wPiece);
                     piecesGroup.getChildren().addAll(wPiece);
                     double x = i * helpw;
@@ -354,6 +357,8 @@ public class CheckersGame extends Application implements Runnable{
         GraphicalPiece graphicalPiece = new GraphicalPiece(Color, x, y);
 
         graphicalPiece.setOnMouseReleased(e -> {
+        	//TODO: wywolanie metody onPieceMoved z Controllera!!!
+        	//TODO: Przekopiowac wnetrze tej metody do onPieceMoved razem z metodami prywatnymi
             int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
             int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
 
@@ -392,7 +397,12 @@ public class CheckersGame extends Application implements Runnable{
                         //tworzenie damki
                     board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
                     piecesGroup.getChildren().remove(otherPiece);
-                    graphicalPiecesList.remove(otherPiece);
+                    //graphicalPiecesList.remove(otherPiece);
+                    int x_cord = toBoardCoordinates(otherPiece.getOldX());
+                    int y_cord = toBoardCoordinates(otherPiece.getOldY());
+                    piecesArray[x_cord][y_cord] 
+                    		= null;
+                    System.out.println(x_cord + ", " +  y_cord);
                     break;
             }
         });
