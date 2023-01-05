@@ -9,7 +9,7 @@ public class Move {
 
     private GraphicalPiece graphicalPiece;
 
-    public GraphicalPiece getPieceObject(){
+    public GraphicalPiece getGraphicalPiece(){
         return graphicalPiece;
     }
     public Move(MovementTypes type, GraphicalPiece graphicalPiece){

@@ -213,9 +213,9 @@ public class CheckersGame extends Application implements Runnable{
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
                    //WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
-                   wPiece = makePieceObject(PieceColor.WHITE,i,j);
+                   wPiece = makeGraphicalPiece(PieceColor.WHITE,i,j);
                    //whitePiecesList.add(wPiece);
-                   board[i][j].setPieceObject(wPiece);
+                   board[i][j].setGraphicalPiece(wPiece);
                    piecesGroup.getChildren().addAll(wPiece);
                    double x = i * helpw + offset;
                    double y = j * helph + offset;
@@ -229,9 +229,9 @@ public class CheckersGame extends Application implements Runnable{
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
                     //BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
-                    bPiece = makePieceObject(PieceColor.BLACK,i,j);
+                    bPiece = makeGraphicalPiece(PieceColor.BLACK,i,j);
                     //blackPiecesList.add(bPiece);
-                    board[i][j].setPieceObject(bPiece);
+                    board[i][j].setGraphicalPiece(bPiece);
                     piecesGroup.getChildren().addAll(bPiece);
                     double x = i * helpw + offset;
                     double y = j * helph + offset;
@@ -324,9 +324,9 @@ public class CheckersGame extends Application implements Runnable{
                 int x1 = xp + (newX - xp)/2;
                 int y1 = yp + (newY - yp)/2;
 
-                if (board[x1][y1].isOccupied() && board[x1][y1].getPieceObject().getColor() != graphicalPiece.getColor())
+                if (board[x1][y1].isOccupied() && board[x1][y1].getGraphicalPiece().getColor() != graphicalPiece.getColor())
                     {
-                    return new Move(MovementTypes.CAPTURE_FORWARD, board[x1][y1].getPieceObject());
+                    return new Move(MovementTypes.CAPTURE_FORWARD, board[x1][y1].getGraphicalPiece());
                     }
             }
         return new Move(MovementTypes.NONE);
@@ -336,7 +336,7 @@ public class CheckersGame extends Application implements Runnable{
         {
             return (int)(pixel + Config.CLASSICAL_CHECKERS_BOARD_WIDTH / 2) / Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
         }
-    private GraphicalPiece makePieceObject(PieceColor Color, int x, int y) {
+    private GraphicalPiece makeGraphicalPiece(PieceColor Color, int x, int y) {
         GraphicalPiece graphicalPiece = new GraphicalPiece(Color, x, y);
 
         graphicalPiece.setOnMouseReleased(e -> {
@@ -360,16 +360,16 @@ public class CheckersGame extends Application implements Runnable{
                     break;
                 case FORWARD:
                     graphicalPiece.move(newX, newY);
-                    board[xp][yp].setPieceObject(null);
-                    board[newX][newY].setPieceObject(graphicalPiece);
+                    board[xp][yp].setGraphicalPiece(null);
+                    board[newX][newY].setGraphicalPiece(graphicalPiece);
                     break;
                 case CAPTURE_FORWARD:
                     graphicalPiece.move(newX, newY);
-                    board[xp][yp].setPieceObject(null);
-                    board[newX][newY].setPieceObject(graphicalPiece);
+                    board[xp][yp].setGraphicalPiece(null);
+                    board[newX][newY].setGraphicalPiece(graphicalPiece);
 
-                    GraphicalPiece otherPiece = result.getPieceObject();
-                    board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setPieceObject(null);
+                    GraphicalPiece otherPiece = result.getGraphicalPiece();
+                    board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
                     piecesGroup.getChildren().remove(otherPiece);
                     break;
             }

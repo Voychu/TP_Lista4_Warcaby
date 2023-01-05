@@ -18,10 +18,10 @@ public class BlackSquare extends Square{
     public boolean isOccupied(){
         return graphicalPiece!= null;
     }
-    public GraphicalPiece getPieceObject(){
+    public GraphicalPiece getGraphicalPiece(){
         return graphicalPiece;
     }
-    public void setPieceObject(GraphicalPiece graphicalPiece){
+    public void setGraphicalPiece(GraphicalPiece graphicalPiece){
         this.graphicalPiece = graphicalPiece;
     }
 
