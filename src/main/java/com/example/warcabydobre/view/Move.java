@@ -1,4 +1,6 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.view;
+
+import com.example.warcabydobre.model.MovementTypes;
 
 public class Move {
     private MovementTypes type;

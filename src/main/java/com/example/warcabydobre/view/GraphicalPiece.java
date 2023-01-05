@@ -1,4 +1,6 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.view;
+
+import com.example.warcabydobre.Config;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;

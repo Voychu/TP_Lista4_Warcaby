@@ -1,4 +1,4 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.view;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +8,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Optional;
+
+import com.example.warcabydobre.Config;
+import com.example.warcabydobre.controller.GameController;
+import com.example.warcabydobre.model.BoardModel;
+import com.example.warcabydobre.model.MovementTypes;
 
 import javafx.application.Application;
 import javafx.application.Platform;

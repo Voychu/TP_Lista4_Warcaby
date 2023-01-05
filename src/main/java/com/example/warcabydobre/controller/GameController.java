@@ -1,8 +1,11 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.controller;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+
+import com.example.warcabydobre.model.BoardModel;
+import com.example.warcabydobre.view.GraphicalPiece;
 
 //Klasa kontroleraa
 //wzorzec projektowy MVC

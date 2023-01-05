@@ -1,4 +1,4 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.controller;
 
 public class GameRulesFactory extends AbstractFactory {
 

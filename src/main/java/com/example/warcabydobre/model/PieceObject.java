@@ -1,4 +1,6 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.model;
+
+import com.example.warcabydobre.view.PieceColor;
 
 //klasa pionka jako obiektu abstrakcyjnego gry
 public class PieceObject {
