@@ -3,6 +3,7 @@ package com.example.warcabydobre.model;
 import java.util.LinkedList;
 
 import com.example.warcabydobre.Config;
+import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.PieceColor;
 
 public class BoardModel {
@@ -11,7 +12,23 @@ public class BoardModel {
     private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
     
     public interface Listener {
-    	void onChange(BoardModel model);
+    	void onChange(BoardModel model, int x, int y);
+    }
+    
+    public class PieceListener implements Listener{
+
+    	GraphicalPiece graphicalPiece;
+    	
+    	public PieceListener(GraphicalPiece graphicalPiece){
+    		this.graphicalPiece = graphicalPiece;
+    	}
+    	
+		@Override
+		public void onChange(BoardModel model, int x, int y) {
+			graphicalPiece.move(x,y);
+			
+		}
+    	
     }
 	
 
@@ -61,15 +78,25 @@ public class BoardModel {
 	}
 	
 	
-	public void move(int xp, int yp, int xk, int yk) {
+	public void movePieceObject(int xp, int yp, int xk, int yk) throws InvalidMoveException{
 		PieceObject piece = piecesArray[xp][yp];
+		if(piece == null) {
+			throw new InvalidMoveException("brak pionka");
+		}
+		
+		//TODO metody prywatne do kazdej osobnej procedury
+		//TODO biale pola
+		//TODO ruch do tylu
+		//TODO bicie pionka
+		//TODO pionek nakoncu planszy isQueen = true
+		
 		piecesArray[xp][yp] = null;
 		piecesArray[xk][yk] = piece;
-		notifyObservers();
+		notifyObservers(xk, yk);
 	}
 	
-	private void notifyObservers() {
-		listeners.stream().forEach(l -> l.onChange(this));
+	private void notifyObservers(int xk, int yk) {
+		listeners.stream().forEach(l -> l.onChange(this, xk, yk));
 	}
 	
 	
