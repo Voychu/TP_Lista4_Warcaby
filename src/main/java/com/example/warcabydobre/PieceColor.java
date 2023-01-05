@@ -2,7 +2,7 @@ package com.example.warcabydobre;
 
 public enum PieceColor {
 
-	WHITE(0), BLACK(1);
+	WHITE(-1), BLACK(1);
 
 	//public final int pieceColor;
 
@@ -10,7 +10,7 @@ public enum PieceColor {
 		pieceColor = i;
 	}*/
 
-	int movementDirection;
+	final int movementDirection;
 
 	PieceColor(int movementDirection) {
 		this.movementDirection = movementDirection;
