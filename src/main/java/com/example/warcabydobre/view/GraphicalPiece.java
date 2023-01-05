@@ -13,6 +13,8 @@ public class GraphicalPiece extends StackPane {
 
 	private double mouseX, mouseY;
 	private double oldX, oldY;
+
+	private double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
 	
 	public GraphicalPiece(PieceColor color, int x, int y) {
 
@@ -29,6 +31,8 @@ public class GraphicalPiece extends StackPane {
 			circle.setFill(Color.RED);
 
 		circle.setRadius(Config.PIECE_RADIUS);
+		circle.setTranslateX(offset);
+		circle.setTranslateY(offset);
 		getChildren().add(circle);
 		setOnMousePressed(e -> {
 			mouseX = e.getSceneX();

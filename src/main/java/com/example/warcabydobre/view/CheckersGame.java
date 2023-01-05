@@ -213,7 +213,7 @@ public class CheckersGame extends Application implements Runnable{
        //x = i * helw
         GraphicalPiece wPiece;
         GraphicalPiece bPiece;
-        double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
+        //double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
         for (int j=0; j<numRowsWithPieces; j++){
             for(int i = 0; i< numCols; i++) {
                 if((i+j)%2 ==1){
@@ -223,8 +223,8 @@ public class CheckersGame extends Application implements Runnable{
                     graphicalPiecesList.add(bPiece);
                     board[i][j].setGraphicalPiece(bPiece);
                     piecesGroup.getChildren().addAll(bPiece);
-                    double x = i * helpw + offset;
-                    double y = j * helph + offset;
+                    double x = i * helpw;
+                    double y = j * helph;
                     bPiece.relocate(x,y);
                    
                     
@@ -242,8 +242,8 @@ public class CheckersGame extends Application implements Runnable{
                     graphicalPiecesList.add(wPiece);
                     board[i][j].setGraphicalPiece(wPiece);
                     piecesGroup.getChildren().addAll(wPiece);
-                    double x = i * helpw + offset;
-                    double y = j * helph + offset;
+                    double x = i * helpw;
+                    double y = j * helph;
                     wPiece.relocate(x,y);
                     
                     
@@ -323,6 +323,7 @@ public class CheckersGame extends Application implements Runnable{
     
     private Move tryMove(GraphicalPiece graphicalPiece, int newX, int newY)
         {
+            int offset =10;
         if(board[newX][newY].isOccupied() || (newX + newY) % 2 == 0)
             {
             return new Move(MovementTypes.NONE);
