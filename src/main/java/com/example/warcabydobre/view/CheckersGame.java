@@ -323,7 +323,6 @@ public class CheckersGame extends Application implements Runnable{
     
     private Move tryMove(GraphicalPiece graphicalPiece, int newX, int newY)
         {
-            int offset =10;
         if(board[newX][newY].isOccupied() || (newX + newY) % 2 == 0)
             {
             return new Move(MovementTypes.NONE);
