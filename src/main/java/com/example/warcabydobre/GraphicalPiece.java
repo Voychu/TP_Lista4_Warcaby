@@ -7,9 +7,7 @@ import javafx.scene.shape.Circle;
 public class GraphicalPiece extends StackPane {
 	
 	private PieceColor color;
-	//int xs;
-	//int y;
-	boolean isQueen;
+	
 
 	private double mouseX, mouseY;
 	private double oldX, oldY;
@@ -19,9 +17,7 @@ public class GraphicalPiece extends StackPane {
 		move(x, y);
 
 		this.color = color;
-		//this.x = x;
-		//this.y = y;
-		this.isQueen = false;
+		
 
 		Circle circle = new Circle();
 
@@ -54,25 +50,13 @@ public class GraphicalPiece extends StackPane {
 		return oldY;
 	}
 
-	public boolean isQueen() {
-		return isQueen;
-	}
 
 	public void setColor(PieceColor color) {
 		this.color = color;
 	}
 
-	/*public void setX(int x) {
-		this.x = x;
-	}
 
-	public void setY(int y) {
-		this.y = y;
-	}*/
 
-	public void setQueen(boolean isQueen) {
-		this.isQueen = isQueen;
-	}
 
 	public void move(int x, int y) {
 		oldX = x * Config.SQUARE_CLASSIC_WIDTH;
