@@ -371,13 +371,20 @@ public class CheckersGame extends Application implements Runnable{
                     graphicalPiece.move(newX, newY);
                     board[xp][yp].setGraphicalPiece(null);
                     board[newX][newY].setGraphicalPiece(graphicalPiece);
+                    //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+                        //tworzenie damki
+                    //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+                        //tworzenie damki
                     break;
                 case CAPTURE_FORWARD:
                     graphicalPiece.move(newX, newY);
                     board[xp][yp].setGraphicalPiece(null);
                     board[newX][newY].setGraphicalPiece(graphicalPiece);
-
                     GraphicalPiece otherPiece = result.getGraphicalPiece();
+                    //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+                        //tworzenie damki
+                    //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+                        //tworzenie damki
                     board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
                     piecesGroup.getChildren().remove(otherPiece);
                     graphicalPiecesList.remove(otherPiece);
@@ -471,7 +478,7 @@ public class CheckersGame extends Application implements Runnable{
             if (player== PLAYER1) {
             	//messageLabel.setText("My Turn");
             	Platform.runLater(()->messageLabel.setText("My Turn"));
-            	
+
             } else {
             	//messageLabel.setText("Opposite turn");
             	Platform.runLater(()->messageLabel.setText("Opposite turn"));
