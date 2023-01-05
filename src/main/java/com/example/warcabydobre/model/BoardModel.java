@@ -1,6 +1,9 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.model;
 
 import java.util.LinkedList;
+
+import com.example.warcabydobre.Config;
+import com.example.warcabydobre.view.PieceColor;
 
 public class BoardModel {
 	
@@ -12,7 +15,8 @@ public class BoardModel {
     }
 	
 
-	private LinkedList<PieceObject> piecesList;
+	//private LinkedList<PieceObject> piecesList;
+    private PieceObject[][] piecesArray; 
 	private int turn;
 	private PieceColor pieceColor;
 	private LinkedList<Listener> listeners;
@@ -21,7 +25,8 @@ public class BoardModel {
 	
 	public BoardModel(int player) {
 		this.listeners = new LinkedList<>();
-		this.piecesList = new LinkedList<>();
+		//this.piecesList = new LinkedList<>();
+		this.piecesArray = new PieceObject[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 		if(player == Config.FIRST) {
 			this.pieceColor = PieceColor.WHITE;
 		}
@@ -34,7 +39,7 @@ public class BoardModel {
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
                     PieceObject pieceObject = new PieceObject(PieceColor.WHITE, x, y);
-                    piecesList.add(pieceObject);
+                    piecesArray[x][y] = pieceObject;
                     //System.out.println("x" + x + "y" + y);
                 }
             }
@@ -43,7 +48,7 @@ public class BoardModel {
             for(int x = 0; x< numCols; x++) {
                 if((x+y)%2 ==1){
                 	PieceObject pieceObject = new PieceObject(PieceColor.BLACK, x, y);
-                    piecesList.add(pieceObject);
+                	piecesArray[x][y] = pieceObject;
                     //System.out.println("x" + x + "y" + y);
                 }
             }
@@ -56,8 +61,10 @@ public class BoardModel {
 	}
 	
 	
-	public void setMove() {
-		
+	public void move(int xp, int yp, int xk, int yk) {
+		PieceObject piece = piecesArray[xp][yp];
+		piecesArray[xp][yp] = null;
+		piecesArray[xk][yk] = piece;
 		notifyObservers();
 	}
 	

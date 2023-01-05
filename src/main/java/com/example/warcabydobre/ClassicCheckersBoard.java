@@ -3,6 +3,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.example.warcabydobre.view.BlackSquare;
+import com.example.warcabydobre.view.GraphicalPiece;
+import com.example.warcabydobre.view.PieceColor;
+import com.example.warcabydobre.view.WhiteSquare;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
