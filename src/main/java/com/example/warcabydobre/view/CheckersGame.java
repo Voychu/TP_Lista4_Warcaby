@@ -69,7 +69,7 @@ public class CheckersGame extends Application implements Runnable{
     private GraphicalPiece[][] piecesArray;//TODO: edytowanie tablicy przy przeuswaniu pionkow
     private Group squaresGroup;
     private Group piecesGroup;
-    private BlackSquare[][] board = new BlackSquare[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
+    private Square[][] board = new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 
    
     
@@ -192,6 +192,7 @@ public class CheckersGame extends Application implements Runnable{
                     WhiteSquare wSquare = 
                     		new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
                     //squaresArray[a][b] = wSquare;
+                    board[i][j] = wSquare;
                     squaresGroup.getChildren().addAll(wSquare);
                     wSquare.relocate(x,y);
                     //a+=1;
@@ -334,9 +335,9 @@ public class CheckersGame extends Application implements Runnable{
         int yp = toBoardCoordinates(graphicalPiece.getOldY());
         System.out.println(xp + ", " + yp);
 
-        if(Math.abs(newX - xp) == 1 && newY - yp == graphicalPiece.getColor().movementDirection)
+        if(Math.abs(newX - xp) == 1 && newY - yp == graphicalPiece.getColor().getMovementDirection())
             return new Move(MovementTypes.FORWARD);
-        else if (Math.abs(newX - xp) == 2 && newY - yp == graphicalPiece.getColor().movementDirection* 2)
+        else if (Math.abs(newX - xp) == 2 && newY - yp == graphicalPiece.getColor().getMovementDirection()* 2)
             {
                 int x1 = xp + (newX - xp)/2;
                 int y1 = yp + (newY - yp)/2;
@@ -358,6 +359,7 @@ public class CheckersGame extends Application implements Runnable{
 
         graphicalPiece.setOnMouseReleased(e -> {
         	//TODO: wywolanie metody onPieceMoved z Controllera!!!
+        	///controller.onPieceMoved(graphicalPiece,e);
         	//TODO: Przekopiowac wnetrze tej metody do onPieceMoved razem z metodami prywatnymi
             int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
             int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
@@ -554,7 +556,7 @@ public class CheckersGame extends Application implements Runnable{
     private void initMVC() {
         this.boardModel = new BoardModel(player);
         System.out.println(player);
-        //this.controller = new GameController(this.boardModel);
+        ///this.controller = new GameController(this.boardModel, piecesArray);
     }
 	
 	
