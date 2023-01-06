@@ -25,7 +25,13 @@ public class BoardModel {
     	
 		@Override
 		public void onChange(BoardModel model, int x, int y) {
-			graphicalPiece.move(x,y);
+			if (model.getPiecesArray()[x][y] == null) {
+				graphicalPiece.delete();
+			}
+			else if (model.getPiecesArray()[x][y] != null) {
+				graphicalPiece.move(x,y);
+			}
+			
 			
 		}
     	
@@ -34,6 +40,13 @@ public class BoardModel {
 
 	//private LinkedList<PieceObject> piecesList;
     private PieceObject[][] piecesArray; 
+	/**
+	 * @return the piecesArray
+	 */
+	public PieceObject[][] getPiecesArray() {
+		return piecesArray;
+	}
+
 	private int turn;
 	private PieceColor pieceColor;
 	private LinkedList<Listener> listeners;
@@ -93,6 +106,11 @@ public class BoardModel {
 		piecesArray[xp][yp] = null;
 		piecesArray[xk][yk] = piece;
 		notifyObservers(xk, yk);
+	}
+	
+	public void deletePieceObject(int x, int y) throws InvalidMoveException {
+		piecesArray[x][y] = null;
+		notifyObservers(x, y);
 	}
 	
 	private void notifyObservers(int xk, int yk) {
