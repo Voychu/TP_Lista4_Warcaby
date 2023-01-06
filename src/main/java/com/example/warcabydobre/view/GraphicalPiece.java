@@ -2,6 +2,7 @@ package com.example.warcabydobre.view;
 
 import com.example.warcabydobre.Config;
 
+import javafx.scene.Group;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -10,17 +11,20 @@ public class GraphicalPiece extends StackPane {
 	
 	private PieceColor color;
 	
+	private Group piecesGroup;
+	
 
 	private double mouseX, mouseY;
 	private double oldX, oldY;
 
 	private double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
 	
-	public GraphicalPiece(PieceColor color, int x, int y) {
+	public GraphicalPiece(PieceColor color, int x, int y, Group piecesGroup) {
 
 		move(x, y);
 
 		this.color = color;
+		this.piecesGroup = piecesGroup;
 		
 
 		Circle circle = new Circle();
@@ -69,6 +73,13 @@ public class GraphicalPiece extends StackPane {
 		oldY = y * Config.SQUARE_CLASSIC_HEIGHT;
 		relocate(oldX, oldY);
 	}
+	
+	
+	public void delete() {
+		piecesGroup.getChildren().remove(this);
+		
+	}
+	
 	public void abortMove() {
 		relocate(oldX, oldY);
 	}

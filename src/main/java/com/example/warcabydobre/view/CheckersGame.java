@@ -355,7 +355,7 @@ public class CheckersGame extends Application implements Runnable{
             return (int)(pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int)(Config.SQUARE_CLASSIC_WIDTH);
         }
     private GraphicalPiece makeGraphicalPiece(PieceColor Color, int x, int y) {
-        GraphicalPiece graphicalPiece = new GraphicalPiece(Color, x, y);
+        GraphicalPiece graphicalPiece = new GraphicalPiece(Color, x, y, piecesGroup);
 
         graphicalPiece.setOnMouseReleased(e -> {
         	//TODO: wywolanie metody onPieceMoved z Controllera!!!
@@ -398,7 +398,8 @@ public class CheckersGame extends Application implements Runnable{
                     //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
                         //tworzenie damki
                     board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
-                    piecesGroup.getChildren().remove(otherPiece);
+                    //piecesGroup.getChildren().remove(otherPiece);
+                    otherPiece.delete();
                     //graphicalPiecesList.remove(otherPiece);
                     int x_cord = toBoardCoordinates(otherPiece.getOldX());
                     int y_cord = toBoardCoordinates(otherPiece.getOldY());
