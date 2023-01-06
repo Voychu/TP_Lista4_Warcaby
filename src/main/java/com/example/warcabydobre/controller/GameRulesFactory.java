@@ -8,9 +8,9 @@ public class GameRulesFactory extends AbstractFactory {
             return null;
         }
 
-        if(type.equalsIgnoreCase("classic")){
+        /*if(type.equalsIgnoreCase("classic")){
             return new ClassicCheckersRules();
-        }   
+        }*/   
 
         return null;
 	}
