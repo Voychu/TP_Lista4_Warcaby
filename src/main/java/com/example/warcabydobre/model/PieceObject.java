@@ -28,6 +28,10 @@ public class PieceObject {
 	public int getY() {
 		return y;
 	}
+	
+	public int getMovementDirection() {
+		return color.getMovementDirection();
+	}
 
 	public boolean isQueen() {
 		return isQueen;

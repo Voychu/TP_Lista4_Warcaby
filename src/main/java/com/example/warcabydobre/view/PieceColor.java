@@ -10,10 +10,14 @@ public enum PieceColor {
 		pieceColor = i;
 	}*/
 
-	final int movementDirection;
+	private final int movementDirection;
 
 	PieceColor(int movementDirection) {
 		this.movementDirection = movementDirection;
+	}
+
+	public int getMovementDirection() {
+		return movementDirection;
 	}
 
 }
