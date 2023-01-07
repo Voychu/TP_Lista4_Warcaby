@@ -9,61 +9,55 @@ import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.BoardModel.Listener;
 import com.example.warcabydobre.model.BoardModel.PieceListener;
+import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.PieceObject;
 import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.Move;
+import com.example.warcabydobre.view.Square;
 
 import javafx.scene.input.MouseEvent;
 
 //Klasa kontroleraa
 //wzorzec projektowy MVC
 
-
 public class GameController {
-	
+
 	private PrintWriter out = null;
-    private BufferedReader in = null;
-	//private ClassicCheckersBoard board;
+	private BufferedReader in = null;
+	// private ClassicCheckersBoard board;
 	private String message;
 	private BoardModel boardModel;
-	//TODO GameRules
+	// TODO GameRules
 	private GameRules rules;
-	private GraphicalPiece[][] graphicalPiecesArray; 
-	
-	private BlackSquare[][] board;//TODO: dziurawa tablica
+	private GraphicalPiece[][] graphicalPiecesArray;
 
-	
-	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, BlackSquare[][] board) {
+	private Square[][] board;
+
+	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, Square[][] board) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
 		this.board = board;
-		this.rules = new ClassicCheckersRules(boardModel.getPiecesArray());//TODO Factory
-		for(int i = 0 ; i<Config.CLASSICAL_CHECKERS_BOARD_WIDTH;i++) {
-			for(int j = 0 ; j<Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;j++) {
+		this.rules = new ClassicCheckersRules(boardModel);// TODO Factory
+		for (int j = 0; j < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; j++) {
+			for (int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_HEIGHT; i++) {
 				GraphicalPiece graphicalPiece = graphicalPiecesArray[i][j];
-				if(graphicalPiece != null) { //this.boardModel.
-					Listener pieceListener= this.boardModel.new PieceListener(graphicalPiece);
+				if (graphicalPiece != null) { // this.boardModel.
+					Listener pieceListener = boardModel.new PieceListener(graphicalPiece);
 					boardModel.addListener(pieceListener);
 				}
 			}
 		}
-		
-		
-		
+
 	}
-	
-	
-	 private int toBoardCoordinates(double pixel)
-     {
-         return (int)(pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int)(Config.SQUARE_CLASSIC_WIDTH);
-     }
-	 
-	/* 
-	
-	 //TODO: implementacja metody
-	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) {
+
+	private int toBoardCoordinates(double pixel) {
+		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
+	}
+
+	// TODO: implementacja metody
+	/*public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 		//TODO: Przekonwertowac piksele -> inty
 		//TODO: wywolac metode tryMove z GameRules.
 		//TODO: Zaktualizowac wspolrzedne pionka na podstawie zmiennej Move.
@@ -71,22 +65,23 @@ public class GameController {
 		
 		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
 	    int oldY = toBoardCoordinates(graphicalPiece.getOldY());
-		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
-          int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
+		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());//zastanowic sie ???
+        int newY = toBoardCoordinates(graphicalPiece.getLayoutY());//zastanowic sie ???
 
-            ModelMove result;
+       ModelMove modelResult;
+       Move graphicalResult;
 
             if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH || newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
-                result = new ModelMove(MovementTypes.NONE);
+                modelResult = new ModelMove(MovementTypes.NONE);
+                graphicalResult = new Move(MovementTypes.NONE);
             } else {
             
-                result = rules.tryMove(oldX, oldY, newX, newY);
+                modelResult = rules.tryMove(oldX, oldY, newX, newY);
+                //graphicalResult = 
             }
 
-            //int xp = toBoardCoordinates(graphicalPiece.getOldX());
-            //int yp = toBoardCoordinates(graphicalPiece.getOldY());
 
-            switch (result.getMovementType()) {
+            switch (modelResult.getMovementType()) {
                 case NONE:
                     graphicalPiece.abortMove();
                     break;
@@ -95,7 +90,8 @@ public class GameController {
                     board[oldX][oldY].setGraphicalPiece(null);
                     board[newX][newY].setGraphicalPiece(graphicalPiece);
                     //TODO: try-catch:
-                    this.boardModel.movePieceObject(oldX, oldY, newX, newY);
+                    boardModel.movePieceObject(oldX, oldY, newX, newY);	
+                    
                     //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
                         //tworzenie damki
                     //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
@@ -105,77 +101,59 @@ public class GameController {
                     graphicalPiece.move(newX, newY);
                     board[oldX][oldY].setGraphicalPiece(null);
                     board[newX][newY].setGraphicalPiece(graphicalPiece);
-                    ///GraphicalPiece otherPiece = result.getGraphicalPiece();
+                    GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
                     
                     //TODO: Wywolanie boardModel.deletePieceObject()
                     //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
                         //tworzenie damki
                     //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
                         //tworzenie damki
-                    ///board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
-                    ///piecesGroup.getChildren().remove(otherPiece);//W modelu listenery na usuwanie
-                    //graphicalPiecesList.remove(otherPiece);
-                    ///int x_cord = toBoardCoordinates(otherPiece.getOldX());
-                    ///int y_cord = toBoardCoordinates(otherPiece.getOldY());
-                    ///piecesArray[x_cord][y_cord] 
-                    		= null;
-                    System.out.println(x_cord + ", " +  y_cord);
-                    break;
+                   board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
+                   otherPiece.delete();;//W modelu listenery na usuwanie
+                   int x_cord = toBoardCoordinates(otherPiece.getOldX());
+                   int y_cord = toBoardCoordinates(otherPiece.getOldY());
+                   try {
+                	   boardModel.deletePieceObject(x_cord, y_cord);
+                	   System.out.println(x_cord + ", " +  y_cord);
+                   } 
+                   catch (InvalidMoveException ex) {
+                	   graphicalPiece.abortMove();
+				}
+                   break;
             }
-        });
-
 	}*/
-	
 
 	public BoardModel getBoardModel() {
 		return boardModel;
 	}
 
-
-
-	/*public void setBoardModel(BoardModel boardModel) {
-		this.boardModel = boardModel;
-		
-	}*/
-
-
+	/*
+	 * public void setBoardModel(BoardModel boardModel) { this.boardModel =
+	 * boardModel;
+	 * 
+	 * }
+	 */
 
 	public String getMessage() {
 		return message;
 	}
 
-
-
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
+	/*
+	 * public ClassicCheckersBoard getBoard() { return board; }
+	 */
 
+	/*
+	 * public void setBoard(ClassicCheckersBoard board) { this.board = board; }
+	 */
 
-	/*public ClassicCheckersBoard getBoard() {
-		return board;
-	}*/
-
-
-
-
-
-	/*public void setBoard(ClassicCheckersBoard board) {
-		this.board = board;
-	}*/
-
-
-
-	
-	/*public void receiveMessage() {
-		board.setLabelText(message);
-	}
-	
-	public void sendMessage() {
-		board.getSendingText();
-	}*/
-	
-	
-	
+	/*
+	 * public void receiveMessage() { board.setLabelText(message); }
+	 * 
+	 * public void sendMessage() { board.getSendingText(); }
+	 */
 
 }

@@ -11,6 +11,24 @@ public class BoardModel {
 	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
     private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
     
+    
+
+	//private LinkedList<PieceObject> piecesList;
+    private PieceObject[][] piecesArray; 
+	
+
+	private int turn;
+	private PieceColor pieceColor;
+	private LinkedList<Listener> listeners;
+	
+	/**
+	 * @return the piecesArray
+	 */
+	public PieceObject[][] getPiecesArray() {
+		return piecesArray;
+	}
+	
+    
     public interface Listener {
     	void onChange(BoardModel model, int x, int y);
     }
@@ -37,20 +55,13 @@ public class BoardModel {
     	
     }
 	
-
-	//private LinkedList<PieceObject> piecesList;
-    private PieceObject[][] piecesArray; 
-	/**
-	 * @return the piecesArray
-	 */
-	public PieceObject[][] getPiecesArray() {
-		return piecesArray;
+    public boolean isBlackSquare(int x, int y) {
+    	return (x+y)%2 == 1;
+    }
+    
+    public boolean isOccupied(int x, int y) {
+		return piecesArray[x][y] != null;
 	}
-
-	private int turn;
-	private PieceColor pieceColor;
-	private LinkedList<Listener> listeners;
-	
 	
 	
 	public BoardModel(int player) {
@@ -67,7 +78,7 @@ public class BoardModel {
 		this.turn = Config.FIRST;
 		for (int y=0; y<numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
-                if((x+y)%2 ==1){
+                if(isBlackSquare(x,y)){
                     PieceObject pieceObject = new PieceObject(PieceColor.WHITE, x, y);
                     piecesArray[x][y] = pieceObject;
                     //System.out.println("x" + x + "y" + y);
@@ -76,7 +87,7 @@ public class BoardModel {
         }
         for (int y=5; y<5+numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
-                if((x+y)%2 ==1){
+                if(isBlackSquare(x,y)){
                 	PieceObject pieceObject = new PieceObject(PieceColor.BLACK, x, y);
                 	piecesArray[x][y] = pieceObject;
                     //System.out.println("x" + x + "y" + y);
@@ -91,14 +102,20 @@ public class BoardModel {
 	}
 	
 	
+	
+	
 	public void movePieceObject(int xp, int yp, int xk, int yk) throws InvalidMoveException{
 		PieceObject piece = piecesArray[xp][yp];
 		if(piece == null) {
 			throw new InvalidMoveException("brak pionka");
 		}
 		
+		//biale pola
+		if(!isBlackSquare(xk,yk)){
+            throw new InvalidMoveException("Nie mozna wykonac ruchu na biale pole");
+        }
+		
 		//TODO metody prywatne do kazdej osobnej procedury
-		//TODO biale pola
 		//TODO ruch do tylu
 		//TODO bicie pionka
 		//TODO pionek nakoncu planszy isQueen = true
