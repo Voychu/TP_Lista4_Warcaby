@@ -1,4 +1,4 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.srv;
 
 import java.io.*;
 import java.net.Socket;
