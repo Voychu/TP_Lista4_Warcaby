@@ -17,7 +17,7 @@ public class GraphicalPiece extends StackPane {
 	private double mouseX, mouseY;
 	private double oldX, oldY;
 
-	private double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
+	private final double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
 	
 	public GraphicalPiece(PieceColor color, int x, int y, Group piecesGroup) {
 
