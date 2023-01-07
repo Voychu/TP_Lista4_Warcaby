@@ -44,7 +44,8 @@ public class GameController {
 			for (int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_HEIGHT; i++) {
 				GraphicalPiece graphicalPiece = graphicalPiecesArray[i][j];
 				if (graphicalPiece != null) { // this.boardModel.
-					Listener pieceListener = boardModel.new PieceListener(graphicalPiece);
+					Listener pieceListener = boardModel.new PieceListener(graphicalPiece,
+							boardModel.getPiecesArray()[i][j], board);
 					boardModel.addListener(pieceListener);
 				}
 			}
@@ -52,76 +53,102 @@ public class GameController {
 
 	}
 
-	private int toBoardCoordinates(double pixel) {
+	public static int toBoardCoordinates(double pixel) {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
+	/*
+	 * private Move executeMove(GraphicalPiece graphicalPiece, int newX, int newY) {
+	 * try { int oldX = toBoardCoordinates(graphicalPiece.getOldX()); int oldY =
+	 * toBoardCoordinates(graphicalPiece.getOldY()); ModelMove modelMove =
+	 * rules.tryMove(oldX, oldY, newX, newY); MovementTypes moveType =
+	 * modelMove.getMovementType(); return new Move(moveType);
+	 * 
+	 * } catch(InvalidMoveException ex) { return new Move(MovementTypes.NONE); } }
+	 */
+
 	// TODO: implementacja metody
-	/*public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
-		//TODO: Przekonwertowac piksele -> inty
-		//TODO: wywolac metode tryMove z GameRules.
-		//TODO: Zaktualizowac wspolrzedne pionka na podstawie zmiennej Move.
-		//TODO: wywolac onPieceMoved z modelu.
-		
+	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
+		// TODO: Przekonwertowac piksele -> inty
+		// TODO: wywolac metode tryMove z GameRules.
+		// TODO: Zaktualizowac wspolrzedne pionka na podstawie zmiennej Move.
+		// TODO: wywolac onPieceMoved z modelu.
+
+		System.out.println("OK1");
 		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
-	    int oldY = toBoardCoordinates(graphicalPiece.getOldY());
-		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());//zastanowic sie ???
-        int newY = toBoardCoordinates(graphicalPiece.getLayoutY());//zastanowic sie ???
+		int oldY = toBoardCoordinates(graphicalPiece.getOldY());
+		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
+		int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
 
-       ModelMove modelResult;
-       Move graphicalResult;
+		System.out.println("OK2");
 
-            if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH || newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
-                modelResult = new ModelMove(MovementTypes.NONE);
-                graphicalResult = new Move(MovementTypes.NONE);
-            } else {
-            
-                modelResult = rules.tryMove(oldX, oldY, newX, newY);
-                //graphicalResult = 
-            }
+		ModelMove modelResult;
 
+		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
+				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
+			modelResult = new ModelMove(MovementTypes.NONE);
+			// graphicalResult = new Move(MovementTypes.NONE);
+		} else {
 
-            switch (modelResult.getMovementType()) {
-                case NONE:
-                    graphicalPiece.abortMove();
-                    break;
-                case FORWARD:
-                    graphicalPiece.move(newX, newY);
-                    board[oldX][oldY].setGraphicalPiece(null);
-                    board[newX][newY].setGraphicalPiece(graphicalPiece);
-                    //TODO: try-catch:
-                    boardModel.movePieceObject(oldX, oldY, newX, newY);	
-                    
-                    //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
-                        //tworzenie damki
-                    //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
-                        //tworzenie damki
-                    break;
-                case CAPTURE_FORWARD:
-                    graphicalPiece.move(newX, newY);
-                    board[oldX][oldY].setGraphicalPiece(null);
-                    board[newX][newY].setGraphicalPiece(graphicalPiece);
-                    GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
-                    
-                    //TODO: Wywolanie boardModel.deletePieceObject()
-                    //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
-                        //tworzenie damki
-                    //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
-                        //tworzenie damki
-                   board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece.getOldY())].setGraphicalPiece(null);
-                   otherPiece.delete();;//W modelu listenery na usuwanie
-                   int x_cord = toBoardCoordinates(otherPiece.getOldX());
-                   int y_cord = toBoardCoordinates(otherPiece.getOldY());
-                   try {
-                	   boardModel.deletePieceObject(x_cord, y_cord);
-                	   System.out.println(x_cord + ", " +  y_cord);
-                   } 
-                   catch (InvalidMoveException ex) {
-                	   graphicalPiece.abortMove();
-				}
-                   break;
-            }
-	}*/
+			modelResult = rules.tryMove(oldX, oldY, newX, newY);
+			// graphicalResult =
+		}
+
+		System.out.println("OK3");
+		switch (modelResult.getMovementType()) {
+		case NONE:
+			graphicalPiece.abortMove();
+			break;
+		case FORWARD:
+			// graphicalPiece.move(newX, newY);
+//                    board[oldX][oldY].setGraphicalPiece(null);
+//                    board[newX][newY].setGraphicalPiece(graphicalPiece);
+			// TODO: try-catch:
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+
+			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+			// tworzenie damki
+			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+			// tworzenie damki
+			System.out.println("OK4");
+			break;
+		case CAPTURE_FORWARD:
+//                    graphicalPiece.move(newX, newY);
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+				// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
+				int x1 = oldX + (newX - oldX) / 2;
+				int y1 = oldY + (newY - oldY) / 2;
+				boardModel.deletePieceObject(x1, y1);
+
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+
+//                    board[oldX][oldY].setGraphicalPiece(null);
+//                    board[newX][newY].setGraphicalPiece(graphicalPiece);
+			// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
+
+			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+			// tworzenie damki
+			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+			// tworzenie damki
+			/*
+			 * board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece
+			 * .getOldY())].setGraphicalPiece(null); //otherPiece.delete();;//W modelu
+			 * listenery na usuwanie int x_cord = toBoardCoordinates(otherPiece.getOldX());
+			 * int y_cord = toBoardCoordinates(otherPiece.getOldY()); try {
+			 * boardModel.deletePieceObject(x_cord, y_cord); System.out.println(x_cord +
+			 * ", " + y_cord); } catch (InvalidMoveException ex) {
+			 * graphicalPiece.abortMove(); }
+			 */
+			break;
+		}
+	}
 
 	public BoardModel getBoardModel() {
 		return boardModel;
