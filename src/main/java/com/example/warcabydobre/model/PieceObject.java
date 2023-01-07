@@ -6,8 +6,8 @@ import com.example.warcabydobre.view.PieceColor;
 public class PieceObject {
 	
 	private PieceColor color;
-	int x;
-	int y;
+	private int x;
+	private int y;
 	boolean isQueen;
 	
 	public PieceObject(PieceColor color, int x, int y) {
@@ -21,13 +21,7 @@ public class PieceObject {
 		return color;
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
+	
 	
 	public int getMovementDirection() {
 		return color.getMovementDirection();
@@ -41,13 +35,6 @@ public class PieceObject {
 		this.color = color;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
 
 	public void setQueen(boolean isQueen) {
 		this.isQueen = isQueen;
