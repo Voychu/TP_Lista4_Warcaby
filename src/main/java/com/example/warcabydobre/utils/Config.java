@@ -1,4 +1,4 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.utils;
 
 public class Config {
 	public static final String APPLICATION_TITLE_TXT =
@@ -29,6 +29,13 @@ public class Config {
     public static final int SECOND=2;
     public static final String CLASSIC_CHECKERS_TYPE = 
     		"classic";
+    public static final int PORT = 4444;
+    public static final String LOCALHOST_ADDRESS = "localhost";
+    public final static int PLAYER1 = 1;
+	public final static int PLAYER2 = 2;
+
+	public final static int ACTIVE = 0;
+	public final static int NONACTIVE = 1;
 	
 	
 	

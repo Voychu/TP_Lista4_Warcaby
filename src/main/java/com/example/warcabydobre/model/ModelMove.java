@@ -1,5 +1,5 @@
 package com.example.warcabydobre.model;
-import com.example.warcabydobre.view.GraphicalPiece;
+
 
 public class ModelMove {
     private MovementTypes type;

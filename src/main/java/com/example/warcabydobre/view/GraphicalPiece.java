@@ -1,6 +1,6 @@
 package com.example.warcabydobre.view;
 
-import com.example.warcabydobre.Config;
+import com.example.warcabydobre.utils.Config;
 
 import javafx.scene.Group;
 import javafx.scene.layout.StackPane;

@@ -2,8 +2,8 @@ package com.example.warcabydobre.model;
 
 import java.util.LinkedList;
 
-import com.example.warcabydobre.Config;
 import com.example.warcabydobre.controller.GameController;
+import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
