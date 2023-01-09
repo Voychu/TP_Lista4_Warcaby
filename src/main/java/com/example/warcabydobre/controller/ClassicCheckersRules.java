@@ -35,7 +35,7 @@ public class ClassicCheckersRules implements GameRules {
 			throw new InvalidMoveException("Na tym polu nie ma pionka");
 		}
 		if (Math.abs(newX - oldX) == 1 && newY - oldY == pieceObject.getMovementDirection())
-			return new ModelMove(MovementTypes.FORWARD);
+			return new ModelMove(MovementTypes.FORWARD, oldX, oldY, newX, newY);
 		else if (Math.abs(newX - oldX) == 2 && newY - oldY == pieceObject.getMovementDirection() * 2) {
 			int x1 = oldX + (newX - oldX) / 2;
 			int y1 = oldY + (newY - oldY) / 2;
@@ -43,7 +43,7 @@ public class ClassicCheckersRules implements GameRules {
 			PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 
 			if (boardModel.isOccupied(x1, y1) && secondPiece.getColor() != pieceObject.getColor()) {
-				return new ModelMove(MovementTypes.CAPTURE_FORWARD, secondPiece);
+				return new ModelMove(MovementTypes.CAPTURE_FORWARD, secondPiece, oldX, oldY, newX, newY);
 			}
 		}
 		return new ModelMove(MovementTypes.NONE);
