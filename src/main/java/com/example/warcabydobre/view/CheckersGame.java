@@ -9,11 +9,12 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import com.example.warcabydobre.Config;
 import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.srvhandler.ServerHandler;
+import com.example.warcabydobre.utils.Config;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -48,16 +49,10 @@ public class CheckersGame extends Application implements Runnable {
 	Label messageLabel;
 	private Button confirmButton;
 	private Alert endingGameAlert;
-	private int player;
 
-	public final static int PLAYER1 = 1;
-	public final static int PLAYER2 = 2;
+	private static int actualPlayer = Config.PLAYER1;
 
-	public final static int ACTIVE = 0;
-	public final static int NONACTIVE = 1;
-	private static int actualPlayer = PLAYER1;
-
-	private static int showing = ACTIVE;
+	private static int showing = Config.ACTIVE;
 
 	Socket socket = null;
 	PrintWriter out = null;
@@ -69,6 +64,7 @@ public class CheckersGame extends Application implements Runnable {
 	private GraphicalPiece[][] piecesArray;// TODO: edytowanie tablicy przy przeuswaniu pionkow
 	private Group squaresGroup;
 	private Group piecesGroup;
+	private ServerHandler serverHandler;
 	private Square[][] board = new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 
 	/*
@@ -265,7 +261,7 @@ public class CheckersGame extends Application implements Runnable {
 
 		EventHandler<ActionEvent> sendingMessageHandler = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				sendMessage();
+				//sendMessage();
 
 			}
 		};
@@ -305,63 +301,14 @@ public class CheckersGame extends Application implements Runnable {
 	private GraphicalPiece makeGraphicalPiece(PieceColor Color, int x, int y) {
 		GraphicalPiece graphicalPiece = new GraphicalPiece(Color, x, y, piecesGroup);
 		
-		/*EventHandler<MouseEvent> handler = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				try {
-					controller.onPieceMoved(graphicalPiece, e);
-				} catch (InvalidMoveException ex) {
-					System.out.println(ex.getMessage());
-				}
-			}
-
-		};
-		graphicalPiece.setOnMouseReleased(handler);*/
 
         graphicalPiece.setOnMouseReleased(e -> {
-        	//TODO: wywolanie metody onPieceMoved z Controllera!!!
         	try {
         		controller.onPieceMoved(graphicalPiece,e);
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
 			}
-		// TODO: Przekopiowac wnetrze tej metody do onPieceMoved razem z metodami
-		// prywatnymi
-		/*
-		 * int newX = toBoardCoordinates(graphicalPiece.getLayoutX()); int newY =
-		 * toBoardCoordinates(graphicalPiece.getLayoutY());
-		 * 
-		 * Move result;
-		 * 
-		 * if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH ||
-		 * newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) { result = new
-		 * Move(MovementTypes.NONE); } else { result = tryMove(graphicalPiece, newX,
-		 * newY); }
-		 * 
-		 * int xp = toBoardCoordinates(graphicalPiece.getOldX()); int yp =
-		 * toBoardCoordinates(graphicalPiece.getOldY());
-		 * 
-		 * switch (result.getMovementType()) { case NONE: graphicalPiece.abortMove();
-		 * break; case FORWARD: graphicalPiece.move(newX, newY);
-		 * board[xp][yp].setGraphicalPiece(null);
-		 * board[newX][newY].setGraphicalPiece(graphicalPiece);
-		 * //if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8) //tworzenie
-		 * damki //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
-		 * //tworzenie damki break; case CAPTURE_FORWARD: graphicalPiece.move(newX,
-		 * newY); board[xp][yp].setGraphicalPiece(null);
-		 * board[newX][newY].setGraphicalPiece(graphicalPiece); GraphicalPiece
-		 * otherPiece = result.getGraphicalPiece(); //if(graphicalPiece.getColor() ==
-		 * PieceColor.WHITE && newY == 8) //tworzenie damki
-		 * //if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0) //tworzenie
-		 * damki
-		 * board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece
-		 * .getOldY())].setGraphicalPiece(null);
-		 * //piecesGroup.getChildren().remove(otherPiece); otherPiece.delete();
-		 * //graphicalPiecesList.remove(otherPiece); int x_cord =
-		 * toBoardCoordinates(otherPiece.getOldX()); int y_cord =
-		 * toBoardCoordinates(otherPiece.getOldY()); piecesArray[x_cord][y_cord] = null;
-		 * System.out.println(x_cord + ", " + y_cord); break; }
-		 */
+        	
 		});
 
 		return graphicalPiece;
@@ -375,7 +322,7 @@ public class CheckersGame extends Application implements Runnable {
 	 * public String sendMessage() { return sendingField.getText(); }
 	 */
 
-	public void sendMessage() {
+	/*public void sendMessage() {
 		String message = sendingField.getText();
 		out.println(message);
 		// messageLabel.setText("OppositeTurn");
@@ -402,49 +349,47 @@ public class CheckersGame extends Application implements Runnable {
 		// input.requestFocus();
 		showing = ACTIVE;
 		actualPlayer = player;
-	}
+	}*/
 
-	public void receiveMessage() {
+//	public void receiveMessage() {
+//		try {
+//			// Odbieranie z serwera
+//			String str = in.readLine();
+//
+//			if (str.equals("bye")) {
+//				/*
+//				 * endingGameAlert.setTitle("Uwaga");
+//				 * endingGameAlert.setHeaderText("Rozlaczono z serwerem.");
+//				 * endingGameAlert.setContentText("Czy chcesz zamknac okno?");
+//				 * endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+//				 * 
+//				 * Optional<ButtonType> clickedButton = endingGameAlert.showAndWait();
+//				 * if(clickedButton.get() == ButtonType.OK){ System.exit(0); }
+//				 */
+//				// Platform.runLater(()->System.exit(0));
+//				System.exit(0);
+//				socket.close();
+//			}
+//			// textLabel.setText(str);
+//			Platform.runLater(() -> textLabel.setText(str));
+//			// messageLabel.setText("My turn");
+//			Platform.runLater(() -> messageLabel.setText("My turn"));
+//			// send.setEnabled(true);
+//			// sendingField.setText("");
+//			Platform.runLater(() -> sendingField.setText(""));
+//
+//			Platform.runLater(() -> confirmButton.setDisable(false));
+//			// input.requestFocus();
+//		} catch (IOException e) {
+//			System.out.println("Read failed");
+//			System.exit(1);
+//		}
+//	}
+
+	private int receiveInitFromServer() {
 		try {
-			// Odbieranie z serwera
-			String str = in.readLine();
-
-			if (str.equals("bye")) {
-				/*
-				 * endingGameAlert.setTitle("Uwaga");
-				 * endingGameAlert.setHeaderText("Rozlaczono z serwerem.");
-				 * endingGameAlert.setContentText("Czy chcesz zamknac okno?");
-				 * endingGameAlert.initModality(Modality.APPLICATION_MODAL);
-				 * 
-				 * Optional<ButtonType> clickedButton = endingGameAlert.showAndWait();
-				 * if(clickedButton.get() == ButtonType.OK){ System.exit(0); }
-				 */
-				// Platform.runLater(()->System.exit(0));
-				System.exit(0);
-				socket.close();
-			}
-			// textLabel.setText(str);
-			Platform.runLater(() -> textLabel.setText(str));
-			// messageLabel.setText("My turn");
-			Platform.runLater(() -> messageLabel.setText("My turn"));
-			// send.setEnabled(true);
-			// sendingField.setText("");
-			Platform.runLater(() -> sendingField.setText(""));
-
-			Platform.runLater(() -> confirmButton.setDisable(false));
-			// input.requestFocus();
-		} catch (IOException e) {
-			System.out.println("Read failed");
-			System.exit(1);
-		}
-	}
-
-	private void receiveInitFromServer() {
-		try {
-			System.out.println("Oczekiwanie...");
-			player = Integer.parseInt(in.readLine());
-			System.out.println("Polaczono");
-			if (player == PLAYER1) {
+			int player = serverHandler.receiveInitFromServer();
+			if (player == Config.PLAYER1) {
 				// messageLabel.setText("My Turn");
 				Platform.runLater(() -> messageLabel.setText("My Turn"));
 
@@ -454,9 +399,11 @@ public class CheckersGame extends Application implements Runnable {
 				Platform.runLater(() -> confirmButton.setDisable(true));
 				// sendingField.setEnabled(false);
 			}
+			return player;
 		} catch (IOException e) {
 			System.out.println("Read failed");
 			System.exit(1);
+			return -1;
 		}
 	}
 
@@ -475,6 +422,7 @@ public class CheckersGame extends Application implements Runnable {
 		 */
 		// Mozna zrobic w jednej metodzie. Zostawiam
 		// dla potrzeb prezentacji
+		int player = controller.getPlayer();
 		f(player);
 	}
 
@@ -488,29 +436,47 @@ public class CheckersGame extends Application implements Runnable {
 					} catch (InterruptedException e) {
 					}
 				}
-				if (showing == ACTIVE) {
-					receiveMessage();
-					showing = NONACTIVE;
+				if (showing == Config.ACTIVE) {
+					controller.makeEnemyMove();
+					//String message = serverHandler.receiveMessage();
+					showing = Config.NONACTIVE;
 				}
 				notifyAll();
 			}
 		}
 	}
 
-	private void initMVC() {
+	private void initMVC(int player) {
 		this.boardModel = new BoardModel(player);
 		System.out.println(player);
-		controller = new GameController(this.boardModel, piecesArray, board);
+		controller = new GameController(this.boardModel, piecesArray, board, serverHandler);
+		controller.setPlayer(player);
 	}
 
+	private void initServerHandler() {
+		try {
+			this.serverHandler = new ServerHandler(Config.LOCALHOST_ADDRESS, Config.PORT);
+			this.socket = serverHandler.getSocket();
+		} catch (UnknownHostException e) {
+			System.out.println("Unknown host: localhost");
+			System.exit(1);
+		} catch (IOException e) {
+			System.out.println("No I/O");
+			System.exit(1);
+		}
+		
+	}
+	
 	@Override
 	public void start(Stage arg0) throws Exception {
 		// tworzenie kontrolera
 		initBoardStage();
-		listenSocket();
-
-		receiveInitFromServer();
-		initMVC();
+		//listenSocket();
+		initServerHandler();
+		
+		int player = receiveInitFromServer();
+		
+		initMVC(player);
 		startThread();
 
 	}
