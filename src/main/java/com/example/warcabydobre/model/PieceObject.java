@@ -40,6 +40,8 @@ public class PieceObject {
 		this.isQueen = isQueen;
 	}
 	
+	//TODO:Aktualizacja x,y
+	
 	
 	
 	
