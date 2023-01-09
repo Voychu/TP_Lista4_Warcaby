@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 
-import com.example.warcabydobre.Config;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.BoardModel.Listener;
@@ -12,6 +11,9 @@ import com.example.warcabydobre.model.BoardModel.PieceListener;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.PieceObject;
+import com.example.warcabydobre.srvhandler.MoveConverter;
+import com.example.warcabydobre.srvhandler.ServerHandler;
+import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.Move;
@@ -32,10 +34,20 @@ public class GameController {
 	// TODO GameRules
 	private GameRules rules;
 	private GraphicalPiece[][] graphicalPiecesArray;
+	private ServerHandler serverHandler;
 
 	private Square[][] board;
+	private ModelMove moveHelper = null;
+	
+	
+	private int actualPlayer = Config.PLAYER1;
+	
+	private int player;
 
-	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, Square[][] board) {
+	private int showing = Config.ACTIVE;
+
+	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, 
+			Square[][] board, ServerHandler serverHandler) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
 		this.board = board;
@@ -50,6 +62,7 @@ public class GameController {
 				}
 			}
 		}
+		this.serverHandler = serverHandler;
 
 	}
 
@@ -67,12 +80,7 @@ public class GameController {
 	 * } catch(InvalidMoveException ex) { return new Move(MovementTypes.NONE); } }
 	 */
 
-	// TODO: implementacja metody
 	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
-		// TODO: Przekonwertowac piksele -> inty
-		// TODO: wywolac metode tryMove z GameRules.
-		// TODO: Zaktualizowac wspolrzedne pionka na podstawie zmiennej Move.
-		// TODO: wywolac onPieceMoved z modelu.
 
 		System.out.println("OK1");
 		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
@@ -87,7 +95,6 @@ public class GameController {
 		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
 				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
 			modelResult = new ModelMove(MovementTypes.NONE);
-			// graphicalResult = new Move(MovementTypes.NONE);
 		} else {
 
 			modelResult = rules.tryMove(oldX, oldY, newX, newY);
@@ -95,16 +102,35 @@ public class GameController {
 		}
 
 		System.out.println("OK3");
-		switch (modelResult.getMovementType()) {
-		case NONE:
+		MovementTypes type = modelResult.getMovementType();
+		//TODO: Fabryka trybow
+		String message;
+		if(type != MovementTypes.NONE) {
+			message = MoveConverter.convertMoveToString(modelResult);
+			serverHandler.sendMessage(message);
+		}
+		else {
 			graphicalPiece.abortMove();
+		}
+		moveHelper = modelResult;
+		
+		
+}
+	
+	
+	public void movePieceAfterServerAnswer() {
+		MovementTypes type = moveHelper.getMovementType();
+		int oldX = moveHelper.getOldX();
+		int oldY = moveHelper.getOldY();
+		int newX = moveHelper.getNewX();
+		int newY = moveHelper.getNewY();
+		switch (type) {
+		case NONE:
 			break;
 		case FORWARD:
-			// graphicalPiece.move(newX, newY);
-//                    board[oldX][oldY].setGraphicalPiece(null);
-//                    board[newX][newY].setGraphicalPiece(graphicalPiece);
-			// TODO: try-catch:
+
 			try {
+				//TODO:Dopiero pospr. ruchu przez serwer
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
@@ -119,6 +145,7 @@ public class GameController {
 		case CAPTURE_FORWARD:
 //                    graphicalPiece.move(newX, newY);
 			try {
+				//TODO:Dopiero pospr. ruchu przez serwer
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 				// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
 				int x1 = oldX + (newX - oldX) / 2;
@@ -167,6 +194,53 @@ public class GameController {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public void makeEnemyMove() {
+		
+		
+	}
+
+	/**
+	 * @return the actualPlayer
+	 */
+	public int getActualPlayer() {
+		return actualPlayer;
+	}
+
+	/**
+	 * @return the showing
+	 */
+	public int getShowing() {
+		return showing;
+	}
+
+	/**
+	 * @param actualPlayer the actualPlayer to set
+	 */
+	public void setActualPlayer(int actualPlayer) {
+		this.actualPlayer = actualPlayer;
+	}
+
+	/**
+	 * @param showing the showing to set
+	 */
+	public void setShowing(int showing) {
+		this.showing = showing;
+	}
+
+	/**
+	 * @return the player
+	 */
+	public int getPlayer() {
+		return player;
+	}
+
+	/**
+	 * @param player the player to set
+	 */
+	public void setPlayer(int player) {
+		this.player = player;
 	}
 
 	/*
