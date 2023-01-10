@@ -39,6 +39,10 @@ public class ModelMove {
     public ModelMove(MovementTypes type, int oldX, int oldY, int newX, int newY){
         this(type,null,oldX,oldY,newX,newY);
     }
+    
+    public ModelMove(int oldX, int oldY, int newX, int newY){
+        this(null,oldX,oldY,newX,newY);
+    }
 	/**
 	 * @return the oldX
 	 */
