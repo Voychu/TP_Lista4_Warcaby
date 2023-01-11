@@ -2,6 +2,7 @@ package com.example.warcabydobre.srvhandler;
 
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.srv.Commands;
 
 public class MoveConverter {
 	
@@ -11,7 +12,7 @@ public class MoveConverter {
 	//TODO: move xp yp xk yk split po spacji
 	public static ModelMove convertToMove(String message) throws InvalidCommandException{
 		String[] parameters = message.split(separator);
-		if(!parameters[0].equals("move")) {
+		if(!parameters[0].equals(Commands.MOVE.getCommand())) {
 			return null;
 		}
 		if(parameters.length != 5) {
@@ -36,7 +37,7 @@ public class MoveConverter {
 	public static String convertMoveToString(ModelMove move) {
 		MovementTypes type = move.getMovementType();
 		if(type != MovementTypes.NONE) {
-			return "move " + move.getOldX() + " " + move.getOldY() +" "+
+			return Commands.MOVE.getCommand() + move.getOldX() + " " + move.getOldY() +" "+
 					move.getNewX() + " " + move.getNewY();
 		}
 		else return null;
