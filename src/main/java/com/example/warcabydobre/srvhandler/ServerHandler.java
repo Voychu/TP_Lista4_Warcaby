@@ -102,5 +102,13 @@ public class ServerHandler {
 			return MessageState.OK;
 
 	}
+	public void closeConnection(){
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
