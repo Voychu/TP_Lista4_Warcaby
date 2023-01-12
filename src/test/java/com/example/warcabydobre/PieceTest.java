@@ -32,13 +32,18 @@ public class PieceTest {
         BlackSquare tile = new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
         tile.setGraphicalPiece(gPiece);
         assertTrue(tile.isOccupied());
-        //test delete'a
+        int newX=8;
+        int newY=0;
+        gPiece.move(newX,newY);
+        assertEquals(gPiece.getLayoutX(),newX*Config.SQUARE_CLASSIC_WIDTH,0);
+        assertEquals(gPiece.getLayoutY(),newY*Config.CLASSICAL_CHECKERS_BOARD_HEIGHT,0);
     }
     @Test
-    public void TestObjectPiece(){
-        PieceObject pObject = new PieceObject(x,y, PieceColor.BLACK);
+    public void TestObjectPieceNotQueen(){
+        PieceObject pObject = new PieceObject(PieceColor.BLACK,x,y);
         assertFalse(pObject.isQueen());
     }
+
 
     @Test
     public void TestNumberOfPieces() {
