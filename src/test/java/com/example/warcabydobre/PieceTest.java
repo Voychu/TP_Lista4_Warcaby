@@ -11,8 +11,9 @@ import org.junit.Test;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 
 
 public class PieceTest {
@@ -35,7 +36,7 @@ public class PieceTest {
     }
     @Test
     public void TestObjectPiece(){
-        PieceObject pObject = new PieceObject(PieceColor.BLACK,x,y);
+        PieceObject pObject = new PieceObject(x,y, PieceColor.BLACK);
         assertFalse(pObject.isQueen());
     }
 
@@ -51,13 +52,16 @@ public class PieceTest {
                 if ((i + j) % 2 == 0) {
                     WhiteSquare wSquare = new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
                     board[i][j] = wSquare;
+                    System.out.println(i + " " + j);
                 } else {
                     BlackSquare bSquare = new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
                     board[i][j] = bSquare;
+                    System.out.println(i + " " + j);
                 }
             }
+        }    
             int OccupiedTiles = 0;
-            for ( j = 0; j < Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES; j++) {
+            for (int j = 0; j < Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES; j++) {
                 for ( int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; i++) {
                     if ((i + j) % 2 == 1) {
                         bPiece = new GraphicalPiece(PieceColor.BLACK, i, j, piecesGroup);
@@ -67,7 +71,7 @@ public class PieceTest {
                     }
                 }
             }
-            for (j = 5; j < 5 + Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES; j++) {
+            for (int j = 5; j < 5 + Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES; j++) {
                 for (int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; i++) {
                     if ((i + j) % 2 == 1) {
                         wPiece = new GraphicalPiece(PieceColor.WHITE, i, j, piecesGroup);
@@ -79,5 +83,4 @@ public class PieceTest {
             }
             assertEquals(OccupiedTiles, 24);
         }
-    }
 }
