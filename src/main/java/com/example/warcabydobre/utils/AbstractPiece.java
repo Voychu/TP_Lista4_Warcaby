@@ -1,13 +1,17 @@
 package com.example.warcabydobre.utils;
 
+import com.example.warcabydobre.view.PieceColor;
+
 public abstract class AbstractPiece {
 
 	private int x;
 	private int y;
+	private PieceColor color;
 	
-	public AbstractPiece(int x, int y) {
+	public AbstractPiece(int x, int y, PieceColor color) {
 		this.x = x;
 		this.y = y;
+		this.color = color;
 	}
 
 	/**
@@ -36,6 +40,25 @@ public abstract class AbstractPiece {
 	 */
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	/**
+	 * @return the color
+	 */
+	public PieceColor getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(PieceColor color) {
+		this.color = color;
+	}
+	
+	
+	public int getMovementDirection() {
+		return color.getMovementDirection();
 	}
 
 }

@@ -130,7 +130,7 @@ public class BoardModel {
 		for (int y=0; y<numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if(isBlackSquare(x,y)){
-                    PieceObject pieceObject = new PieceObject(PieceColor.BLACK, x, y);
+                    PieceObject pieceObject = new PieceObject(x, y, PieceColor.BLACK);
                     piecesArray[x][y] = pieceObject;
                     //System.out.println("x" + x + "y" + y);
                 }
@@ -139,7 +139,7 @@ public class BoardModel {
         for (int y=5; y<5+numRowsWithPieces; y++){
             for(int x = 0; x< numCols; x++) {
                 if(isBlackSquare(x,y)){
-                	PieceObject pieceObject = new PieceObject(PieceColor.WHITE, x, y);
+                	PieceObject pieceObject = new PieceObject(x, y, PieceColor.WHITE);
                 	piecesArray[x][y] = pieceObject;
                     //System.out.println("x" + x + "y" + y);
                 }
