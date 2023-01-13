@@ -1,5 +1,6 @@
 package com.example.warcabydobre.model;
 
+import com.example.warcabydobre.utils.AbstractPiece;
 
 public class ModelMove {
     private MovementTypes type;
@@ -12,9 +13,9 @@ public class ModelMove {
         return type;
     }
 
-    private PieceObject pieceObject;
+    private AbstractPiece pieceObject;
 
-    public PieceObject getPieceObject(){
+    public AbstractPiece getPieceObject(){
         return pieceObject;
     }
     
@@ -27,7 +28,7 @@ public class ModelMove {
     	this.type=type;
     }
     
-    public ModelMove(MovementTypes type, PieceObject pieceObject, int oldX, int oldY, int newX, int newY){
+    public ModelMove(MovementTypes type, AbstractPiece pieceObject, int oldX, int oldY, int newX, int newY){
         this.type = type;
         this.pieceObject = pieceObject;
         this.oldX = oldX;
@@ -66,6 +67,11 @@ public class ModelMove {
 	 */
 	public int getNewY() {
 		return newY;
+	}
+	
+	public boolean equals(ModelMove move) {
+		return (this.oldX == move.getOldX()) && (this.oldY == move.getOldY()) && 
+				(this.newX == move.getNewX()) && (this.newY == move.getNewY());
 	}
 	
 }
