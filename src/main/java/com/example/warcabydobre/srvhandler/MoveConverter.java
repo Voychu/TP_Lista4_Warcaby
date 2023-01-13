@@ -12,7 +12,9 @@ public class MoveConverter {
 	//TODO: move xp yp xk yk split po spacji
 	public static ModelMove convertToMove(String message) throws InvalidCommandException{
 		String[] parameters = message.split(separator);
-		if(!parameters[0].equals(Commands.MOVE.getCommand())) {
+		String moveStr = Commands.MOVE.getCommand();
+		String okmv = Commands.OKMV.getCommand();
+		if( !( (parameters[0].equals(moveStr)) || (parameters[0].equals(okmv)) ) ) {
 			return null;
 		}
 		if(parameters.length != 5) {
@@ -32,6 +34,19 @@ public class MoveConverter {
 		}
 		
 		
+	}
+	
+	public static Commands getCommandType(String message) {
+		String[] parameters = message.split(separator);
+		if(parameters[0].equals("move")) {
+			return Commands.MOVE;
+		}
+		else if(parameters[0].equals("okmv")) {
+			return Commands.OKMV;
+		}
+		else {
+			return Commands.ERMV;
+		}
 	}
 	
 	public static String convertMoveToString(ModelMove move) {
