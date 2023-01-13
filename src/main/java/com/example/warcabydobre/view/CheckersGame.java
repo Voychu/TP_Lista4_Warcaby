@@ -438,18 +438,7 @@ public class CheckersGame extends Application implements Runnable {
 					}
 				}
 				if (showing == Config.ACTIVE) {
-					//TODO: czekac az serwer wysle odpowiedz, ze ruch jest prawidlowy:
-					//0. Zrob test i wypisz odpowiedz serwera.
-					//1. controller.waitForServerApproval().
-					//2. controller.movePieceAfterServerAnswer().
-					//3. controller.waitForEnemyMove().
-					//4. controller.makeEnemyMove();
-					/*if(controller.waitForServerApproval()) {
-						controller.movePieceAfterServerAnswer();
-					}
-					else {
-						controller.abortMove();
-					}*/
+					
 					
 					controller.makeEnemyMove();
 					//String message = serverHandler.receiveMessage();

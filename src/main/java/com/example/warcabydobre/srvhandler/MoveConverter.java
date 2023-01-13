@@ -52,7 +52,7 @@ public class MoveConverter {
 	public static String convertMoveToString(ModelMove move) {
 		MovementTypes type = move.getMovementType();
 		if(type != MovementTypes.NONE) {
-			return Commands.MOVE.getCommand() + move.getOldX() + " " + move.getOldY() +" "+
+			return Commands.MOVE.getCommand() + " " + move.getOldX() + " " + move.getOldY() +" "+
 					move.getNewX() + " " + move.getNewY();
 		}
 		else return null;

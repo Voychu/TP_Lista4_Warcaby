@@ -173,6 +173,8 @@ public class GameController {
 			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
 			// tworzenie damki
 			System.out.println("OK4");
+			message = MoveConverter.convertMoveToString(modelResult);
+			serverHandler.sendMessage(message);
 			break;
 		case CAPTURE_FORWARD:
 //                    graphicalPiece.move(newX, newY);
@@ -182,6 +184,8 @@ public class GameController {
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
+				message = MoveConverter.convertMoveToString(modelResult);
+				serverHandler.sendMessage(message);
 
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
