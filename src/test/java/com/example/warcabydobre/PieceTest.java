@@ -40,7 +40,7 @@ public class PieceTest {
     }
     @Test
     public void TestObjectPieceNotQueen(){
-        PieceObject pObject = new PieceObject(PieceColor.BLACK,x,y);
+        PieceObject pObject = new PieceObject(x,y, PieceColor.BLACK);
         assertFalse(pObject.isQueen());
     }
 

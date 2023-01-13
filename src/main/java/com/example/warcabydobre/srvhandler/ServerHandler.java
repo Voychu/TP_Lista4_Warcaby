@@ -102,6 +102,13 @@ public class ServerHandler {
 			return MessageState.OK;
 
 	}
+	
+	
+	public String waitForServerApproval() {
+		String message = receiveMessage();
+		return message;
+	}
+	
 	public void closeConnection(){
 		try {
 			this.socket.close();

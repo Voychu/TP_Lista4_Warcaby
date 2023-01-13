@@ -6,7 +6,7 @@ import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.PieceObject;
 
-public class ClassicCheckersRules implements GameRules {
+public class ClassicCheckersRules implements GameRules{
 
 	private BoardModel boardModel;
 
@@ -14,7 +14,7 @@ public class ClassicCheckersRules implements GameRules {
 		this.boardModel = boardModel;
 	}
 
-	@Override
+
 	public boolean isMoveValid() {
 		// TODO Auto-generated method stub
 		return false;
@@ -23,7 +23,6 @@ public class ClassicCheckersRules implements GameRules {
 	// TODO: sprawdzic waznosc ruchu. Jesli nie, to zwrocic NONE
 	// TODO: Jesli dobry, to zwrocic nowe wspolrzedne intowe oraz fakt, czy jest
 	// bicie i czy zmienia sie w damke
-	@Override
 	public ModelMove tryMove(int oldX, int oldY, int newX, int newY) throws InvalidMoveException {
 		if (boardModel.isOccupied(newX, newY) || !boardModel.isBlackSquare(newX, newY)) {
 			return new ModelMove(MovementTypes.NONE);

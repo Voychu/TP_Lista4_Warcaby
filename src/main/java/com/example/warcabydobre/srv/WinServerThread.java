@@ -27,7 +27,6 @@ public class WinServerThread {
                 Thread gTh = new Thread(g);
                 gTh.start();
 
-                // TODO: Musi byc dokldnie dwoch klientow
 
             }*/
 
@@ -37,6 +36,7 @@ public class WinServerThread {
                 System.out.println("Player connected");
             }
             System.out.println("Two players connected");
+            GameData gameData = new GameData();
             Game g = new Game(players[0],players[1]);
             Thread gTh = new Thread(g);
             gTh.start();

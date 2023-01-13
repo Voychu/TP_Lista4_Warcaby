@@ -1,39 +1,26 @@
 package com.example.warcabydobre.model;
 
+import com.example.warcabydobre.utils.AbstractPiece;
 import com.example.warcabydobre.view.PieceColor;
 
 //klasa pionka jako obiektu abstrakcyjnego gry
-public class PieceObject {
+public class PieceObject extends AbstractPiece{
 	
-	private PieceColor color;
+	/*private PieceColor color;
 	private int x;
-	private int y;
+	private int y;*/
 	boolean isQueen;
 	
-	public PieceObject(PieceColor color, int x, int y) {
-		this.color = color;
-		this.x = x;
-		this.y = y;
+	public PieceObject(int x, int y, PieceColor color) {
+		super(x,y,color);
 		this.isQueen = false;
 	}
 
-	public PieceColor getColor() {
-		return color;
-	}
-
-	
-	
-	public int getMovementDirection() {
-		return color.getMovementDirection();
-	}
 
 	public boolean isQueen() {
 		return isQueen;
 	}
 
-	public void setColor(PieceColor color) {
-		this.color = color;
-	}
 
 
 	public void setQueen(boolean isQueen) {

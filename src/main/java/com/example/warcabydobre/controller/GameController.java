@@ -11,8 +11,12 @@ import com.example.warcabydobre.model.BoardModel.PieceListener;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.PieceObject;
+import com.example.warcabydobre.srv.Commands;
+import com.example.warcabydobre.srvhandler.InvalidCommandException;
 import com.example.warcabydobre.srvhandler.MoveConverter;
 import com.example.warcabydobre.srvhandler.ServerHandler;
+import com.example.warcabydobre.utils.AbstractPiece;
+import com.example.warcabydobre.utils.BoardStructure;
 import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
@@ -31,6 +35,7 @@ public class GameController {
 	// private ClassicCheckersBoard board;
 	private String message;
 	private BoardModel boardModel;
+	//private BoardStructure<T> boardStructure;
 	// TODO GameRules
 	private GameRules rules;
 	private GraphicalPiece[][] graphicalPiecesArray;
@@ -38,6 +43,7 @@ public class GameController {
 
 	private Square[][] board;
 	private ModelMove moveHelper = null;
+	private GraphicalPiece pieceHelper = null;
 	
 	
 	private int actualPlayer = Config.PLAYER1;
@@ -80,7 +86,7 @@ public class GameController {
 	 * } catch(InvalidMoveException ex) { return new Move(MovementTypes.NONE); } }
 	 */
 
-	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
+	/*public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 
 		System.out.println("OK1");
 		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
@@ -113,24 +119,50 @@ public class GameController {
 			graphicalPiece.abortMove();
 		}
 		moveHelper = modelResult;
+		pieceHelper = graphicalPiece;
 		
 		
-}
+}*/
 	
 	
-	public void movePieceAfterServerAnswer() {
-		MovementTypes type = moveHelper.getMovementType();
-		int oldX = moveHelper.getOldX();
-		int oldY = moveHelper.getOldY();
-		int newX = moveHelper.getNewX();
-		int newY = moveHelper.getNewY();
-		switch (type) {
+	
+	public void onPieceMovedOld(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
+		// TODO: Przekonwertowac piksele -> inty
+		// TODO: wywolac metode tryMove z GameRules.
+		// TODO: Zaktualizowac wspolrzedne pionka na podstawie zmiennej Move.
+		// TODO: wywolac onPieceMoved z modelu.
+
+		System.out.println("OK1");
+		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
+		int oldY = toBoardCoordinates(graphicalPiece.getOldY());
+		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
+		int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
+
+		System.out.println("OK2");
+
+		ModelMove modelResult;
+
+		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
+				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
+			modelResult = new ModelMove(MovementTypes.NONE);
+			// graphicalResult = new Move(MovementTypes.NONE);
+		} else {
+
+			modelResult = rules.tryMove(oldX, oldY, newX, newY);
+			// graphicalResult =
+		}
+
+		System.out.println("OK3");
+		switch (modelResult.getMovementType()) {
 		case NONE:
+			graphicalPiece.abortMove();
 			break;
 		case FORWARD:
-
+			// graphicalPiece.move(newX, newY);
+//                    board[oldX][oldY].setGraphicalPiece(null);
+//                    board[newX][newY].setGraphicalPiece(graphicalPiece);
+			// TODO: try-catch:
 			try {
-				//TODO:Dopiero pospr. ruchu przez serwer
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
@@ -145,7 +177,6 @@ public class GameController {
 		case CAPTURE_FORWARD:
 //                    graphicalPiece.move(newX, newY);
 			try {
-				//TODO:Dopiero pospr. ruchu przez serwer
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 				// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
 				int x1 = oldX + (newX - oldX) / 2;
@@ -176,7 +207,95 @@ public class GameController {
 			break;
 		}
 	}
-
+	
+	
+//	public void movePieceAfterServerAnswer() {
+//		MovementTypes type = moveHelper.getMovementType();
+//		int oldX = moveHelper.getOldX();
+//		int oldY = moveHelper.getOldY();
+//		int newX = moveHelper.getNewX();
+//		int newY = moveHelper.getNewY();
+//		switch (type) {
+//		case NONE:
+//			break;
+//		case FORWARD:
+//
+//			try {
+//				//TODO:Dopiero pospr. ruchu przez serwer
+//				boardModel.movePieceObject(oldX, oldY, newX, newY);
+//			} catch (InvalidMoveException ex) {
+//				System.out.println("Niaprawidlowy ruch");
+//			}
+//
+//			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+//			// tworzenie damki
+//			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+//			// tworzenie damki
+//			System.out.println("OK4");
+//			break;
+//		case CAPTURE_FORWARD:
+////                    graphicalPiece.move(newX, newY);
+//			try {
+//				//TODO:Dopiero pospr. ruchu przez serwer
+//				boardModel.movePieceObject(oldX, oldY, newX, newY);
+//				// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
+//				int x1 = oldX + (newX - oldX) / 2;
+//				int y1 = oldY + (newY - oldY) / 2;
+//				boardModel.deletePieceObject(x1, y1);
+//
+//			} catch (InvalidMoveException ex) {
+//				System.out.println("Niaprawidlowy ruch");
+//			}
+//
+////                    board[oldX][oldY].setGraphicalPiece(null);
+////                    board[newX][newY].setGraphicalPiece(graphicalPiece);
+//			// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
+//
+//			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+//			// tworzenie damki
+//			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+//			// tworzenie damki
+//			/*
+//			 * board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece
+//			 * .getOldY())].setGraphicalPiece(null); //otherPiece.delete();;//W modelu
+//			 * listenery na usuwanie int x_cord = toBoardCoordinates(otherPiece.getOldX());
+//			 * int y_cord = toBoardCoordinates(otherPiece.getOldY()); try {
+//			 * boardModel.deletePieceObject(x_cord, y_cord); System.out.println(x_cord +
+//			 * ", " + y_cord); } catch (InvalidMoveException ex) {
+//			 * graphicalPiece.abortMove(); }
+//			 */
+//			break;
+//		}
+//	}
+//	
+	
+//	public boolean waitForServerApproval() {
+//		String message = serverHandler.waitForServerApproval();
+//		
+//		//TODO: Czekac az przyjdzie odpowiednia odpowiedz.
+//		//1. utworz petle nieskonczona i czekaj tak dlugo, az przyjdzie odpowiedz dotyczaca
+//		//	ruchu, ktory zosta wykonany.
+//		//2. w petli skonwertuj odpowiedz z serwra na obiekt typu ModelMove i porownaj
+//		//	z obiektem moveHelper pod warunkiem, ze byla odpowiez OKMV.
+//		
+//		while(true) {
+//			ModelMove move;
+//			try {
+//				move = MoveConverter.convertToMove(message);
+//			} catch (InvalidCommandException ex) {
+//				System.out.println(ex.getMessage());
+//				continue;
+//			};
+//			Commands command = MoveConverter.getCommandType(message);
+//			if(command == Commands.OKMV && move.equals(moveHelper)){ 
+//					return true;
+//			}
+//			else if(command == Commands.ERMV && move.equals(moveHelper)){
+//				return false;
+//			}
+//			
+//		}
+//	}
 	public BoardModel getBoardModel() {
 		return boardModel;
 	}
@@ -242,6 +361,14 @@ public class GameController {
 	public void setPlayer(int player) {
 		this.player = player;
 	}
+	
+	
+	public void abortMove() {
+		pieceHelper.abortMove();
+		pieceHelper = null;
+	}
+	
+	
 
 	/*
 	 * public ClassicCheckersBoard getBoard() { return board; }
