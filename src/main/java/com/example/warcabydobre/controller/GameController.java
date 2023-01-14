@@ -97,7 +97,7 @@ public class GameController {
 	
 	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 		boolean appropriateColor = isAppropriateColor(graphicalPiece);
-		if((!appropriateColor) || (player != actualPlayer)) {
+		if((player != actualPlayer) || (!appropriateColor)) {
 			graphicalPiece.abortMove();
 			return;
 		}
@@ -146,7 +146,7 @@ public class GameController {
 			serverHandler.sendMessage(message);
 			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 			showing = Config.ACTIVE;
-			actualPlayer = player;
+			actualPlayer = getOtherPlayer();
 			break;
 		case CAPTURE_FORWARD:
 //                    graphicalPiece.move(newX, newY);
@@ -160,7 +160,7 @@ public class GameController {
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 				showing = Config.ACTIVE;
-				actualPlayer = player;
+				actualPlayer = getOtherPlayer();
 
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
@@ -337,6 +337,15 @@ public class GameController {
 		this.player = player;
 	}
 	
+	private int getOtherPlayer() {
+		if(player == Config.PLAYER1) {
+			return Config.PLAYER2;
+		}
+		else {
+			return Config.PLAYER1;
+		}
+	}
+	
 	
 	public void abortMove() {
 		pieceHelper.abortMove();
@@ -403,6 +412,7 @@ public class GameController {
 			// tworzenie damki
 			System.out.println("OK4");
 			Platform.runLater(() -> turnLabel.setText("MyTurn"));
+			actualPlayer = player;
 			break;
 		case CAPTURE_FORWARD:
 			try {
@@ -411,6 +421,7 @@ public class GameController {
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
+				actualPlayer = player;
 
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());

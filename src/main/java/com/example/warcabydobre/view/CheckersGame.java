@@ -447,7 +447,6 @@ public class CheckersGame extends Application implements Runnable {
 					
 					
 					controller.makeEnemyMove();
-					//String boardString = boardModel.toString();
 					System.out.println(boardModel);
 					showing = Config.NONACTIVE;
 					controller.setShowing(showing);
@@ -465,7 +464,7 @@ public class CheckersGame extends Application implements Runnable {
 		controller = new GameController(this.boardModel, piecesArray, 
 				board, serverHandler, turnLabel);
 		controller.setPlayer(player);
-		controller.setActualPlayer(player);
+		controller.setActualPlayer(Config.PLAYER1);
 	}
 
 	private void initServerHandler() {
