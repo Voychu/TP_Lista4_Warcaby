@@ -60,7 +60,7 @@ public class Game implements Runnable{
                     // Wypisywanie na serwerze
                     System.out.println(line);
                     // Wysylanie do socketa
-                    outF.println("-> (" + line + ")");
+                    outF.println(line);
                     turn=FIRST;
                 }
 
@@ -75,7 +75,7 @@ public class Game implements Runnable{
                     // Wypisywanie na serwerze
                     System.out.println(line);
                     // Wysylanie do socketa
-                    outS.println("-> (" + line + ")");
+                    outS.println(line);
                     turn=SECOND;
                 }
             } while (!line.equals("bye"));

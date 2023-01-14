@@ -447,6 +447,8 @@ public class CheckersGame extends Application implements Runnable {
 					
 					
 					controller.makeEnemyMove();
+					//String boardString = boardModel.toString();
+					System.out.println(boardModel);
 					showing = Config.NONACTIVE;
 					controller.setShowing(showing);
 				}

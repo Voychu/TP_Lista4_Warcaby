@@ -14,7 +14,7 @@ public class MoveConverter {
 		String[] parameters = message.split(separator);
 		String moveStr = Commands.MOVE.getCommand();
 		//String okmv = Commands.OKMV.getCommand();
-		if( !(parameters[0].equals(moveStr)) ) {
+		if( !(parameters[0].equalsIgnoreCase(moveStr)) ) {
 			return null;
 		}
 		if(parameters.length != 5) {
