@@ -50,9 +50,9 @@ public class CheckersGame extends Application implements Runnable {
 	private Button confirmButton;
 	private Alert endingGameAlert;
 
-	private static int actualPlayer = Config.PLAYER1;
+	//private static int actualPlayer = Config.PLAYER1;
 
-	private static int showing = Config.ACTIVE;
+	//private static int showing = Config.ACTIVE;
 
 	Socket socket = null;
 	PrintWriter out = null;
@@ -304,8 +304,9 @@ public class CheckersGame extends Application implements Runnable {
 
         graphicalPiece.setOnMouseReleased(e -> {
         	try {
-        		//controller.onPieceMoved(graphicalPiece,e);
         		controller.onPieceMovedOld(graphicalPiece,e);
+        		
+        		
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -431,18 +432,21 @@ public class CheckersGame extends Application implements Runnable {
 	void f(int iPlayer) {
 		while (true) {
 			synchronized (this) {
+				int actualPlayer = controller.getPlayer();
 				if (actualPlayer == iPlayer) {
 					try {
 						wait(10);
 					} catch (InterruptedException e) {
 					}
 				}
+				int showing = controller.getShowing();
 				if (showing == Config.ACTIVE) {
 					
-					
+					serverHandler.receiveMessage();
 					controller.makeEnemyMove();
 					//String message = serverHandler.receiveMessage();
 					showing = Config.NONACTIVE;
+					controller.setShowing(showing);
 				}
 				notifyAll();
 			}
@@ -454,6 +458,7 @@ public class CheckersGame extends Application implements Runnable {
 		System.out.println(player);
 		controller = new GameController(this.boardModel, piecesArray, board, serverHandler);
 		controller.setPlayer(player);
+		controller.setActualPlayer(player);
 	}
 
 	private void initServerHandler() {

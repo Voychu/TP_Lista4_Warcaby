@@ -137,11 +137,11 @@ public class GameController {
 	
 	
 	public void onPieceMovedOld(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
-		// TODO: Przekonwertowac piksele -> inty
-		// TODO: wywolac metode tryMove z GameRules.
-		// TODO: Zaktualizowac wspolrzedne pionka na podstawie zmiennej Move.
-		// TODO: wywolac onPieceMoved z modelu.
-
+		boolean appropriateColor = isAppropriateColor(graphicalPiece);
+		if(!appropriateColor) {
+			graphicalPiece.abortMove();
+			return;
+		}
 		System.out.println("OK1");
 		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
 		int oldY = toBoardCoordinates(graphicalPiece.getOldY());
