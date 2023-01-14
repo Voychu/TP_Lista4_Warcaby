@@ -13,6 +13,7 @@ import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.srvhandler.InvalidCommandException;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.utils.Config;
 
@@ -444,9 +445,8 @@ public class CheckersGame extends Application implements Runnable {
 				int showing = controller.getShowing();
 				if (showing == Config.ACTIVE) {
 					
-					serverHandler.receiveMessage();
+					
 					controller.makeEnemyMove();
-					//String message = serverHandler.receiveMessage();
 					showing = Config.NONACTIVE;
 					controller.setShowing(showing);
 				}

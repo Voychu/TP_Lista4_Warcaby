@@ -329,10 +329,6 @@ public class GameController {
 		this.message = message;
 	}
 
-	public void makeEnemyMove() {
-		
-		
-	}
 
 	/**
 	 * @return the actualPlayer
@@ -383,19 +379,80 @@ public class GameController {
 	}
 	
 	
+	public String receiveMessage() {
+		return serverHandler.receiveMessage();
+	}
+	
+	private ModelMove receiveMove() {
+		String message = serverHandler.receiveMessage();
+		ModelMove move;
+		try {
+			move = MoveConverter.convertToMove(message);
+			return move;
+		} catch (InvalidCommandException e) {
+			move = new ModelMove(MovementTypes.NONE);
+			return move;
+		}
+	}
+	
+	
+	public void makeEnemyMove() {
+		ModelMove move = this.receiveMove();
+		System.out.println("OK1");
+		int oldX = move.getOldX();
+		int oldY = move.getOldY();
+		int newX = move.getNewX();
+		int newY = move.getNewY();
 
-	/*
-	 * public ClassicCheckersBoard getBoard() { return board; }
-	 */
+		System.out.println("OK2");
 
-	/*
-	 * public void setBoard(ClassicCheckersBoard board) { this.board = board; }
-	 */
+		ModelMove modelResult;
 
-	/*
-	 * public void receiveMessage() { board.setLabelText(message); }
-	 * 
-	 * public void sendMessage() { board.getSendingText(); }
-	 */
+		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
+				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
+			modelResult = new ModelMove(MovementTypes.NONE);
+		} else {
+
+				try {
+					modelResult = rules.tryMove(oldX, oldY, newX, newY);
+				} catch (InvalidMoveException ex) {
+					System.out.println(ex.getMessage());
+					return;
+				}
+		}
+
+		System.out.println("OK3");
+		switch (modelResult.getMovementType()) {
+		case NONE:
+			break;
+		case FORWARD:
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+
+			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+			// tworzenie damki
+			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+			// tworzenie damki
+			System.out.println("OK4");
+			break;
+		case CAPTURE_FORWARD:
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+				int x1 = oldX + (newX - oldX) / 2;
+				int y1 = oldY + (newY - oldY) / 2;
+				boardModel.deletePieceObject(x1, y1);
+
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+			break;
+		}
+		
+	}
+
+	
 
 }
