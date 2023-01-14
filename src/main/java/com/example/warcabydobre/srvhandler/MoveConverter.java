@@ -13,8 +13,8 @@ public class MoveConverter {
 	public static ModelMove convertToMove(String message) throws InvalidCommandException{
 		String[] parameters = message.split(separator);
 		String moveStr = Commands.MOVE.getCommand();
-		String okmv = Commands.OKMV.getCommand();
-		if( !( (parameters[0].equals(moveStr)) || (parameters[0].equals(okmv)) ) ) {
+		//String okmv = Commands.OKMV.getCommand();
+		if( !(parameters[0].equals(moveStr)) ) {
 			return null;
 		}
 		if(parameters.length != 5) {
@@ -23,9 +23,9 @@ public class MoveConverter {
 		
 		try {
 			int oldX = Integer.parseInt(parameters[1]);
-			int oldY = Integer.parseInt(parameters[1]);
-			int newX = Integer.parseInt(parameters[1]);
-			int newY = Integer.parseInt(parameters[1]);
+			int oldY = Integer.parseInt(parameters[2]);
+			int newX = Integer.parseInt(parameters[3]);
+			int newY = Integer.parseInt(parameters[4]);
 			ModelMove move = new ModelMove(oldX, oldY, newX, newY);
 			return move;
 		}
