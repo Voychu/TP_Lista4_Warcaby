@@ -16,8 +16,10 @@ public class GraphicalPiece extends StackPane {
 
 	private double mouseX, mouseY;
 	private double oldX, oldY;
+	
+	protected Circle circle;
 
-	private final double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
+	protected double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS - Config.PIECE_STROKE)/2;
 	
 	public GraphicalPiece(PieceColor color, int x, int y, Group piecesGroup) {
 
@@ -27,12 +29,22 @@ public class GraphicalPiece extends StackPane {
 		this.piecesGroup = piecesGroup;
 		
 
-		Circle circle = new Circle();
+		circle = new Circle();
+		
 
-		if(color==PieceColor.WHITE)
+
+		if(color==PieceColor.WHITE){
 			circle.setFill(Color.WHITE);
-		else if(color==PieceColor.BLACK)
+			circle.setStroke(Color.RED);
+		}
+			
+		else if(color==PieceColor.BLACK) {
 			circle.setFill(Color.RED);
+			circle.setStroke(Color.WHITE);
+		}
+		
+		circle.setStrokeWidth(Config.PIECE_STROKE);
+			
 
 		circle.setRadius(Config.PIECE_RADIUS);
 		circle.setTranslateX(offset);
@@ -60,6 +72,13 @@ public class GraphicalPiece extends StackPane {
 		return oldY;
 	}
 
+
+	/**
+	 * @return the piecesGroup
+	 */
+	public Group getPiecesGroup() {
+		return piecesGroup;
+	}
 
 	public void setColor(PieceColor color) {
 		this.color = color;

@@ -36,6 +36,8 @@ public class Config {
 
 	public final static int ACTIVE = 0;
 	public final static int NONACTIVE = 1;
+	public final static int PIECE_STROKE = 1;
+	public final static int QUEEN_STROKE = 5;
 	
 	
 	
