@@ -5,10 +5,13 @@ import java.util.LinkedList;
 import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.GraphicalPiece;
+import com.example.warcabydobre.view.GraphicalQueenPiece;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 
 import javafx.application.Platform;
+import javafx.scene.Group;
+
 
 public class BoardModel {
 	
@@ -38,7 +41,7 @@ public class BoardModel {
 //    	void onChange(BoardModel model, int x, int y);
     	void onMove(int x, int y);
     	void onDelete();
-    	//TODO: Dodac metody gdy pionek zmienia sie w damke
+    	void onTransform(int x, int y);
     }
     
     public class PieceListener implements Listener{
@@ -57,9 +60,17 @@ public class BoardModel {
 			this.pieceObject = pieceObject;
 		}
 
+		/**
+		 * @param graphicalPiece the graphicalPiece to set
+		 */
+		public void setGraphicalPiece(GraphicalPiece graphicalPiece) {
+			this.graphicalPiece = graphicalPiece;
+		}
+
 		private GraphicalPiece graphicalPiece;
     	private PieceObject pieceObject;
     	private Square[][] board;
+    	
 
     	
     	public PieceListener(GraphicalPiece graphicalPiece, PieceObject pieceObject, Square[][] board){
@@ -109,6 +120,21 @@ public class BoardModel {
 			Platform.runLater(() -> graphicalPiece.delete());
 			
 		}
+
+		@Override
+		public void onTransform(int x, int y) {
+			GraphicalPiece oldPiece = board[x][y].getGraphicalPiece();
+			PieceColor color = oldPiece.getColor();
+			//double newX = oldPiece.getOldX();
+			//double newY = oldPiece.getOldY();
+			Group pieceGroup = oldPiece.getPiecesGroup();
+			GraphicalQueenPiece graphicalQueen = new GraphicalQueenPiece(color, x, y, pieceGroup);
+			this.setGraphicalPiece(graphicalQueen);
+			Platform.runLater(() -> board[x][y].setGraphicalPiece(graphicalQueen));
+			
+		}
+		
+		
     	
     }
 	
@@ -172,9 +198,6 @@ public class BoardModel {
             throw new InvalidMoveException("Nie mozna wykonac ruchu na biale pole");
         }
 		
-		//TODO metody prywatne do kazdej osobnej procedury
-		//TODO ruch do tylu
-		//TODO pionek nakoncu planszy isQueen = true
 		
 		piecesArray[xp][yp] = null;
 		piecesArray[xk][yk] = piece;
@@ -205,6 +228,19 @@ public class BoardModel {
 			PieceListener pieceListener = (PieceListener) listener;
 			if(piece == pieceListener.getPieceObject()) {
 				pieceListener.onDelete();
+			}
+		}
+	}
+	
+	
+	public void transformToQueen(int x, int y) {
+		PieceObject pieceObject =  piecesArray[x][y];
+		pieceObject.setQueen(true);
+		
+		for(Listener listener : listeners) {
+			PieceListener pieceListener = (PieceListener) listener;
+			if(pieceObject == pieceListener.getPieceObject()) {
+				pieceListener.onTransform(x, y);
 			}
 		}
 	}

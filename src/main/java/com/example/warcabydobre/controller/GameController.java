@@ -137,16 +137,24 @@ public class GameController {
 				System.out.println("Niaprawidlowy ruch");
 			}
 
-			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
 			// tworzenie damki
-			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
+			if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
+				boardModel.transformToQueen(newX, newY);
+				
+			}
+			
 			// tworzenie damki
+			if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
+				boardModel.transformToQueen(newX, newY);
+			}
+			
 			System.out.println("OK4");
 			message = MoveConverter.convertMoveToString(modelResult);
 			serverHandler.sendMessage(message);
 			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 			showing = Config.ACTIVE;
 			actualPlayer = getOtherPlayer();
+			
 			break;
 		case SINGLE_CAPTURE:
 //                    graphicalPiece.move(newX, newY);
@@ -165,24 +173,6 @@ public class GameController {
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
-
-//                    board[oldX][oldY].setGraphicalPiece(null);
-//                    board[newX][newY].setGraphicalPiece(graphicalPiece);
-			// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
-
-			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
-			// tworzenie damki
-			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
-			// tworzenie damki
-			/*
-			 * board[toBoardCoordinates(otherPiece.getOldX())][toBoardCoordinates(otherPiece
-			 * .getOldY())].setGraphicalPiece(null); //otherPiece.delete();;//W modelu
-			 * listenery na usuwanie int x_cord = toBoardCoordinates(otherPiece.getOldX());
-			 * int y_cord = toBoardCoordinates(otherPiece.getOldY()); try {
-			 * boardModel.deletePieceObject(x_cord, y_cord); System.out.println(x_cord +
-			 * ", " + y_cord); } catch (InvalidMoveException ex) {
-			 * graphicalPiece.abortMove(); }
-			 */
 			break;
 		}
 	}
@@ -406,10 +396,17 @@ public class GameController {
 				System.out.println(ex.getMessage());
 			}
 
-			// if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8)
+			//TODO:
 			// tworzenie damki
-			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
-			// tworzenie damki
+//			if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8) {
+//				boardModel.transformToQueen(newX, newY);
+//				
+//			}
+//			
+//			// tworzenie damki
+//			if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0) {
+//				boardModel.transformToQueen(newX, newY);
+//			}
 			System.out.println("OK4");
 			Platform.runLater(() -> turnLabel.setText("MyTurn"));
 			actualPlayer = player;
