@@ -305,6 +305,8 @@ public class CheckersGame extends Application implements Runnable {
         graphicalPiece.setOnMouseReleased(e -> {
         	try {
         		controller.onPieceMovedOld(graphicalPiece,e);
+        		String boardString = boardModel.toString();
+        		System.out.println(boardString);
         		
         		
 			} catch (InvalidMoveException ex) {
@@ -456,6 +458,8 @@ public class CheckersGame extends Application implements Runnable {
 	private void initMVC(int player) {
 		this.boardModel = new BoardModel(player);
 		System.out.println(player);
+		String boardString = boardModel.toString();
+		System.out.println(boardString);
 		controller = new GameController(this.boardModel, piecesArray, board, serverHandler);
 		controller.setPlayer(player);
 		controller.setActualPlayer(player);

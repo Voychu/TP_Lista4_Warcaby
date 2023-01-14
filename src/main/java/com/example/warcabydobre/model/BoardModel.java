@@ -11,6 +11,7 @@ import com.example.warcabydobre.view.Square;
 public class BoardModel {
 	
 	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
+	private static final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
     private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
     
     
@@ -118,7 +119,7 @@ public class BoardModel {
 	public BoardModel(int player) {
 		this.listeners = new LinkedList<>();
 		//this.piecesList = new LinkedList<>();
-		this.piecesArray = new PieceObject[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
+		this.piecesArray = new PieceObject[numCols][numRows];
 		if(player == Config.FIRST) {
 			this.pieceColor = PieceColor.WHITE;
 		}
@@ -201,6 +202,29 @@ public class BoardModel {
 				pieceListener.onDelete();
 			}
 		}
+	}
+	
+	
+	public String toString() {
+		String boardString = "";
+		for(int y = 0; y < numRows; y++) {
+			for(int x = 0; x < numCols; x++) {
+				if(piecesArray[x][y] != null) {
+					PieceColor color = piecesArray[x][y].getColor();
+					if(color == PieceColor.BLACK) {
+						boardString += "B ";
+					}
+					else {
+						boardString += "W ";
+					}
+				}
+				else {
+					boardString += "  ";
+				}
+			}
+			boardString += "\n";
+		}
+		return boardString;
 	}
 	
 //	private void notifyObserver(int x, int y) {
