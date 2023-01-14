@@ -24,6 +24,8 @@ import com.example.warcabydobre.view.Move;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 
+import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 //Klasa kontroleraa
@@ -45,6 +47,7 @@ public class GameController {
 	private Square[][] board;
 	private ModelMove moveHelper = null;
 	private GraphicalPiece pieceHelper = null;
+	private Label turnLabel;
 	
 	
 	private int actualPlayer = Config.PLAYER1;
@@ -54,7 +57,7 @@ public class GameController {
 	private int showing = Config.ACTIVE;
 
 	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, 
-			Square[][] board, ServerHandler serverHandler) {
+			Square[][] board, ServerHandler serverHandler, Label turnLabel) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
 		this.board = board;
@@ -70,6 +73,7 @@ public class GameController {
 			}
 		}
 		this.serverHandler = serverHandler;
+		this.turnLabel = turnLabel;
 
 	}
 
@@ -77,53 +81,8 @@ public class GameController {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
-	/*
-	 * private Move executeMove(GraphicalPiece graphicalPiece, int newX, int newY) {
-	 * try { int oldX = toBoardCoordinates(graphicalPiece.getOldX()); int oldY =
-	 * toBoardCoordinates(graphicalPiece.getOldY()); ModelMove modelMove =
-	 * rules.tryMove(oldX, oldY, newX, newY); MovementTypes moveType =
-	 * modelMove.getMovementType(); return new Move(moveType);
-	 * 
-	 * } catch(InvalidMoveException ex) { return new Move(MovementTypes.NONE); } }
-	 */
-
-	/*public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
-
-		System.out.println("OK1");
-		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
-		int oldY = toBoardCoordinates(graphicalPiece.getOldY());
-		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
-		int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
-
-		System.out.println("OK2");
-
-		ModelMove modelResult;
-
-		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
-				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
-			modelResult = new ModelMove(MovementTypes.NONE);
-		} else {
-
-			modelResult = rules.tryMove(oldX, oldY, newX, newY);
-			// graphicalResult =
-		}
-
-		System.out.println("OK3");
-		MovementTypes type = modelResult.getMovementType();
-		//TODO: Fabryka trybow
-		String message;
-		if(type != MovementTypes.NONE) {
-			message = MoveConverter.convertMoveToString(modelResult);
-			serverHandler.sendMessage(message);
-		}
-		else {
-			graphicalPiece.abortMove();
-		}
-		moveHelper = modelResult;
-		pieceHelper = graphicalPiece;
-		
-		
-}*/
+	
+	
 	public boolean isAppropriateColor(GraphicalPiece graphicalPiece) {
 		if(player == 1 && graphicalPiece.getColor() == PieceColor.WHITE) {
 			return true;
@@ -136,9 +95,9 @@ public class GameController {
 	
 	
 	
-	public void onPieceMovedOld(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
+	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 		boolean appropriateColor = isAppropriateColor(graphicalPiece);
-		if(!appropriateColor) {
+		if((!appropriateColor)) {
 			graphicalPiece.abortMove();
 			return;
 		}
@@ -185,6 +144,7 @@ public class GameController {
 			System.out.println("OK4");
 			message = MoveConverter.convertMoveToString(modelResult);
 			serverHandler.sendMessage(message);
+			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 			break;
 		case CAPTURE_FORWARD:
 //                    graphicalPiece.move(newX, newY);
@@ -196,6 +156,7 @@ public class GameController {
 				boardModel.deletePieceObject(x1, y1);
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
+				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
@@ -437,6 +398,7 @@ public class GameController {
 			// if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0)
 			// tworzenie damki
 			System.out.println("OK4");
+			Platform.runLater(() -> turnLabel.setText("MyTurn"));
 			break;
 		case CAPTURE_FORWARD:
 			try {
@@ -444,6 +406,7 @@ public class GameController {
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
+				Platform.runLater(() -> turnLabel.setText("MyTurn"));
 
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());

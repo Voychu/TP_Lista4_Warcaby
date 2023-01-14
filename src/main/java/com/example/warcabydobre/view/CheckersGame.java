@@ -47,7 +47,7 @@ public class CheckersGame extends Application implements Runnable {
 	private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
 	private Label textLabel;
 	private TextField sendingField;
-	Label messageLabel;
+	Label turnLabel;
 	private Button confirmButton;
 	private Alert endingGameAlert;
 
@@ -245,8 +245,8 @@ public class CheckersGame extends Application implements Runnable {
 		buttonHBox.setAlignment(Pos.CENTER);
 		buttonHBox.setSpacing(Config.GAP);
 
-		messageLabel = new Label("Status:");
-		HBox messageLabelHBox = new HBox(messageLabel);
+		turnLabel = new Label("Status:");
+		HBox messageLabelHBox = new HBox(turnLabel);
 		messageLabelHBox.setAlignment(Pos.CENTER);
 		messageLabelHBox.setSpacing(Config.GAP);
 		lVBox.getChildren().addAll(textFieldHBox, buttonHBox, messageLabelHBox);
@@ -305,7 +305,7 @@ public class CheckersGame extends Application implements Runnable {
 
         graphicalPiece.setOnMouseReleased(e -> {
         	try {
-        		controller.onPieceMovedOld(graphicalPiece,e);
+        		controller.onPieceMoved(graphicalPiece,e);
         		String boardString = boardModel.toString();
         		System.out.println(boardString);
         		
@@ -396,11 +396,11 @@ public class CheckersGame extends Application implements Runnable {
 			int player = serverHandler.receiveInitFromServer();
 			if (player == Config.PLAYER1) {
 				// messageLabel.setText("My Turn");
-				Platform.runLater(() -> messageLabel.setText("My Turn"));
+				Platform.runLater(() -> turnLabel.setText("My Turn"));
 
 			} else {
 				// messageLabel.setText("Opposite turn");
-				Platform.runLater(() -> messageLabel.setText("Opposite turn"));
+				Platform.runLater(() -> turnLabel.setText("Opposite turn"));
 				Platform.runLater(() -> confirmButton.setDisable(true));
 				// sendingField.setEnabled(false);
 			}
@@ -462,7 +462,8 @@ public class CheckersGame extends Application implements Runnable {
 		System.out.println(player);
 		String boardString = boardModel.toString();
 		System.out.println(boardString);
-		controller = new GameController(this.boardModel, piecesArray, board, serverHandler);
+		controller = new GameController(this.boardModel, piecesArray, 
+				board, serverHandler, turnLabel);
 		controller.setPlayer(player);
 		controller.setActualPlayer(player);
 	}
