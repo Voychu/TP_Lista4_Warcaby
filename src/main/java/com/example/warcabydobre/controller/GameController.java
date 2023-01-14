@@ -97,7 +97,7 @@ public class GameController {
 	
 	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 		boolean appropriateColor = isAppropriateColor(graphicalPiece);
-		if((!appropriateColor)) {
+		if((!appropriateColor) || (player != actualPlayer)) {
 			graphicalPiece.abortMove();
 			return;
 		}
@@ -145,6 +145,8 @@ public class GameController {
 			message = MoveConverter.convertMoveToString(modelResult);
 			serverHandler.sendMessage(message);
 			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+			showing = Config.ACTIVE;
+			actualPlayer = player;
 			break;
 		case CAPTURE_FORWARD:
 //                    graphicalPiece.move(newX, newY);
@@ -157,6 +159,8 @@ public class GameController {
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+				showing = Config.ACTIVE;
+				actualPlayer = player;
 
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
