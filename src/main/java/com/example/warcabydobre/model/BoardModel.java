@@ -8,6 +8,8 @@ import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 
+import javafx.application.Platform;
+
 public class BoardModel {
 	
 	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
@@ -91,17 +93,20 @@ public class BoardModel {
 
 		@Override
 		public void onMove(int x, int y) {
-			graphicalPiece.move(x, y);
+			//graphicalPiece.move(x, y);
+			Platform.runLater(() -> graphicalPiece.move(x, y));
 			int oldX = GameController.toBoardCoordinates(graphicalPiece.getOldX());
             int oldY = GameController.toBoardCoordinates(graphicalPiece.getOldY());
-			board[oldX][oldY].setGraphicalPiece(null);
-            board[x][y].setGraphicalPiece(graphicalPiece);
+			//board[oldX][oldY].setGraphicalPiece(null);
+			Platform.runLater(() -> board[oldX][oldY].setGraphicalPiece(null));
+            //board[x][y].setGraphicalPiece(graphicalPiece);
+            Platform.runLater(() -> board[x][y].setGraphicalPiece(graphicalPiece));
 			
 		}
 
 		@Override
 		public void onDelete() {
-			graphicalPiece.delete();
+			Platform.runLater(() -> graphicalPiece.delete());
 			
 		}
     	
