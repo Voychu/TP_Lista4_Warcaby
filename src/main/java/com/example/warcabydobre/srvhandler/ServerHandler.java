@@ -67,6 +67,7 @@ public class ServerHandler {
 //TODO: Uzyc moveConverter
 	public MessageState sendMessage(String message) {
 		outWriter.println(message);
+		System.out.println(message);
 
 		if (message.equals("bye")) {
 			return MessageState.EXIT;
@@ -82,6 +83,7 @@ public class ServerHandler {
 		try {
 			// Odbieranie z serwera
 			String str = inReader.readLine();
+			System.out.println(str);
 			if (str.equals("bye")) {
 				return null;
 			}
