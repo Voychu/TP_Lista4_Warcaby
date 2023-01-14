@@ -21,6 +21,7 @@ import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.Move;
+import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 
 import javafx.scene.input.MouseEvent;
@@ -123,6 +124,15 @@ public class GameController {
 		
 		
 }*/
+	public boolean isAppropriateColor(GraphicalPiece graphicalPiece) {
+		if(player == 1 && graphicalPiece.getColor() == PieceColor.WHITE) {
+			return true;
+		}
+		if(player == 2 && graphicalPiece.getColor() == PieceColor.BLACK) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	
