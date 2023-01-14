@@ -20,8 +20,6 @@ public class ClassicCheckersRules implements GameRules{
 		return false;
 	}
 
-	// TODO: sprawdzic waznosc ruchu. Jesli nie, to zwrocic NONE
-	// TODO: Jesli dobry, to zwrocic nowe wspolrzedne intowe oraz fakt, czy jest
 	// bicie i czy zmienia sie w damke
 	public ModelMove tryMove(int oldX, int oldY, int newX, int newY) throws InvalidMoveException {
 		if (boardModel.isOccupied(newX, newY) || !boardModel.isBlackSquare(newX, newY)) {
@@ -35,14 +33,14 @@ public class ClassicCheckersRules implements GameRules{
 		}
 		if (Math.abs(newX - oldX) == 1 && newY - oldY == pieceObject.getMovementDirection())
 			return new ModelMove(MovementTypes.FORWARD, oldX, oldY, newX, newY);
-		else if (Math.abs(newX - oldX) == 2 && newY - oldY == pieceObject.getMovementDirection() * 2) {
+		else if (Math.abs(newX - oldX) == 2 && Math.abs(newY - oldY) == 2) {
 			int x1 = oldX + (newX - oldX) / 2;
 			int y1 = oldY + (newY - oldY) / 2;
 
 			PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 
 			if (boardModel.isOccupied(x1, y1) && secondPiece.getColor() != pieceObject.getColor()) {
-				return new ModelMove(MovementTypes.CAPTURE_FORWARD, secondPiece, oldX, oldY, newX, newY);
+				return new ModelMove(MovementTypes.SINGLE_CAPTURE, secondPiece, oldX, oldY, newX, newY);
 			}
 		}
 		return new ModelMove(MovementTypes.NONE);

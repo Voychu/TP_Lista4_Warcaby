@@ -148,7 +148,7 @@ public class GameController {
 			showing = Config.ACTIVE;
 			actualPlayer = getOtherPlayer();
 			break;
-		case CAPTURE_FORWARD:
+		case SINGLE_CAPTURE:
 //                    graphicalPiece.move(newX, newY);
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
@@ -414,7 +414,7 @@ public class GameController {
 			Platform.runLater(() -> turnLabel.setText("MyTurn"));
 			actualPlayer = player;
 			break;
-		case CAPTURE_FORWARD:
+		case SINGLE_CAPTURE:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 				int x1 = oldX + (newX - oldX) / 2;
