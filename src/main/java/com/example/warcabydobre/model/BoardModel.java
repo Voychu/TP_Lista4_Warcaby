@@ -297,6 +297,39 @@ public class BoardModel {
 		return boardString;
 	}
 	
+	
+	
+	public int countPiecesBetween(int oldX, int oldY, int newX, int newY) throws NotDiagonalException {
+		if(Math.abs(newX - oldX) != Math.abs(newY - oldY)) {
+			throw new NotDiagonalException("To nie jest przekatna");
+		}
+		int stepX = 0, stepY = 0;
+		if(newX - oldX > 0) {
+			stepX = 1;
+		}
+		else {
+			stepX = -1;
+		}
+		if(newY - oldY > 0) {
+			stepY = 1;
+		}
+		else {
+			stepY = -1;
+		}
+		int currX = oldX, currY = oldY;
+		currX += stepX;;
+		currY += stepY;
+		int counter = 0;
+		while(currX != newX && currY != newY) {
+			if(this.isOccupied(currX, currY)) {
+				counter++;
+			}
+			currX += stepX;
+			currY += stepY;
+		}
+		return counter;
+	}
+	
 //	private void notifyObserver(int x, int y) {
 //		listeners.stream().forEach(l -> {
 //			if (l.getX() == x && l.getY() == y) l.onChange(this, xk, yk);

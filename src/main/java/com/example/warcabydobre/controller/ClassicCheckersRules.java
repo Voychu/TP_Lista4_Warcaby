@@ -4,6 +4,7 @@ import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.model.NotDiagonalException;
 import com.example.warcabydobre.model.PieceObject;
 
 public class ClassicCheckersRules implements GameRules{
@@ -33,6 +34,11 @@ public class ClassicCheckersRules implements GameRules{
 		}
 		
 		if(pieceObject.isQueen() && Math.abs(newX - oldX) == Math.abs(newY - oldY)) {
+			try {
+				System.out.println(boardModel.countPiecesBetween(oldX, oldY, newX, newY));
+			} catch (NotDiagonalException e) {
+				System.out.println(0);
+			}
 			return new ModelMove(MovementTypes.QUEEN_DIAGONAL, oldX, oldY, newX, newY);
 		}
 		
