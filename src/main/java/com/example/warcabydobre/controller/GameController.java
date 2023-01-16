@@ -381,13 +381,13 @@ public void initGraphicalQueen(int newX, int newY) {
 		case FORWARD:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
-				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8) {
+				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
 					boardModel.transformToQueen(newX, newY);
 					
 				}
 				
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0) {
+				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
 					boardModel.transformToQueen(newX, newY);
 				}
 			} catch (InvalidMoveException ex) {
@@ -405,13 +405,13 @@ public void initGraphicalQueen(int newX, int newY) {
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
-				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 8) {
+				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
 					boardModel.transformToQueen(newX, newY);
 					
 				}
 				
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 0) {
+				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
 					boardModel.transformToQueen(newX, newY);
 				}
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
@@ -421,9 +421,23 @@ public void initGraphicalQueen(int newX, int newY) {
 				System.out.println(ex.getMessage());
 			}
 			break;
+		case QUEEN_DIAGONAL:
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+			System.out.println("OK4");
+			message = MoveConverter.convertMoveToString(modelResult);
+			serverHandler.sendMessage(message);
+			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+			showing = Config.ACTIVE;
+			actualPlayer = getOtherPlayer();
+			break;
+			
 		}
-		
-	}
+		}
+	
 
 	
 
