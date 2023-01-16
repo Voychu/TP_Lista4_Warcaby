@@ -128,9 +128,6 @@ public class GameController {
 			graphicalPiece.abortMove();
 			break;
 		case FORWARD:
-			// graphicalPiece.move(newX, newY);
-//                    board[oldX][oldY].setGraphicalPiece(null);
-//                    board[newX][newY].setGraphicalPiece(graphicalPiece);
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 				// tworzenie damki
@@ -191,6 +188,21 @@ public class GameController {
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
+			break;
+		case QUEEN_DIAGONAL:
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+			System.out.println("OK4");
+			message = MoveConverter.convertMoveToString(modelResult);
+			serverHandler.sendMessage(message);
+			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+			showing = Config.ACTIVE;
+			actualPlayer = getOtherPlayer();
+			break;
+		default:
 			break;
 		}
 	}

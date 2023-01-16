@@ -269,10 +269,23 @@ public class BoardModel {
 				if(piecesArray[x][y] != null) {
 					PieceColor color = piecesArray[x][y].getColor();
 					if(color == PieceColor.BLACK) {
-						boardString += "B ";
+						boolean isQueen = piecesArray[x][y].isQueen();
+						if(isQueen) {
+							boardString += "B ";
+						}
+						else {
+							boardString += "b ";
+						}
+						
 					}
 					else {
-						boardString += "W ";
+						boolean isQueen = piecesArray[x][y].isQueen();
+						if(isQueen) {
+							boardString += "W ";
+						}
+						else {
+							boardString += "w ";
+						}
 					}
 				}
 				else {

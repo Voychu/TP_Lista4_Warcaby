@@ -31,6 +31,11 @@ public class ClassicCheckersRules implements GameRules{
 		if (pieceObject == null) {
 			throw new InvalidMoveException("Na tym polu nie ma pionka");
 		}
+		
+		if(pieceObject.isQueen() && Math.abs(newX - oldX) == Math.abs(newY - oldY)) {
+			return new ModelMove(MovementTypes.QUEEN_DIAGONAL, oldX, oldY, newX, newY);
+		}
+		
 		if (Math.abs(newX - oldX) == 1 && newY - oldY == pieceObject.getMovementDirection())
 			return new ModelMove(MovementTypes.FORWARD, oldX, oldY, newX, newY);
 		else if (Math.abs(newX - oldX) == 2 && Math.abs(newY - oldY) == 2) {
