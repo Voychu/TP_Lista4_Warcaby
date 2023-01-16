@@ -16,11 +16,9 @@ import com.example.warcabydobre.srvhandler.InvalidCommandException;
 import com.example.warcabydobre.srvhandler.MoveConverter;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.utils.AbstractPiece;
-import com.example.warcabydobre.utils.BoardStructure;
 import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
-import com.example.warcabydobre.view.Move;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 
