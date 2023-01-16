@@ -260,6 +260,9 @@ public class BoardModel {
 			}
 		}
 	}
+	public void transformGraphicsToQueen(){
+		//transformacja graficzna damki
+	}
 	
 	
 	public String toString() {
