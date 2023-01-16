@@ -46,15 +46,6 @@ public class ServerHandler {
 		return inReader;
 	}
 
-	/*
-	 * public void listenSocket() { try { socket = new Socket("localhost", 4444); //
-	 * Inicjalizacja wysylania do serwera outWriter = new
-	 * PrintWriter(socket.getOutputStream(), true); // Inicjalizacja odbierania z
-	 * serwera inReader = new BufferedReader(new
-	 * InputStreamReader(socket.getInputStream())); } catch (UnknownHostException e)
-	 * { System.out.println("Unknown host: localhost"); System.exit(1); } catch
-	 * (IOException e) { System.out.println("No I/O"); System.exit(1); } }
-	 */
 
 	public int receiveInitFromServer() throws IOException {
 		System.out.println("Oczekiwanie...");
@@ -64,7 +55,7 @@ public class ServerHandler {
 
 	}
 
-//TODO: Uzyc moveConverter
+
 	public MessageState sendMessage(String message) {
 		outWriter.println(message);
 		System.out.println(message);
@@ -73,9 +64,6 @@ public class ServerHandler {
 			return MessageState.EXIT;
 		}
 
-		// input.requestFocus();
-		// TODO://showing = ACTIVE;
-		// TODO://actualPlayer = player;
 		return MessageState.OK;
 	}
 

@@ -6,7 +6,8 @@ public enum Commands {
 	
 	MOVE("move"),
 	OKMV("okmv"),
-	ERMV("ermv");
+	ERMV("ermv"),
+	EXIT("bye");
 	
 	
 	private String command;
