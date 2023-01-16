@@ -19,7 +19,7 @@ public class GraphicalPiece extends StackPane {
 	
 	protected Circle circle;
 
-	protected double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS - Config.PIECE_STROKE)/2;
+	private double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS - Config.PIECE_STROKE)/2;
 	
 	public GraphicalPiece(PieceColor color, int x, int y, Group piecesGroup) {
 

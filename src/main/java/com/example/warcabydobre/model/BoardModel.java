@@ -70,13 +70,16 @@ public class BoardModel {
 		private GraphicalPiece graphicalPiece;
     	private PieceObject pieceObject;
     	private Square[][] board;
+    	private GraphicalPiece[][] piecesArray;
     	
 
     	
-    	public PieceListener(GraphicalPiece graphicalPiece, PieceObject pieceObject, Square[][] board){
+    	public PieceListener(GraphicalPiece graphicalPiece, PieceObject pieceObject, 
+    			Square[][] board, GraphicalPiece[][] piecesArray){
     		this.graphicalPiece = graphicalPiece;
     		this.pieceObject = pieceObject;
     		this.board = board;
+    		this.piecesArray = piecesArray;
     	}
     	
 //		@Override
@@ -109,28 +112,41 @@ public class BoardModel {
 			int oldX = GameController.toBoardCoordinates(graphicalPiece.getOldX());
             int oldY = GameController.toBoardCoordinates(graphicalPiece.getOldY());
 			//board[oldX][oldY].setGraphicalPiece(null);
+            Platform.runLater(() -> piecesArray[oldX][oldY] = null);
 			Platform.runLater(() -> board[oldX][oldY].setGraphicalPiece(null));
+			
             //board[x][y].setGraphicalPiece(graphicalPiece);
+            Platform.runLater(() -> piecesArray[x][y] = graphicalPiece);
             Platform.runLater(() -> board[x][y].setGraphicalPiece(graphicalPiece));
 			
 		}
 
 		@Override
 		public void onDelete() {
+			int oldX = GameController.toBoardCoordinates(graphicalPiece.getOldX());
+            int oldY = GameController.toBoardCoordinates(graphicalPiece.getOldY());
+            Platform.runLater(() -> piecesArray[oldX][oldY] = null);
+			Platform.runLater(() -> board[oldX][oldY].setGraphicalPiece(null));
 			Platform.runLater(() -> graphicalPiece.delete());
 			
 		}
 
 		@Override
 		public void onTransform(int x, int y) {
-			GraphicalPiece oldPiece = board[x][y].getGraphicalPiece();
-			PieceColor color = oldPiece.getColor();
-			//double newX = oldPiece.getOldX();
-			//double newY = oldPiece.getOldY();
-			Group pieceGroup = oldPiece.getPiecesGroup();
+			PieceColor color = graphicalPiece.getColor();
+			Group pieceGroup = graphicalPiece.getPiecesGroup();
+			
 			GraphicalQueenPiece graphicalQueen = new GraphicalQueenPiece(color, x, y, pieceGroup);
-			this.setGraphicalPiece(graphicalQueen);
+			Platform.runLater(() -> pieceGroup.getChildren().addAll(graphicalQueen));
 			Platform.runLater(() -> board[x][y].setGraphicalPiece(graphicalQueen));
+			Platform.runLater(() -> piecesArray[x][y] = graphicalQueen);
+			Platform.runLater(() -> graphicalPiece.delete());
+			double helpx = x * Config.SQUARE_CLASSIC_WIDTH;
+			double helpy = y * Config.SQUARE_CLASSIC_HEIGHT;
+			Platform.runLater(() -> graphicalQueen.relocate(helpx, helpy));
+			Platform.runLater(() -> this.setGraphicalPiece(graphicalQueen));
+			//this.setGraphicalPiece(graphicalQueen);
+			
 			
 		}
 		
@@ -234,7 +250,7 @@ public class BoardModel {
 	
 	
 	public void transformToQueen(int x, int y) {
-		PieceObject pieceObject =  piecesArray[x][y];
+		PieceObject pieceObject = piecesArray[x][y];
 		pieceObject.setQueen(true);
 		
 		for(Listener listener : listeners) {

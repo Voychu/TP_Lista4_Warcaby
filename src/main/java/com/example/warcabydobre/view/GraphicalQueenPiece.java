@@ -6,12 +6,16 @@ import javafx.scene.Group;
 
 public class GraphicalQueenPiece extends GraphicalPiece {
 
+	private double queenOffset;
 	
 	
 	public GraphicalQueenPiece(PieceColor color, int x, int y, Group piecesGroup) {
 		super(color, x, y, piecesGroup);
-		offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS - Config.QUEEN_STROKE)/2;
-		circle.setStrokeWidth(Config.PIECE_STROKE);
+		queenOffset = Config.QUEEN_STROKE/2;
+		circle.setStrokeWidth(Config.QUEEN_STROKE);
+		circle.setTranslateX(queenOffset);
+		circle.setTranslateY(queenOffset);
+		
 	}
 
 }
