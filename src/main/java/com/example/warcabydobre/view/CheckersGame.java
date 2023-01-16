@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Scanner;
 
 import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.model.BoardModel;
@@ -38,8 +39,16 @@ import javafx.event.ActionEvent;
 
 public class CheckersGame extends Application implements Runnable {
 
+	/**
+	 * @return the gameType
+	 */
+	public int getGameType() {
+		return gameType;
+	}
+
 	private static int MARGIN_X = 30;
 	private static int MARGIN_Y = 30;
+	private int gameType;
 	// private Stage choosingGameStage;
 	private Stage boardStage;
 	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
@@ -51,9 +60,9 @@ public class CheckersGame extends Application implements Runnable {
 	private Button confirmButton;
 	private Alert endingGameAlert;
 
-	//private static int actualPlayer = Config.PLAYER1;
+	// private static int actualPlayer = Config.PLAYER1;
 
-	//private static int showing = Config.ACTIVE;
+	// private static int showing = Config.ACTIVE;
 
 	Socket socket = null;
 	PrintWriter out = null;
@@ -220,13 +229,12 @@ public class CheckersGame extends Application implements Runnable {
 				}
 			}
 		}
-		/*GraphicalPiece bQueen = makeGraphicalPiece(PieceColor.BLACK, 2, 3, true);
-		piecesArray[2][3] = bQueen;
-		board[2][3].setGraphicalPiece(bQueen);
-		piecesGroup.getChildren().addAll(bQueen);
-		double x = 2 * helpw;
-		double y = 3 * helph;
-		bQueen.relocate(x, y);*/
+		/*
+		 * GraphicalPiece bQueen = makeGraphicalPiece(PieceColor.BLACK, 2, 3, true);
+		 * piecesArray[2][3] = bQueen; board[2][3].setGraphicalPiece(bQueen);
+		 * piecesGroup.getChildren().addAll(bQueen); double x = 2 * helpw; double y = 3
+		 * * helph; bQueen.relocate(x, y);
+		 */
 
 		borderPane.setCenter(pane);
 
@@ -269,7 +277,7 @@ public class CheckersGame extends Application implements Runnable {
 
 		EventHandler<ActionEvent> sendingMessageHandler = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				//sendMessage();
+				// sendMessage();
 
 			}
 		};
@@ -279,56 +287,52 @@ public class CheckersGame extends Application implements Runnable {
 
 	}
 
-	/*private Move tryMove(GraphicalPiece graphicalPiece, int newX, int newY) {
-		if (board[newX][newY].isOccupied() || (newX + newY) % 2 == 0) {
-			return new Move(MovementTypes.NONE);
-		}
-		int xp = toBoardCoordinates(graphicalPiece.getOldX());
-		int yp = toBoardCoordinates(graphicalPiece.getOldY());
-		System.out.println(xp + ", " + yp);
-
-		if (Math.abs(newX - xp) == 1 && newY - yp == graphicalPiece.getColor().getMovementDirection())
-			return new Move(MovementTypes.FORWARD);
-		else if (Math.abs(newX - xp) == 2 && newY - yp == graphicalPiece.getColor().getMovementDirection() * 2) {
-			int x1 = xp + (newX - xp) / 2;
-			int y1 = yp + (newY - yp) / 2;
-
-			if (board[x1][y1].isOccupied()
-					&& board[x1][y1].getGraphicalPiece().getColor() != graphicalPiece.getColor()) {
-				return new Move(MovementTypes.CAPTURE_FORWARD, board[x1][y1].getGraphicalPiece());
-			}
-		}
-		return new Move(MovementTypes.NONE);
-
-	}*/
+	/*
+	 * private Move tryMove(GraphicalPiece graphicalPiece, int newX, int newY) { if
+	 * (board[newX][newY].isOccupied() || (newX + newY) % 2 == 0) { return new
+	 * Move(MovementTypes.NONE); } int xp =
+	 * toBoardCoordinates(graphicalPiece.getOldX()); int yp =
+	 * toBoardCoordinates(graphicalPiece.getOldY()); System.out.println(xp + ", " +
+	 * yp);
+	 * 
+	 * if (Math.abs(newX - xp) == 1 && newY - yp ==
+	 * graphicalPiece.getColor().getMovementDirection()) return new
+	 * Move(MovementTypes.FORWARD); else if (Math.abs(newX - xp) == 2 && newY - yp
+	 * == graphicalPiece.getColor().getMovementDirection() * 2) { int x1 = xp +
+	 * (newX - xp) / 2; int y1 = yp + (newY - yp) / 2;
+	 * 
+	 * if (board[x1][y1].isOccupied() &&
+	 * board[x1][y1].getGraphicalPiece().getColor() != graphicalPiece.getColor()) {
+	 * return new Move(MovementTypes.CAPTURE_FORWARD,
+	 * board[x1][y1].getGraphicalPiece()); } } return new Move(MovementTypes.NONE);
+	 * 
+	 * }
+	 */
 
 	private int toBoardCoordinates(double pixel) {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
 	private GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
-		
+
 //		GraphicalPiece graphicalPiece = controller.makeGraphicalPiece(color,x,y,isQueen);
 //		return graphicalPiece;
 		GraphicalPiece graphicalPiece;
-		if(!isQueen) {
+		if (!isQueen) {
 			graphicalPiece = new GraphicalPiece(color, x, y, piecesGroup);
-		}
-		else {
+		} else {
 			graphicalPiece = new GraphicalQueenPiece(color, x, y, piecesGroup);
 		}
-		
-		
-        graphicalPiece.setOnMouseReleased(e -> {
-        	try {
-        		controller.onPieceMoved(graphicalPiece,e);
-        		System.out.println(boardModel);
-        		
-        		
+
+		graphicalPiece.setOnMouseReleased(e -> {
+			try {
+				controller.onPieceMoved(graphicalPiece, e);
+				System.out.println(boardModel);
+
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
 			}
-        	
+
 		});
 
 		return graphicalPiece;
@@ -342,34 +346,24 @@ public class CheckersGame extends Application implements Runnable {
 	 * public String sendMessage() { return sendingField.getText(); }
 	 */
 
-	/*public void sendMessage() {
-		String message = sendingField.getText();
-		out.println(message);
-		// messageLabel.setText("OppositeTurn");
-		Platform.runLater(() -> messageLabel.setText("OppositeTurn"));
-		// send.setEnabled(false);
-		// sendingField.setText("");
-		Platform.runLater(() -> sendingField.setText(""));
-
-		Platform.runLater(() -> textLabel.setText(""));
-
-		Platform.runLater(() -> confirmButton.setDisable(true));
-
-		if (message.equals("bye")) {
-			try {
-
-				Platform.runLater(() -> System.exit(0));
-				socket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		// input.requestFocus();
-		showing = ACTIVE;
-		actualPlayer = player;
-	}*/
+	/*
+	 * public void sendMessage() { String message = sendingField.getText();
+	 * out.println(message); // messageLabel.setText("OppositeTurn");
+	 * Platform.runLater(() -> messageLabel.setText("OppositeTurn")); //
+	 * send.setEnabled(false); // sendingField.setText(""); Platform.runLater(() ->
+	 * sendingField.setText(""));
+	 * 
+	 * Platform.runLater(() -> textLabel.setText(""));
+	 * 
+	 * Platform.runLater(() -> confirmButton.setDisable(true));
+	 * 
+	 * if (message.equals("bye")) { try {
+	 * 
+	 * Platform.runLater(() -> System.exit(0)); socket.close(); } catch (IOException
+	 * e) { // TODO Auto-generated catch block e.printStackTrace(); } }
+	 * 
+	 * // input.requestFocus(); showing = ACTIVE; actualPlayer = player; }
+	 */
 
 //	public void receiveMessage() {
 //		try {
@@ -459,8 +453,6 @@ public class CheckersGame extends Application implements Runnable {
 				}
 				int showing = controller.getShowing();
 				if (showing == Config.ACTIVE) {
-					
-					
 					controller.makeEnemyMove();
 					System.out.println(boardModel);
 					showing = Config.NONACTIVE;
@@ -476,8 +468,7 @@ public class CheckersGame extends Application implements Runnable {
 		System.out.println(player);
 		String boardString = boardModel.toString();
 		System.out.println(boardString);
-		controller = new GameController(this.boardModel, piecesArray, 
-				board, serverHandler, turnLabel, piecesGroup);
+		controller = new GameController(this.boardModel, piecesArray, board, serverHandler, turnLabel, piecesGroup);
 		controller.setPlayer(player);
 		controller.setActualPlayer(Config.PLAYER1);
 	}
@@ -493,16 +484,26 @@ public class CheckersGame extends Application implements Runnable {
 			System.out.println("No I/O");
 			System.exit(1);
 		}
-		
+
 	}
-	
+
 	@Override
 	public void start(Stage arg0) throws Exception {
-		initBoardStage();
 		initServerHandler();
 		
-		int player = receiveInitFromServer();
+		// TODO: wybor trybow gry z kosnoli 1, 2, 3
+		// TODO: walidacja trybow
+//		System.out.println("Podaj tryb: ");
+//		System.out.print("-> ");
+//		Scanner sc = new Scanner(System.in);
+//		int i = sc.nextInt();
+//		String message = Integer.toString(i);
+//		serverHandler.sendMessage(message);
+		initBoardStage();
 		
+
+		int player = receiveInitFromServer();
+
 		initMVC(player);
 		startThread();
 
