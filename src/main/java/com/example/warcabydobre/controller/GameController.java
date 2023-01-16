@@ -19,10 +19,12 @@ import com.example.warcabydobre.utils.AbstractPiece;
 import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
+import com.example.warcabydobre.view.GraphicalQueenPiece;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 
 import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
@@ -36,8 +38,7 @@ public class GameController {
 	// private ClassicCheckersBoard board;
 	private String message;
 	private BoardModel boardModel;
-	//private BoardStructure<T> boardStructure;
-	// TODO GameRules
+	private Group piecesGroup;
 	private GameRules rules;
 	private GraphicalPiece[][] graphicalPiecesArray;
 	private ServerHandler serverHandler;
@@ -55,17 +56,19 @@ public class GameController {
 	private int showing = Config.ACTIVE;
 
 	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, 
-			Square[][] board, ServerHandler serverHandler, Label turnLabel) {
+			Square[][] board, ServerHandler serverHandler, Label turnLabel, 
+			Group piecesGroup) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
 		this.board = board;
+		this.piecesGroup = piecesGroup;
 		this.rules = new ClassicCheckersRules(boardModel);// TODO Factory
 		for (int j = 0; j < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; j++) {
 			for (int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_HEIGHT; i++) {
 				GraphicalPiece graphicalPiece = graphicalPiecesArray[i][j];
 				if (graphicalPiece != null) { // this.boardModel.
 					Listener pieceListener = boardModel.new PieceListener(graphicalPiece,
-							boardModel.getPiecesArray()[i][j], board);
+							boardModel.getPiecesArray()[i][j], board, graphicalPiecesArray);
 					boardModel.addListener(pieceListener);
 				}
 			}
@@ -162,6 +165,18 @@ public class GameController {
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
+				
+				// tworzenie damki
+				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
+					boardModel.transformToQueen(newX, newY);
+					
+				}
+				
+				// tworzenie damki
+				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
+					boardModel.transformToQueen(newX, newY);
+				}
+				
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
@@ -173,6 +188,33 @@ public class GameController {
 			}
 			break;
 		}
+	}
+	
+	
+public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
+		
+		GraphicalPiece graphicalPiece;
+		if(!isQueen) {
+			graphicalPiece = new GraphicalPiece(color, x, y, piecesGroup);
+		}
+		else {
+			graphicalPiece = new GraphicalQueenPiece(color, x, y, piecesGroup);
+		}
+		
+		
+        graphicalPiece.setOnMouseReleased(e -> {
+        	try {
+        		onPieceMoved(graphicalPiece,e);
+        		System.out.println(boardModel);
+        		
+        		
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+        	
+		});
+
+		return graphicalPiece;
 	}
 	
 	

@@ -189,7 +189,7 @@ public class CheckersGame extends Application implements Runnable {
 			for (int i = 0; i < numCols; i++) {
 				if ((i + j) % 2 == 1) {
 					// BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
-					bPiece = makeGraphicalPiece(PieceColor.BLACK, i, j);
+					bPiece = makeGraphicalPiece(PieceColor.BLACK, i, j, false);
 					// blackPiecesList.add(bPiece);
 					// graphicalPiecesList.add(bPiece);
 					piecesArray[i][j] = bPiece;
@@ -207,7 +207,7 @@ public class CheckersGame extends Application implements Runnable {
 				if ((i + j) % 2 == 1) {
 
 					// WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
-					wPiece = makeGraphicalPiece(PieceColor.WHITE, i, j);
+					wPiece = makeGraphicalPiece(PieceColor.WHITE, i, j, false);
 					// whitePiecesList.add(wPiece);
 					// graphicalPiecesList.add(wPiece);
 					piecesArray[i][j] = wPiece;
@@ -220,6 +220,13 @@ public class CheckersGame extends Application implements Runnable {
 				}
 			}
 		}
+		/*GraphicalPiece bQueen = makeGraphicalPiece(PieceColor.BLACK, 2, 3, true);
+		piecesArray[2][3] = bQueen;
+		board[2][3].setGraphicalPiece(bQueen);
+		piecesGroup.getChildren().addAll(bQueen);
+		double x = 2 * helpw;
+		double y = 3 * helph;
+		bQueen.relocate(x, y);*/
 
 		borderPane.setCenter(pane);
 
@@ -299,15 +306,23 @@ public class CheckersGame extends Application implements Runnable {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
-	private GraphicalPiece makeGraphicalPiece(PieceColor Color, int x, int y) {
-		GraphicalPiece graphicalPiece = new GraphicalPiece(Color, x, y, piecesGroup);
+	private GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
 		
-
+//		GraphicalPiece graphicalPiece = controller.makeGraphicalPiece(color,x,y,isQueen);
+//		return graphicalPiece;
+		GraphicalPiece graphicalPiece;
+		if(!isQueen) {
+			graphicalPiece = new GraphicalPiece(color, x, y, piecesGroup);
+		}
+		else {
+			graphicalPiece = new GraphicalQueenPiece(color, x, y, piecesGroup);
+		}
+		
+		
         graphicalPiece.setOnMouseReleased(e -> {
         	try {
         		controller.onPieceMoved(graphicalPiece,e);
-        		String boardString = boardModel.toString();
-        		System.out.println(boardString);
+        		System.out.println(boardModel);
         		
         		
 			} catch (InvalidMoveException ex) {
@@ -462,7 +477,7 @@ public class CheckersGame extends Application implements Runnable {
 		String boardString = boardModel.toString();
 		System.out.println(boardString);
 		controller = new GameController(this.boardModel, piecesArray, 
-				board, serverHandler, turnLabel);
+				board, serverHandler, turnLabel, piecesGroup);
 		controller.setPlayer(player);
 		controller.setActualPlayer(Config.PLAYER1);
 	}
@@ -483,9 +498,7 @@ public class CheckersGame extends Application implements Runnable {
 	
 	@Override
 	public void start(Stage arg0) throws Exception {
-		// tworzenie kontrolera
 		initBoardStage();
-		//listenSocket();
 		initServerHandler();
 		
 		int player = receiveInitFromServer();
