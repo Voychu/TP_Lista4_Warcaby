@@ -47,17 +47,15 @@ public class GameController {
 	private ModelMove moveHelper = null;
 	private GraphicalPiece pieceHelper = null;
 	private Label turnLabel;
-	
-	
+
 	private int actualPlayer = Config.PLAYER1;
-	
+
 	private int player;
 
 	private int showing = Config.ACTIVE;
 
-	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, 
-			Square[][] board, ServerHandler serverHandler, Label turnLabel, 
-			Group piecesGroup) {
+	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, Square[][] board,
+			ServerHandler serverHandler, Label turnLabel, Group piecesGroup) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
 		this.board = board;
@@ -82,23 +80,19 @@ public class GameController {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
-	
-	
 	public boolean isAppropriateColor(GraphicalPiece graphicalPiece) {
-		if(player == 1 && graphicalPiece.getColor() == PieceColor.WHITE) {
+		if (player == 1 && graphicalPiece.getColor() == PieceColor.WHITE) {
 			return true;
 		}
-		if(player == 2 && graphicalPiece.getColor() == PieceColor.BLACK) {
+		if (player == 2 && graphicalPiece.getColor() == PieceColor.BLACK) {
 			return true;
 		}
 		return false;
 	}
-	
-	
-	
+
 	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 		boolean appropriateColor = isAppropriateColor(graphicalPiece);
-		if((player != actualPlayer) || (!appropriateColor)) {
+		if ((player != actualPlayer) || (!appropriateColor)) {
 			graphicalPiece.abortMove();
 			return;
 		}
@@ -131,14 +125,14 @@ public class GameController {
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
+				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
 					boardModel.transformToQueen(newX, newY);
 					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-					
+
 				}
-				
+
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
+				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
 					boardModel.transformToQueen(newX, newY);
 					Platform.runLater(() -> initGraphicalQueen(newX, newY));
 				}
@@ -146,15 +140,13 @@ public class GameController {
 				System.out.println("Niaprawidlowy ruch");
 			}
 
-			
-			
 			System.out.println("OK4");
 			message = MoveConverter.convertMoveToString(modelResult);
 			serverHandler.sendMessage(message);
 			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 			showing = Config.ACTIVE;
 			actualPlayer = getOtherPlayer();
-			
+
 			break;
 		case SINGLE_CAPTURE:
 //                    graphicalPiece.move(newX, newY);
@@ -164,21 +156,20 @@ public class GameController {
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
-				
+
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
+				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
 					boardModel.transformToQueen(newX, newY);
 					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-					
-					
+
 				}
-				
+
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
+				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
 					boardModel.transformToQueen(newX, newY);
 					Platform.runLater(() -> initGraphicalQueen(newX, newY));
 				}
-				
+
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
@@ -202,18 +193,18 @@ public class GameController {
 				System.out.println("Niaprawidlowy ruch");
 			}
 			break;
-			case QUEEN_CAPTURE:
+		case QUEEN_CAPTURE:
 			try {
-				boardModel.movePieceObject(oldX,oldY,newX,newY);
-				int x1 = newX-1;
-				int y1 = newY-1;
-				boardModel.deletePieceObject(x1,y1);
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+				int x1 = newX - 1;
+				int y1 = newY - 1;
+				boardModel.deletePieceObject(x1, y1);
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
-			} catch(InvalidMoveException ex) {
+			} catch (InvalidMoveException ex) {
 				System.out.println("Nieprawidlowy ruch");
 			}
 			System.out.println("OK4");
@@ -223,59 +214,44 @@ public class GameController {
 		}
 	}
 
-	
-public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
-		
+	public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
+
 		GraphicalPiece graphicalPiece;
-		if(!isQueen) {
+		if (!isQueen) {
 			graphicalPiece = new GraphicalPiece(color, x, y, piecesGroup);
-		}
-		else {
+		} else {
 			graphicalPiece = new GraphicalQueenPiece(color, x, y, piecesGroup);
 		}
-		
-		
-        graphicalPiece.setOnMouseReleased(e -> {
-        	try {
-        		onPieceMoved(graphicalPiece,e);
-        		System.out.println(boardModel);
-        		
-        		
+
+		graphicalPiece.setOnMouseReleased(e -> {
+			try {
+				onPieceMoved(graphicalPiece, e);
+				System.out.println(boardModel);
+
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
 			}
-        	
+
 		});
 
 		return graphicalPiece;
-}
+	}
 
-
-public void initGraphicalQueen(int newX, int newY) {
-	GraphicalPiece graphicalQueen = graphicalPiecesArray[newX][newY];
-    graphicalQueen.setOnMouseReleased(e -> {
-    	//try {
-    		Platform.runLater(() -> {
+	public void initGraphicalQueen(int newX, int newY) {
+		GraphicalPiece graphicalQueen = graphicalPiecesArray[newX][newY];
+		graphicalQueen.setOnMouseReleased(e -> {
+			Platform.runLater(() -> {
 				try {
-					onPieceMoved(graphicalQueen,e);
+					onPieceMoved(graphicalQueen, e);
 				} catch (InvalidMoveException ex) {
 					System.out.println(ex.getMessage());
 					graphicalQueen.abortMove();
 				}
 			});
-    		//onPieceMoved(graphicalQueen,e);
-    		System.out.println(boardModel);
-    		
-    		
-		//} catch (InvalidMoveException ex) {
-			
-		//}
-    	
-	});
+			System.out.println(boardModel);
+		});
 
-}
-	
-	
+	}
 
 	public BoardModel getBoardModel() {
 		return boardModel;
@@ -295,7 +271,6 @@ public void initGraphicalQueen(int newX, int newY) {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
 
 	/**
 	 * @return the actualPlayer
@@ -338,27 +313,24 @@ public void initGraphicalQueen(int newX, int newY) {
 	public void setPlayer(int player) {
 		this.player = player;
 	}
-	
+
 	private int getOtherPlayer() {
-		if(player == Config.PLAYER1) {
+		if (player == Config.PLAYER1) {
 			return Config.PLAYER2;
-		}
-		else {
+		} else {
 			return Config.PLAYER1;
 		}
 	}
-	
-	
+
 	public void abortMove() {
 		pieceHelper.abortMove();
 		pieceHelper = null;
 	}
-	
-	
+
 	public String receiveMessage() {
 		return serverHandler.receiveMessage();
 	}
-	
+
 	private ModelMove receiveMove() {
 		String message = serverHandler.receiveMessage();
 		ModelMove move;
@@ -370,8 +342,7 @@ public void initGraphicalQueen(int newX, int newY) {
 			return move;
 		}
 	}
-	
-	
+
 	public void makeEnemyMove() {
 		ModelMove move = this.receiveMove();
 		System.out.println("OK1");
@@ -390,12 +361,12 @@ public void initGraphicalQueen(int newX, int newY) {
 			modelResult = new ModelMove(MovementTypes.NONE);
 		} else {
 
-				try {
-					modelResult = rules.tryMove(oldX, oldY, newX, newY);
-				} catch (InvalidMoveException ex) {
-					System.out.println(ex.getMessage());
-					return;
-				}
+			try {
+				modelResult = rules.tryMove(oldX, oldY, newX, newY);
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+				return;
+			}
 		}
 
 		System.out.println("OK3");
@@ -405,20 +376,21 @@ public void initGraphicalQueen(int newX, int newY) {
 		case FORWARD:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
-				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
+				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
 					boardModel.transformToQueen(newX, newY);
-					
+					Platform.runLater(() -> initGraphicalQueen(newX, newY));
+
 				}
-				
+
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
+				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
 					boardModel.transformToQueen(newX, newY);
+					Platform.runLater(() -> initGraphicalQueen(newX, newY));
 				}
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
 			}
 
-			
 			System.out.println("OK4");
 			Platform.runLater(() -> turnLabel.setText("MyTurn"));
 			actualPlayer = player;
@@ -429,14 +401,16 @@ public void initGraphicalQueen(int newX, int newY) {
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
-				if(graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
+				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
 					boardModel.transformToQueen(newX, newY);
-					
+					Platform.runLater(() -> initGraphicalQueen(newX, newY));
+
 				}
-				
+
 				// tworzenie damki
-				if(graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
+				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
 					boardModel.transformToQueen(newX, newY);
+					Platform.runLater(() -> initGraphicalQueen(newX, newY));
 				}
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
 				actualPlayer = player;
@@ -458,11 +432,8 @@ public void initGraphicalQueen(int newX, int newY) {
 			break;
 		default:
 			break;
-			
-		}
-		}
-	
 
-	
+		}
+	}
 
 }
