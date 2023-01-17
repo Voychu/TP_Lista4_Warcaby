@@ -201,12 +201,6 @@ public class GameController {
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
-			//System.out.println("OK4");
-			//message = MoveConverter.convertMoveToString(modelResult);
-			//serverHandler.sendMessage(message);
-			//Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-			//showing = Config.ACTIVE;
-			//actualPlayer = getOtherPlayer();
 			break;
 			case QUEEN_CAPTURE:
 			try {
@@ -229,10 +223,6 @@ public class GameController {
 		}
 	}
 
-	public boolean isCapturePossible(){
-
-		return false;
-	}
 	
 public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
 		
@@ -264,14 +254,22 @@ public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean
 public void initGraphicalQueen(int newX, int newY) {
 	GraphicalPiece graphicalQueen = graphicalPiecesArray[newX][newY];
     graphicalQueen.setOnMouseReleased(e -> {
-    	try {
-    		onPieceMoved(graphicalQueen,e);
+    	//try {
+    		Platform.runLater(() -> {
+				try {
+					onPieceMoved(graphicalQueen,e);
+				} catch (InvalidMoveException ex) {
+					System.out.println(ex.getMessage());
+					graphicalQueen.abortMove();
+				}
+			});
+    		//onPieceMoved(graphicalQueen,e);
     		System.out.println(boardModel);
     		
     		
-		} catch (InvalidMoveException ex) {
-			System.out.println(ex.getMessage());
-		}
+		//} catch (InvalidMoveException ex) {
+			
+		//}
     	
 	});
 
@@ -450,15 +448,15 @@ public void initGraphicalQueen(int newX, int newY) {
 		case QUEEN_DIAGONAL:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
+				Platform.runLater(() -> turnLabel.setText("MyTurn"));
+				actualPlayer = player;
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
-			System.out.println("OK4");
-			message = MoveConverter.convertMoveToString(modelResult);
-			serverHandler.sendMessage(message);
-			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-			showing = Config.ACTIVE;
-			actualPlayer = getOtherPlayer();
+			break;
+		case QUEEN_CAPTURE:
+			break;
+		default:
 			break;
 			
 		}
