@@ -192,21 +192,47 @@ public class GameController {
 		case QUEEN_DIAGONAL:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
+				System.out.println("OK4");
+				message = MoveConverter.convertMoveToString(modelResult);
+				serverHandler.sendMessage(message);
+				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+				showing = Config.ACTIVE;
+				actualPlayer = getOtherPlayer();
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
+			//System.out.println("OK4");
+			//message = MoveConverter.convertMoveToString(modelResult);
+			//serverHandler.sendMessage(message);
+			//Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+			//showing = Config.ACTIVE;
+			//actualPlayer = getOtherPlayer();
+			break;
+			case QUEEN_CAPTURE:
+			try {
+				boardModel.movePieceObject(oldX,oldY,newX,newY);
+				int x1 = newX-1;
+				int y1 = newY-1;
+				boardModel.deletePieceObject(x1,y1);
+				message = MoveConverter.convertMoveToString(modelResult);
+				serverHandler.sendMessage(message);
+				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
+				showing = Config.ACTIVE;
+				actualPlayer = getOtherPlayer();
+			} catch(InvalidMoveException ex) {
+				System.out.println("Nieprawidlowy ruch");
+			}
 			System.out.println("OK4");
-			message = MoveConverter.convertMoveToString(modelResult);
-			serverHandler.sendMessage(message);
-			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-			showing = Config.ACTIVE;
-			actualPlayer = getOtherPlayer();
 			break;
 		default:
 			break;
 		}
 	}
-	
+
+	public boolean isCapturePossible(){
+
+		return false;
+	}
 	
 public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
 		
