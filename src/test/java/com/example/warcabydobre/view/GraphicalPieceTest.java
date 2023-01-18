@@ -1,9 +1,7 @@
-package com.example.warcabydobre;
+package com.example.warcabydobre.view;
 
 import com.example.warcabydobre.model.PieceObject;
 import com.example.warcabydobre.utils.Config;
-import com.example.warcabydobre.view.*;
-
 
 import javafx.scene.Group;
 import org.junit.Test;
@@ -16,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 
 
-public class PieceTest {
+public class GraphicalPieceTest {
 
     private Group piecesGroup = new Group();
     final private int x = 4;
@@ -38,11 +36,13 @@ public class PieceTest {
         assertEquals(gPiece.getLayoutX(),newX*Config.SQUARE_CLASSIC_WIDTH,0);
         assertEquals(gPiece.getLayoutY(),newY*Config.CLASSICAL_CHECKERS_BOARD_HEIGHT,0);
     }
-    @Test
+    
+    //TODO: Przeniesc do JUnit Test case zwiazanego z PieceObject
+    /*@Test
     public void TestObjectPieceNotQueen(){
         PieceObject pObject = new PieceObject(x,y, PieceColor.BLACK);
         assertFalse(pObject.isQueen());
-    }
+    }*/
 
 
     @Test
