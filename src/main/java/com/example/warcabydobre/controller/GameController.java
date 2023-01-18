@@ -1,64 +1,97 @@
 package com.example.warcabydobre.controller;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.util.LinkedList;
+
 
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.BoardModel.Listener;
-import com.example.warcabydobre.model.BoardModel.PieceListener;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
-import com.example.warcabydobre.model.PieceObject;
-import com.example.warcabydobre.srv.Commands;
 import com.example.warcabydobre.srvhandler.InvalidCommandException;
 import com.example.warcabydobre.srvhandler.MoveConverter;
 import com.example.warcabydobre.srvhandler.ServerHandler;
-import com.example.warcabydobre.utils.AbstractPiece;
 import com.example.warcabydobre.utils.Config;
-import com.example.warcabydobre.view.BlackSquare;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.GraphicalQueenPiece;
 import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
-
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
-//Klasa kontroleraa
-//wzorzec projektowy MVC
 
+
+
+/**
+ * Class of controller. MVC design pattern. 
+ * It is responsible for
+ * controlling application. It delegates performing 
+ * actions on the basis of player's actions.
+ * @author Jan Poreba
+ */
 public class GameController {
 
-	private PrintWriter out = null;
-	private BufferedReader in = null;
-	// private ClassicCheckersBoard board;
+	
+	/** The message sending from one player
+	 * to the other one through the server. */
 	private String message;
+	
+	/** Model storing data of the game */
 	private BoardModel boardModel;
+	
+	/**Group of the graphicalPieces on the board */
 	private Group piecesGroup;
+	
+	/** It is responsible for checking moves
+	 * based on the rules of chosen game type. */
 	private GameRules rules;
+	
+	/** Array of the graphicalPieces from
+	 * the board */
 	private GraphicalPiece[][] graphicalPiecesArray;
+	
+	/** Proxy to the server */
 	private ServerHandler serverHandler;
 
-	private Square[][] board;
-	private ModelMove moveHelper = null;
+	
+	/** It is current piece that
+	 * has moved. */
 	private GraphicalPiece pieceHelper = null;
+	
+	/** Label displaying whether is
+	 * myTurn or oppositeTurn */
 	private Label turnLabel;
 
+	/** Flag storing information which 
+	 * player has now his turn */
 	private int actualPlayer = Config.PLAYER1;
 
+	/** Flag storing information which player' actions
+	 * is the controller managing*/
 	private int player;
 
+	/** Flag to managing blocking sending messages 
+	 * by other player in short period
+	 * when my message is coming to him. */
 	private int showing = Config.ACTIVE;
 
+	/**
+	 * Constructor of GameController
+	 *
+	 * @param boardModel model storing data of the game
+	 * @param graphicalPiecesArray array of the graphicalPieces 
+	 * from the board
+	 * @param serverHandler proxy to the server
+	 * @param turnLabel Label displaying whether is
+	 * myTurn or oppositeTurn 
+	 * @param piecesGroup group of the graphicalPieces 
+	 * on the board
+	 */
 	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, Square[][] board,
 			ServerHandler serverHandler, Label turnLabel, Group piecesGroup) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
-		this.board = board;
 		this.piecesGroup = piecesGroup;
 		this.rules = new ClassicCheckersRules(boardModel);// TODO Factory
 		for (int j = 0; j < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; j++) {
@@ -75,11 +108,134 @@ public class GameController {
 		this.turnLabel = turnLabel;
 
 	}
+	
+	/**
+	 * Gets the board model.
+	 *
+	 * @return the board model
+	 */
+	public BoardModel getBoardModel() {
+		return boardModel;
+	}
 
+
+	/**
+	 * Gets the message.
+	 *
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+	
+	/**
+	 * Gets the actual player.
+	 *
+	 * @return the actualPlayer
+	 */
+	public int getActualPlayer() {
+		return actualPlayer;
+	}
+	
+	/**
+	 * Gets the showing.
+	 *
+	 * @return the showing
+	 */
+	public int getShowing() {
+		return showing;
+	}
+	
+	/**
+	 * Gets the player.
+	 *
+	 * @return the player whose actions the 
+	 * controller is managing.
+	 */
+	public int getPlayer() {
+		return player;
+	}
+	
+	/**
+	 * Gets the other player.
+	 *
+	 * @return the other player
+	 */
+	private int getOtherPlayer() {
+		if (player == Config.PLAYER1) {
+			return Config.PLAYER2;
+		} else {
+			return Config.PLAYER1;
+		}
+	}
+
+	/**
+	 * Sets the message.
+	 *
+	 * @param message the new message
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	
+
+	/**
+	 * Sets the actual player.
+	 *
+	 * @param actualPlayer the actualPlayer to set
+	 */
+	public void setActualPlayer(int actualPlayer) {
+		this.actualPlayer = actualPlayer;
+	}
+
+	/**
+	 * Sets the showing.
+	 *
+	 * @param showing the showing to set
+	 */
+	public void setShowing(int showing) {
+		this.showing = showing;
+	}
+
+	
+
+	/**
+	 * Sets the player.
+	 *
+	 * @param player the player whose actions the 
+	 * controller is managing.
+	 */
+	public void setPlayer(int player) {
+		this.player = player;
+	}
+
+	
+
+	
+
+	/**
+	 * Static method responsible for converting
+	 * pixel dimensions of graphical board
+	 * to natural board coordinates based on
+	 * squares size.
+	 *
+	 * @param pixel dimension in pixels
+	 * @return int board coordinate corresponding
+	 * pixel value
+	 */
 	public static int toBoardCoordinates(double pixel) {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
+	/**
+	 * Checks if graphicalPiece has appropriate color
+	 * to this player.
+	 *
+	 * @param graphicalPiece the graphical piece which
+	 * player wants to move
+	 * @return true, if graohicalPiece has appropriate color
+	 */
 	public boolean isAppropriateColor(GraphicalPiece graphicalPiece) {
 		if (player == 1 && graphicalPiece.getColor() == PieceColor.WHITE) {
 			return true;
@@ -90,6 +246,19 @@ public class GameController {
 		return false;
 	}
 
+	/**
+	 * Method performing actions based on player's
+	 * move. It delegates checking whether
+	 * the move was correct and 
+	 * aborts move or delegates operations
+	 * based on player's move to the bordModel.
+	 *
+	 * @param graphicalPiece graphical piece which has moved
+	 * @param event event which has happened on the
+	 * graphical board.
+	 * @throws InvalidMoveException the exception thrown
+	 * when the move is incorrect.
+	 */
 	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
 		boolean appropriateColor = isAppropriateColor(graphicalPiece);
 		if ((player != actualPlayer) || (!appropriateColor)) {
@@ -109,11 +278,9 @@ public class GameController {
 		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
 				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
 			modelResult = new ModelMove(MovementTypes.NONE);
-			// graphicalResult = new Move(MovementTypes.NONE);
 		} else {
 
 			modelResult = rules.tryMove(oldX, oldY, newX, newY);
-			// graphicalResult =
 		}
 
 		System.out.println("OK3");
@@ -149,10 +316,8 @@ public class GameController {
 
 			break;
 		case SINGLE_CAPTURE:
-//                    graphicalPiece.move(newX, newY);
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
-				// GraphicalPiece otherPiece = graphicalResult.getGraphicalPiece();
 				int x1 = oldX + (newX - oldX) / 2;
 				int y1 = oldY + (newY - oldY) / 2;
 				boardModel.deletePieceObject(x1, y1);
@@ -233,29 +398,17 @@ public class GameController {
 		}
 	}
 
-	public GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
+	
 
-		GraphicalPiece graphicalPiece;
-		if (!isQueen) {
-			graphicalPiece = new GraphicalPiece(color, x, y, piecesGroup);
-		} else {
-			graphicalPiece = new GraphicalQueenPiece(color, x, y, piecesGroup);
-		}
-
-		graphicalPiece.setOnMouseReleased(e -> {
-			try {
-				onPieceMoved(graphicalPiece, e);
-				System.out.println(boardModel);
-
-			} catch (InvalidMoveException ex) {
-				System.out.println(ex.getMessage());
-			}
-
-		});
-
-		return graphicalPiece;
-	}
-
+	/**
+	 * Methods initializing moving on newly
+	 * created graphicalQueen.
+	 *
+	 * @param newX x coordinate where
+	 * the queen was created
+	 * @param newY y coordinate where
+	 * the queen was created
+	 */
 	public void initGraphicalQueen(int newX, int newY) {
 		GraphicalPiece graphicalQueen = graphicalPiecesArray[newX][newY];
 		graphicalQueen.setOnMouseReleased(e -> {
@@ -272,84 +425,32 @@ public class GameController {
 
 	}
 
-	public BoardModel getBoardModel() {
-		return boardModel;
-	}
-
-	/*
-	 * public void setBoardModel(BoardModel boardModel) { this.boardModel =
-	 * boardModel;
-	 * 
-	 * }
-	 */
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
+	
 	/**
-	 * @return the actualPlayer
+	 * Method canceling current piece's move
 	 */
-	public int getActualPlayer() {
-		return actualPlayer;
-	}
-
-	/**
-	 * @return the showing
-	 */
-	public int getShowing() {
-		return showing;
-	}
-
-	/**
-	 * @param actualPlayer the actualPlayer to set
-	 */
-	public void setActualPlayer(int actualPlayer) {
-		this.actualPlayer = actualPlayer;
-	}
-
-	/**
-	 * @param showing the showing to set
-	 */
-	public void setShowing(int showing) {
-		this.showing = showing;
-	}
-
-	/**
-	 * @return the player
-	 */
-	public int getPlayer() {
-		return player;
-	}
-
-	/**
-	 * @param player the player to set
-	 */
-	public void setPlayer(int player) {
-		this.player = player;
-	}
-
-	private int getOtherPlayer() {
-		if (player == Config.PLAYER1) {
-			return Config.PLAYER2;
-		} else {
-			return Config.PLAYER1;
-		}
-	}
-
 	public void abortMove() {
 		pieceHelper.abortMove();
 		pieceHelper = null;
 	}
 
+	/**
+	 * Method responsible for
+	 * receiving message from other player
+	 * through serverHandler
+	 *
+	 * @return string the message from opposite player
+	 */
 	public String receiveMessage() {
 		return serverHandler.receiveMessage();
 	}
 
+	/**
+	 * Method responsible for receiving
+	 * move from opposite player
+	 *
+	 * @return ModelMove the move of opposite player
+	 */
 	private ModelMove receiveMove() {
 		String message = serverHandler.receiveMessage();
 		ModelMove move;
@@ -362,6 +463,13 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Method performing actions based on 
+	 * opposite player's moves.
+	 * It delegates operations
+	 * based on enemy's move to the bordModel.
+	 *
+	 */
 	public void makeEnemyMove() {
 		ModelMove move = this.receiveMove();
 		System.out.println("OK1");
