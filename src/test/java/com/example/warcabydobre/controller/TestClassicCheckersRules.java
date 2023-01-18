@@ -13,10 +13,10 @@ public class TestClassicCheckersRules {
     @Test
     public void TryMoveNoneTest() throws InvalidMoveException {
         BoardModel boardModel = new BoardModel(1);
-        ModelMove modelMove = new ModelMove(MovementTypes.NONE,0,0,1,1);
+        ModelMove modelMove = new ModelMove(MovementTypes.NONE);
         ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
-        assertEquals(classicCheckersRules.tryMove(0,0,1,1),modelMove.getMovementType());
-        assertEquals(classicCheckersRules.tryMove(0,0,1,1),MovementTypes.NONE);
+        assertEquals(classicCheckersRules.tryMove(0,0,1,1),modelMove);
+        assertEquals(classicCheckersRules.tryMove(0,0,1,1).getMovementType(),MovementTypes.NONE);
     }
 
 
