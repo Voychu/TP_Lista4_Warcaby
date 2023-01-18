@@ -15,8 +15,8 @@ public class TestClassicCheckersRules {
         BoardModel boardModel = new BoardModel(1);
         ModelMove modelMove = new ModelMove(MovementTypes.NONE,0,0,1,1);
         ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
-        assertEquals(classicCheckersRules.tryMove(0,0,1,1),modelMove.getMovementType());
-        assertEquals(classicCheckersRules.tryMove(0,0,1,1),MovementTypes.NONE);
+        ModelMove modelMove2 = classicCheckersRules.tryMove(0,0,1,1);
+        assertEquals(modelMove.getMovementType(),modelMove2.getMovementType());
     }
 
 
