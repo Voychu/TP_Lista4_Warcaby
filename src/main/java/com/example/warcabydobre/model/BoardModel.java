@@ -21,13 +21,45 @@ public class BoardModel {
     
     
 
-	//private LinkedList<PieceObject> piecesList;
     private PieceObject[][] piecesArray; 
 	
 
 	private int turn;
 	private PieceColor pieceColor;
 	private LinkedList<Listener> listeners;
+	
+	
+	public BoardModel(int player) {
+		this.listeners = new LinkedList<>();
+		//this.piecesList = new LinkedList<>();
+		this.piecesArray = new PieceObject[numCols][numRows];
+		if(player == Config.FIRST) {
+			this.pieceColor = PieceColor.WHITE;
+		}
+		else {
+			this.pieceColor = PieceColor.BLACK;
+		}
+		
+		this.turn = Config.FIRST;
+		for (int y=0; y<numRowsWithPieces; y++){
+            for(int x = 0; x< numCols; x++) {
+                if(isBlackSquare(x,y)){
+                    PieceObject pieceObject = new PieceObject(x, y, PieceColor.BLACK);
+                    piecesArray[x][y] = pieceObject;
+                    //System.out.println("x" + x + "y" + y);
+                }
+            }
+        }
+        for (int y=5; y<5+numRowsWithPieces; y++){
+            for(int x = 0; x< numCols; x++) {
+                if(isBlackSquare(x,y)){
+                	PieceObject pieceObject = new PieceObject(x, y, PieceColor.WHITE);
+                	piecesArray[x][y] = pieceObject;
+                    //System.out.println("x" + x + "y" + y);
+                }
+            }
+        }
+	}
 	
 	/**
 	 * @return the piecesArray
@@ -36,9 +68,9 @@ public class BoardModel {
 		return piecesArray;
 	}
 	
+	
     
     public interface Listener {
-//    	void onChange(BoardModel model, int x, int y);
     	void onMove(int x, int y);
     	void onDelete();
     	void onTransform(int x, int y);
@@ -82,27 +114,6 @@ public class BoardModel {
     		this.piecesArray = piecesArray;
     	}
     	
-//		@Override
-//		public void onChange(BoardModel model, int x, int y) {
-//			int oldX = GameController.toBoardCoordinates(graphicalPiece.getOldX());
-//		    int oldY = GameController.toBoardCoordinates(graphicalPiece.getOldY());
-//		    
-////		    PieceObject pieceObjOld = model.getPiecesArray()[oldX][oldY];
-////		    PieceObject pieceObjNew = model.getPiecesArray()[oldX][oldY];
-//		    
-//		    graphicalPiece.move();
-//		    
-//		    
-//			if (model.getPiecesArray()[x][y] == null) {
-//				graphicalPiece.delete();
-//			}
-//			else if (model.getPiecesArray()[x][y] != null) {
-//				
-//				graphicalPiece.move(x,y);
-//			}
-//			
-//			
-//		}
 		
 
 		@Override
@@ -163,37 +174,7 @@ public class BoardModel {
 	}
 	
 	
-	public BoardModel(int player) {
-		this.listeners = new LinkedList<>();
-		//this.piecesList = new LinkedList<>();
-		this.piecesArray = new PieceObject[numCols][numRows];
-		if(player == Config.FIRST) {
-			this.pieceColor = PieceColor.WHITE;
-		}
-		else {
-			this.pieceColor = PieceColor.BLACK;
-		}
-		
-		this.turn = Config.FIRST;
-		for (int y=0; y<numRowsWithPieces; y++){
-            for(int x = 0; x< numCols; x++) {
-                if(isBlackSquare(x,y)){
-                    PieceObject pieceObject = new PieceObject(x, y, PieceColor.BLACK);
-                    piecesArray[x][y] = pieceObject;
-                    //System.out.println("x" + x + "y" + y);
-                }
-            }
-        }
-        for (int y=5; y<5+numRowsWithPieces; y++){
-            for(int x = 0; x< numCols; x++) {
-                if(isBlackSquare(x,y)){
-                	PieceObject pieceObject = new PieceObject(x, y, PieceColor.WHITE);
-                	piecesArray[x][y] = pieceObject;
-                    //System.out.println("x" + x + "y" + y);
-                }
-            }
-        }
-	}
+	
 	
 	
 	public void addListener(Listener listener) {
@@ -214,9 +195,11 @@ public class BoardModel {
             throw new InvalidMoveException("Nie mozna wykonac ruchu na biale pole");
         }
 		
-		
+		piece.setX(xk);
+		piece.setY(yk);
 		piecesArray[xp][yp] = null;
 		piecesArray[xk][yk] = piece;
+		
 		
 		for(Listener listener : listeners) {
 			PieceListener pieceListener = (PieceListener) listener;
@@ -224,10 +207,6 @@ public class BoardModel {
 				pieceListener.onMove(xk, yk);
 			}
 		}
-//		notifyObserver(xp, yp);
-		
-		
-		
 	}
 	
 	public void deletePieceObject(int x, int y) throws InvalidMoveException {
@@ -238,7 +217,7 @@ public class BoardModel {
 			throw new InvalidMoveException("Nie ma pionka");
 		}
 		piecesArray[x][y] = null;
-//		notifyObserver(x, y);
+		
 
 		for(Listener listener : listeners) {
 			PieceListener pieceListener = (PieceListener) listener;
@@ -330,15 +309,7 @@ public class BoardModel {
 		return counter;
 	}
 	
-//	private void notifyObserver(int x, int y) {
-//		listeners.stream().forEach(l -> {
-//			if (l.getX() == x && l.getY() == y) l.onChange(this, xk, yk);
-//		});
-//	}
-	
-	/*private void notifyObservers(int xk, int yk) {
-		listeners.stream().forEach(l -> l.onChange(this, xk, yk));
-	}*/
+
 	
 	
 	
