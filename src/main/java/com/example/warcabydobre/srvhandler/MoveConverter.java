@@ -46,13 +46,13 @@ public class MoveConverter {
 		}
 	}
 	
-	public static String convertMoveToString(ModelMove move) {
+	public static String convertMoveToString(ModelMove move) throws InvalidMoveException{
 		MovementTypes type = move.getMovementType();
 		if(type != MovementTypes.NONE) {
 			return Commands.MOVE.getCommand() + " " + move.getOldX() + " " + move.getOldY() +" "+
 					move.getNewX() + " " + move.getNewY();
 		}
-		else return null;
+		else throw new InvalidMoveException("Nieprawidlowy ruch");
 		
 	}
 
