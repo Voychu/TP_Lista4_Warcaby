@@ -9,11 +9,9 @@ public class MoveConverter {
 	private static final String separator =" ";
 
 	
-	//TODO: move xp yp xk yk split po spacji
 	public static ModelMove convertToMove(String message) throws InvalidCommandException{
 		String[] parameters = message.split(separator);
 		String moveStr = Commands.MOVE.getCommand();
-		//String okmv = Commands.OKMV.getCommand();
 		if( !(parameters[0].equalsIgnoreCase(moveStr)) ) {
 			return null;
 		}
@@ -40,9 +38,6 @@ public class MoveConverter {
 		String[] parameters = message.split(separator);
 		if(parameters[0].equals("move")) {
 			return Commands.MOVE;
-		}
-		else if(parameters[0].equals("okmv")) {
-			return Commands.OKMV;
 		}
 		else {
 			return Commands.ERMV;

@@ -69,9 +69,14 @@ public class ModelMove {
 		return newY;
 	}
 	
-	public boolean equals(ModelMove move) {
-		return (this.oldX == move.getOldX()) && (this.oldY == move.getOldY()) && 
-				(this.newX == move.getNewX()) && (this.newY == move.getNewY());
-	}
+
+	
+	@Override
+    public boolean equals(Object obj) {
+        if (obj==this) return true;
+        if (obj==null || obj.getClass()!=this.getClass()) return false;
+        return (this.oldX == ((ModelMove) obj).getOldX()) && (this.oldY == ((ModelMove) obj).getOldY()) && 
+				(this.newX == ((ModelMove) obj).getNewX()) && (this.newY == ((ModelMove) obj).getNewY());
+    }
 	
 }
