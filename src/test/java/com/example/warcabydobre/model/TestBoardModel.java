@@ -66,4 +66,5 @@ public class TestBoardModel {
         BoardModel boardModel = new BoardModel(1);
         assertEquals(boardModel.countPiecesBetween(7,0,0,7),4);
     }
+
 }
