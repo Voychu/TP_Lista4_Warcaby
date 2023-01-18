@@ -40,8 +40,6 @@ public class GameController {
 	/** Model storing data of the game */
 	private BoardModel boardModel;
 	
-	/**Group of the graphicalPieces on the board */
-	private Group piecesGroup;
 	
 	/** It is responsible for checking moves
 	 * based on the rules of chosen game type. */
@@ -92,12 +90,11 @@ public class GameController {
 			ServerHandler serverHandler, Label turnLabel, Group piecesGroup) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
-		this.piecesGroup = piecesGroup;
 		this.rules = new ClassicCheckersRules(boardModel);// TODO Factory
 		for (int j = 0; j < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; j++) {
 			for (int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_HEIGHT; i++) {
 				GraphicalPiece graphicalPiece = graphicalPiecesArray[i][j];
-				if (graphicalPiece != null) { // this.boardModel.
+				if (graphicalPiece != null) { 
 					Listener pieceListener = boardModel.new PieceListener(graphicalPiece,
 							boardModel.getPiecesArray()[i][j], board, graphicalPiecesArray);
 					boardModel.addListener(pieceListener);
