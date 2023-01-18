@@ -1,5 +1,11 @@
 package com.example.warcabydobre.utils;
 
+
+/**
+ * Class storing constants used in this application
+ * @author Jan Poreba
+ *
+ */
 public class Config {
 	public static final String APPLICATION_TITLE_TXT =
 			"CheckersGame";
