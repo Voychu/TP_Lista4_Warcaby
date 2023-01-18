@@ -196,18 +196,37 @@ public class GameController {
 		case QUEEN_CAPTURE:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
-				int x1 = newX - 1;
-				int y1 = newY - 1;
-				boardModel.deletePieceObject(x1, y1);
+				int x1 = 0;
+				int y1 = 0;
+				if(newX>oldX && newY>oldY)
+				{
+					x1 = newX-1;
+					y1 = newY-1;
+				}
+				else if(newX<oldX && newY>oldY)
+				{
+					x1 = newX+1;
+					y1 = newY-1;
+				}
+				else if(newX>oldX && newY<oldY)
+				{
+					x1 = newX-1;
+					y1 = newY+1;
+				}
+				else if(newX<oldX && newY<oldY)
+				{
+					x1 = newX+1;
+					y1 = newY-1;
+				}
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
+
 			} catch (InvalidMoveException ex) {
-				System.out.println("Nieprawidlowy ruch");
+				System.out.println(ex.getMessage());
 			}
-			System.out.println("OK4");
 			break;
 		default:
 			break;
@@ -429,6 +448,37 @@ public class GameController {
 			}
 			break;
 		case QUEEN_CAPTURE:
+			try {
+				boardModel.movePieceObject(oldX, oldY, newX, newY);
+				int x1 = 0;
+				int y1 = 0;
+				if(newX>oldX && newY>oldY)
+				{
+				x1 = newX-1;
+				y1 = newY-1;
+				}
+				else if(newX<oldX && newY>oldY)
+				{
+				x1 = newX+1;
+				y1 = newY-1;
+				}
+				else if(newX>oldX && newY<oldY)
+				{
+				x1 = newX-1;
+				y1 = newY+1;
+				}
+				else if(newX<oldX && newY<oldY)
+				{
+				x1 = newX+1;
+				y1 = newY-1;
+				}
+				boardModel.deletePieceObject(x1, y1);
+				Platform.runLater(() -> turnLabel.setText("MyTurn"));
+				actualPlayer = player;
+
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
 			break;
 		default:
 			break;
