@@ -1,5 +1,6 @@
 package com.example.warcabydobre.srvhandler;
 
+import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.srv.Commands;
@@ -9,14 +10,15 @@ public class MoveConverter {
 	private static final String separator =" ";
 
 	
-	public static ModelMove convertToMove(String message) throws InvalidCommandException{
+	public static ModelMove convertToMove(String message) 
+			throws InvalidCommandException {
 		String[] parameters = message.split(separator);
 		String moveStr = Commands.MOVE.getCommand();
 		if( !(parameters[0].equalsIgnoreCase(moveStr)) ) {
-			return null;
+			throw new InvalidCommandException("Nieprawidlowy komunikat");
 		}
 		if(parameters.length != 5) {
-			return null;
+			throw new InvalidCommandException("Nieprawidlowy komunikat");
 		}
 		
 		try {

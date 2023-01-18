@@ -23,5 +23,29 @@ public class TestStringToMoveConversion {
 		assertEquals(expectedMove, resultMove);
 		
 	}
+	
+	
+	@Test(expected = InvalidCommandException.class)
+	public void testIncorrectMessageExpectedException() throws InvalidCommandException {
+		String message = "nowy ruch";
+		ModelMove resultMove = MoveConverter.convertToMove(message);
+		
+	}
+	
+	
+	@Test(expected = InvalidCommandException.class)
+	public void testTooManyArgumentsExpectedException() throws InvalidCommandException {
+		int oldX = 0;
+		int oldY = 0;;
+		int newX = 1;
+		int newY = 1;
+		int nextX = 2;
+		String moveStr = Commands.MOVE.getCommand();
+		String message = moveStr + " " + Integer.toString(oldX) + " " +
+				Integer.toString(oldY) + " " + Integer.toString(newX) + " " + 
+				Integer.toString(newY) + " " + Integer.toString(nextX);
+		ModelMove resultMove = MoveConverter.convertToMove(message);
+		
+	}
 
 }
