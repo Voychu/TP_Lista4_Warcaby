@@ -46,4 +46,15 @@ public class TestBoardModel {
         boardModel.movePieceObject(1,2,2,3);
         assertEquals(boardModel.toString(),"  b   b   b   b \nb   b   b   b   \n      b   b   b \n    b           \n                \nw   w   w   w   \n  w   w   w   w \nw   w   w   w   \n");
     }
+
+    @Test(expected = NotDiagonalException.class)
+    public void TestPieceCounterException() throws NotDiagonalException {
+        BoardModel boardModel = new BoardModel(1);
+        boardModel.countPiecesBetween(0,0,0,7);
+    }
+    @Test
+    public void TestPieceCounter() throws NotDiagonalException {
+        BoardModel boardModel = new BoardModel(1);
+        assertEquals(boardModel.countPiecesBetween(7,0,0,7),4);
+    }
 }
