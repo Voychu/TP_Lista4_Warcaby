@@ -1,5 +1,11 @@
 package com.example.warcabydobre.model;
 
+/**
+ * the exception thrown where the two field aren't on diagonal.
+ * @author Jan Poreba
+ *
+ */
+
 public class NotDiagonalException extends Exception {
 
 	/**
