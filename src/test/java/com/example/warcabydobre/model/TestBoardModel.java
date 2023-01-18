@@ -26,6 +26,14 @@ public class TestBoardModel {
         boardModel.movePieceObject(1,0,1,1);
     }
     @Test
+    public void TestQueenTransform(){
+        BoardModel boardModel = new BoardModel(1);
+        PieceObject pieceObjects[][] = boardModel.getPiecesArray();
+        pieceObjects[1][0].setQueen(true);
+        boardModel.transformToQueen(3,0);
+        assertEquals(pieceObjects[1][0].isQueen,pieceObjects[3][0].isQueen);
+    }
+    @Test
     public void TestDeleting() throws InvalidMoveException {
         BoardModel boardModel = new BoardModel(1);
         PieceObject pieceObjects[][] = boardModel.getPiecesArray();

@@ -1,9 +1,6 @@
 package com.example.warcabydobre.controller;
 
-import com.example.warcabydobre.model.BoardModel;
-import com.example.warcabydobre.model.InvalidMoveException;
-import com.example.warcabydobre.model.ModelMove;
-import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.model.*;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.Square;
@@ -48,6 +45,16 @@ public class TestClassicCheckersRules {
          MovementTypes expectedType = expectedMove.getMovementType();
          MovementTypes resultType = resultMove.getMovementType();
          assertEquals(expectedType, resultType);
+     }
+     @Test
+     public void TryQueenDiagonalTest() throws InvalidMoveException{
+        BoardModel boardModel = new BoardModel(1);
+        ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+        PieceObject[][] pieceObjects = boardModel.getPiecesArray();
+        pieceObjects[1][2].setQueen(true);
+        ModelMove modelMove = new ModelMove(MovementTypes.QUEEN_DIAGONAL,1,2,3,4);
+        ModelMove modelMove2 = classicCheckersRules.tryMove(1,2,3,4);
+        assertEquals(modelMove,modelMove2);
      }
   
 
