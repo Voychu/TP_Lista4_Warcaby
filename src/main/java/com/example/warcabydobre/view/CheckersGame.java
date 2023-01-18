@@ -60,41 +60,17 @@ public class CheckersGame extends Application implements Runnable {
 	private Button confirmButton;
 	private Alert endingGameAlert;
 
-	// private static int actualPlayer = Config.PLAYER1;
 
-	// private static int showing = Config.ACTIVE;
-
-	Socket socket = null;
-	PrintWriter out = null;
-	BufferedReader in = null;
+	private Socket socket = null;
 	private GameController controller;
 	private BoardModel boardModel;
-	/* private Square[][] squaresArray; */
-	// private LinkedList<GraphicalPiece> graphicalPiecesList;
-	private GraphicalPiece[][] piecesArray;// TODO: edytowanie tablicy przy przeuswaniu pionkow
+	private GraphicalPiece[][] piecesArray;
 	private Group squaresGroup;
 	private Group piecesGroup;
 	private ServerHandler serverHandler;
 	private Square[][] board = new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 
-	/*
-	 * Połaczenie z socketem
-	 */
-	public void listenSocket() {
-		try {
-			socket = new Socket("localhost", 4444);
-			// Inicjalizacja wysylania do serwera
-			out = new PrintWriter(socket.getOutputStream(), true);
-			// Inicjalizacja odbierania z serwera
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		} catch (UnknownHostException e) {
-			System.out.println("Unknown host: localhost");
-			System.exit(1);
-		} catch (IOException e) {
-			System.out.println("No I/O");
-			System.exit(1);
-		}
-	}
+	
 
 	/*
 	 * private void initchoosingGameStage() { choosingGameStage = new Stage();
@@ -141,8 +117,6 @@ public class CheckersGame extends Application implements Runnable {
 		boardStage.setTitle(Config.APPLICATION_TITLE_TXT);
 
 		boardStage.setResizable(true);
-		// ClassicCheckersBoard ccb = new ClassicCheckersBoard(in, out);
-		// Scene windowScene = ccb.getBoardScene();
 		BorderPane borderPane = new BorderPane();
 		squaresGroup = new Group();
 		piecesGroup = new Group();
@@ -151,56 +125,34 @@ public class CheckersGame extends Application implements Runnable {
 				Config.CLASSICAL_CHECKERS_BOARD_HEIGHT * Config.SQUARE_CLASSIC_HEIGHT);
 		pane.getChildren().addAll(squaresGroup, piecesGroup);
 
-		/*
-		 * squaresArray = new Square[numCols][numRows]; whitePiecesList = new
-		 * LinkedList<>(); blackPiecesList = new LinkedList<>();
-		 */
-		// graphicalPiecesList = new LinkedList<>();
+		
 		piecesArray = new GraphicalPiece[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 
 		double helpw = Config.SQUARE_CLASSIC_WIDTH;
 		double helph = Config.SQUARE_CLASSIC_HEIGHT;
-		// boolean white = true;
-		// int a = 0;
-		// int b = 0;
-		// y = j * helph
-		// x = i * helw
 		for (int j = 0; j < numRows; j++) {
 			for (int i = 0; i < numCols; i++) {
 				double x = i * helpw;
 				double y = j * helph;
 				if ((i + j) % 2 == 0) {
 					WhiteSquare wSquare = new WhiteSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
-					// squaresArray[a][b] = wSquare;
 					board[i][j] = wSquare;
 					squaresGroup.getChildren().addAll(wSquare);
 					wSquare.relocate(x, y);
-					// a+=1;
 				} else {
 					BlackSquare bSquare = new BlackSquare(Config.SQUARE_CLASSIC_WIDTH, Config.SQUARE_CLASSIC_HEIGHT);
 					board[i][j] = bSquare;
 					squaresGroup.getChildren().addAll(bSquare);
 					bSquare.relocate(x, y);
-					// a+=1;
 				}
-				// white=!white;
 			}
-			// white=!white;t
-			// a=0;
-			// b+=1;
 		}
-		// y = j * helph
-		// x = i * helw
 		GraphicalPiece wPiece;
 		GraphicalPiece bPiece;
-		// double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS)/2;
 		for (int j = 0; j < numRowsWithPieces; j++) {
 			for (int i = 0; i < numCols; i++) {
 				if ((i + j) % 2 == 1) {
-					// BlackPiece bPiece = new BlackPiece(Config.PIECE_RADIUS);
 					bPiece = makeGraphicalPiece(PieceColor.BLACK, i, j, false);
-					// blackPiecesList.add(bPiece);
-					// graphicalPiecesList.add(bPiece);
 					piecesArray[i][j] = bPiece;
 					board[i][j].setGraphicalPiece(bPiece);
 					piecesGroup.getChildren().addAll(bPiece);
@@ -214,11 +166,7 @@ public class CheckersGame extends Application implements Runnable {
 		for (int j = 5; j < 5 + numRowsWithPieces; j++) {
 			for (int i = 0; i < numCols; i++) {
 				if ((i + j) % 2 == 1) {
-
-					// WhitePiece wPiece = new WhitePiece(Config.PIECE_RADIUS);
 					wPiece = makeGraphicalPiece(PieceColor.WHITE, i, j, false);
-					// whitePiecesList.add(wPiece);
-					// graphicalPiecesList.add(wPiece);
 					piecesArray[i][j] = wPiece;
 					board[i][j].setGraphicalPiece(wPiece);
 					piecesGroup.getChildren().addAll(wPiece);
@@ -229,12 +177,6 @@ public class CheckersGame extends Application implements Runnable {
 				}
 			}
 		}
-		/*
-		 * GraphicalPiece bQueen = makeGraphicalPiece(PieceColor.BLACK, 2, 3, true);
-		 * piecesArray[2][3] = bQueen; board[2][3].setGraphicalPiece(bQueen);
-		 * piecesGroup.getChildren().addAll(bQueen); double x = 2 * helpw; double y = 3
-		 * * helph; bQueen.relocate(x, y);
-		 */
 
 		borderPane.setCenter(pane);
 
@@ -283,40 +225,14 @@ public class CheckersGame extends Application implements Runnable {
 		};
 		confirmButton.setOnAction(sendingMessageHandler);
 
-		boardStage.setOnCloseRequest(event -> out.println("bye"));
+		boardStage.setOnCloseRequest(event -> serverHandler.sendMessage("bye"));
 
 	}
 
-	/*
-	 * private Move tryMove(GraphicalPiece graphicalPiece, int newX, int newY) { if
-	 * (board[newX][newY].isOccupied() || (newX + newY) % 2 == 0) { return new
-	 * Move(MovementTypes.NONE); } int xp =
-	 * toBoardCoordinates(graphicalPiece.getOldX()); int yp =
-	 * toBoardCoordinates(graphicalPiece.getOldY()); System.out.println(xp + ", " +
-	 * yp);
-	 * 
-	 * if (Math.abs(newX - xp) == 1 && newY - yp ==
-	 * graphicalPiece.getColor().getMovementDirection()) return new
-	 * Move(MovementTypes.FORWARD); else if (Math.abs(newX - xp) == 2 && newY - yp
-	 * == graphicalPiece.getColor().getMovementDirection() * 2) { int x1 = xp +
-	 * (newX - xp) / 2; int y1 = yp + (newY - yp) / 2;
-	 * 
-	 * if (board[x1][y1].isOccupied() &&
-	 * board[x1][y1].getGraphicalPiece().getColor() != graphicalPiece.getColor()) {
-	 * return new Move(MovementTypes.CAPTURE_FORWARD,
-	 * board[x1][y1].getGraphicalPiece()); } } return new Move(MovementTypes.NONE);
-	 * 
-	 * }
-	 */
 
-	private int toBoardCoordinates(double pixel) {
-		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
-	}
 
 	private GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
 
-//		GraphicalPiece graphicalPiece = controller.makeGraphicalPiece(color,x,y,isQueen);
-//		return graphicalPiece;
 		GraphicalPiece graphicalPiece;
 		if (!isQueen) {
 			graphicalPiece = new GraphicalPiece(color, x, y, piecesGroup);
@@ -342,76 +258,16 @@ public class CheckersGame extends Application implements Runnable {
 		textLabel.setText(text);
 	}
 
-	/*
-	 * public String sendMessage() { return sendingField.getText(); }
-	 */
-
-	/*
-	 * public void sendMessage() { String message = sendingField.getText();
-	 * out.println(message); // messageLabel.setText("OppositeTurn");
-	 * Platform.runLater(() -> messageLabel.setText("OppositeTurn")); //
-	 * send.setEnabled(false); // sendingField.setText(""); Platform.runLater(() ->
-	 * sendingField.setText(""));
-	 * 
-	 * Platform.runLater(() -> textLabel.setText(""));
-	 * 
-	 * Platform.runLater(() -> confirmButton.setDisable(true));
-	 * 
-	 * if (message.equals("bye")) { try {
-	 * 
-	 * Platform.runLater(() -> System.exit(0)); socket.close(); } catch (IOException
-	 * e) { // TODO Auto-generated catch block e.printStackTrace(); } }
-	 * 
-	 * // input.requestFocus(); showing = ACTIVE; actualPlayer = player; }
-	 */
-
-//	public void receiveMessage() {
-//		try {
-//			// Odbieranie z serwera
-//			String str = in.readLine();
-//
-//			if (str.equals("bye")) {
-//				/*
-//				 * endingGameAlert.setTitle("Uwaga");
-//				 * endingGameAlert.setHeaderText("Rozlaczono z serwerem.");
-//				 * endingGameAlert.setContentText("Czy chcesz zamknac okno?");
-//				 * endingGameAlert.initModality(Modality.APPLICATION_MODAL);
-//				 * 
-//				 * Optional<ButtonType> clickedButton = endingGameAlert.showAndWait();
-//				 * if(clickedButton.get() == ButtonType.OK){ System.exit(0); }
-//				 */
-//				// Platform.runLater(()->System.exit(0));
-//				System.exit(0);
-//				socket.close();
-//			}
-//			// textLabel.setText(str);
-//			Platform.runLater(() -> textLabel.setText(str));
-//			// messageLabel.setText("My turn");
-//			Platform.runLater(() -> messageLabel.setText("My turn"));
-//			// send.setEnabled(true);
-//			// sendingField.setText("");
-//			Platform.runLater(() -> sendingField.setText(""));
-//
-//			Platform.runLater(() -> confirmButton.setDisable(false));
-//			// input.requestFocus();
-//		} catch (IOException e) {
-//			System.out.println("Read failed");
-//			System.exit(1);
-//		}
-//	}
 
 	private int receiveInitFromServer() {
 		try {
 			int player = serverHandler.receiveInitFromServer();
 			if (player == Config.PLAYER1) {
-				// messageLabel.setText("My Turn");
 				Platform.runLater(() -> turnLabel.setText("My Turn"));
 
 			} else {
-				// messageLabel.setText("Opposite turn");
 				Platform.runLater(() -> turnLabel.setText("Opposite turn"));
 				Platform.runLater(() -> confirmButton.setDisable(true));
-				// sendingField.setEnabled(false);
 			}
 			return player;
 		} catch (IOException e) {
