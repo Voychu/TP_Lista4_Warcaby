@@ -3,7 +3,7 @@ package com.example.warcabydobre.model;
 public class InvalidMoveException extends Exception {
 
 	/**
-	 * 
+	 * Exception thrown when the move was incorrect.
 	 */
 	private static final long serialVersionUID = 1L;
 
