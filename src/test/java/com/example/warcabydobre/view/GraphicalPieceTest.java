@@ -36,14 +36,6 @@ public class GraphicalPieceTest {
         assertEquals(gPiece.getLayoutX(),newX*Config.SQUARE_CLASSIC_WIDTH,0);
         assertEquals(gPiece.getLayoutY(),newY*Config.CLASSICAL_CHECKERS_BOARD_HEIGHT,0);
     }
-    
-    //TODO: Przeniesc do JUnit Test case zwiazanego z PieceObject
-    /*@Test
-    public void TestObjectPieceNotQueen(){
-        PieceObject pObject = new PieceObject(x,y, PieceColor.BLACK);
-        assertFalse(pObject.isQueen());
-    }*/
-
 
     @Test
     public void TestNumberOfPieces() {
