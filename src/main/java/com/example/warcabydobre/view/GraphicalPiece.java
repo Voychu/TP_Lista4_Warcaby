@@ -7,6 +7,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/**
+ * The graphical representation of a piece.
+ * @author Wojciech Bajurny
+ */
 public class GraphicalPiece extends StackPane {
 	
 	private PieceColor color;
