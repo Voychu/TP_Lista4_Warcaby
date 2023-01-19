@@ -20,7 +20,14 @@ public class GraphicalPiece extends StackPane {
 	protected Circle circle;
 
 	private double offset = (Config.SQUARE_CLASSIC_WIDTH - 2*Config.PIECE_RADIUS - Config.PIECE_STROKE)/2;
-	
+
+	/**
+	 * Constructor of GraphicalPiece, the visual representation of the PieceObject which the player can interact with.
+	 * @param color uses PieceColor enum, black or white.
+	 * @param x the x coordinate of the Piece.
+	 * @param y the y coordinate of the Piece.
+	 * @param piecesGroup which visually updates the players if the Pieces are still in the game or if they have been captured.
+	 */
 	public GraphicalPiece(PieceColor color, int x, int y, Group piecesGroup) {
 
 		move(x, y);
@@ -60,14 +67,26 @@ public class GraphicalPiece extends StackPane {
 		});
 	}
 
+	/**
+	 * Gets the color of the piece.
+	 * @return the color enum.
+	 */
 	public PieceColor getColor() {
 		return color;
 	}
 
+	/**
+	 * Gets the X coordinate before moving the piece.
+	 * @return the oldX
+	 */
 	public double getOldX() {
 		return oldX;
 	}
 
+	/**
+	 * Gets the Y coordinate before moving the piece.
+	 * @return the oldY
+	 */
 	public double getOldY() {
 		return oldY;
 	}
@@ -80,25 +99,37 @@ public class GraphicalPiece extends StackPane {
 		return piecesGroup;
 	}
 
+	/**
+	 * Sets the color enum for the piece.
+	 * @param color
+	 */
 	public void setColor(PieceColor color) {
 		this.color = color;
 	}
 
 
-
-
+	/**
+	 *
+	 * @param x
+	 * @param y
+	 */
 	public void move(int x, int y) {
 		oldX = x * Config.SQUARE_CLASSIC_WIDTH;
 		oldY = y * Config.SQUARE_CLASSIC_HEIGHT;
 		relocate(oldX, oldY);
 	}
-	
-	
+
+	/**
+	 * Removes the graphic piece from the group - it is no longer visible and can not be interacted with.
+	 */
 	public void delete() {
 		piecesGroup.getChildren().remove(this);
 		
 	}
-	
+
+	/**
+	 * Returns to the starting position of the piece. Used when the move is not possible.
+	 */
 	public void abortMove() {
 		relocate(oldX, oldY);
 	}

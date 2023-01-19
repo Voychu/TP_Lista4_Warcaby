@@ -46,7 +46,11 @@ public class ServerHandler {
 		return inReader;
 	}
 
-
+	/**
+	 * Awaiting for player connection
+	 * @return int of connected player
+	 * @throws IOException
+	 */
 	public int receiveInitFromServer() throws IOException {
 		System.out.println("Oczekiwanie...");
 		int player = Integer.parseInt(inReader.readLine());
@@ -55,7 +59,11 @@ public class ServerHandler {
 
 	}
 
-
+	/**
+	 *
+	 * @param message which is sent to the server and then it's going to be received by the second player.
+	 * @return the state of sent message - if the sending was succesful or not.
+	 */
 	public MessageState sendMessage(String message) {
 		outWriter.println(message);
 		System.out.println(message);
@@ -67,6 +75,10 @@ public class ServerHandler {
 		return MessageState.OK;
 	}
 
+	/**
+	 * Receiving the message sent to the server by another player.
+	 * @return
+	 */
 	public String receiveMessage() {
 		try {
 			// Odbieranie z serwera
@@ -83,6 +95,7 @@ public class ServerHandler {
 			return null;
 		}
 	}
+
 
 	public MessageState determineMessageState(String message) {
 
