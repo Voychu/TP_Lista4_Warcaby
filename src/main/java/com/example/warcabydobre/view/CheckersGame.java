@@ -1,77 +1,112 @@
 package com.example.warcabydobre.view;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Scanner;
+
 
 import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.InvalidMoveException;
-import com.example.warcabydobre.model.MovementTypes;
-import com.example.warcabydobre.srvhandler.InvalidCommandException;
+
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.utils.Config;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
+
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
 
+
+/**
+ * The GUI class of the game.
+ */
 public class CheckersGame extends Application implements Runnable {
 
+	
+	/** Flag representing gameType. */
+	//TODO: Extending project to other game types.
+	private int gameType;
+	
+	
+	/** The stage with the game's board. */
+	private Stage boardStage;
+	
+	//TODO: Extending project to other game types.
+	// private Stage choosingGameStage;
+	
+	/** The Constant storing 
+	 * the number of columns. */
+	private static final int numCols 
+		= Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
+	
+	/** The Constant storing
+	 * the number of rows. */
+	private static final int numRows 
+		= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
+	
+	/** The Constant storing 
+	 * the number of rows with pieces. */
+	private static final int numRowsWithPieces 
+		= Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
+	
+	
+	
+	/** The label displaying whose is turn. */
+	Label turnLabel;
+	
+
+
+	/** The socket of player playing
+	 * from this windows. */
+	private Socket socket = null;
+	
+	/** The controller of player
+	 * playing from this window. */
+	private GameController controller;
+	
+	/** The model of the game of player
+	 * playing from this windows. */
+	private BoardModel boardModel;
+	
+	/** The array of graphical pieces
+	 * moving on the board. */
+	private GraphicalPiece[][] piecesArray;
+	
+	/** The group of fields in
+	 * the board. */
+	private Group squaresGroup;
+	
+	/** The group of graphical pieces
+	 * moving on the board. */
+	private Group piecesGroup;
+	
+	/** The proxy to the server. */
+	private ServerHandler serverHandler;
+	
+	/** The array of fields
+	 * in the board. */
+	private Square[][] board 
+		= new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
+
+	
 	/**
+	 * Gets the game type.
+	 *
 	 * @return the gameType
 	 */
 	public int getGameType() {
 		return gameType;
 	}
-
-	private static int MARGIN_X = 30;
-	private static int MARGIN_Y = 30;
-	private int gameType;
-	// private Stage choosingGameStage;
-	private Stage boardStage;
-	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
-	private static final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
-	private static final int numRowsWithPieces = Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
-	private Label textLabel;
-	private TextField sendingField;
-	Label turnLabel;
-	private Button confirmButton;
-	private Alert endingGameAlert;
-
-
-	private Socket socket = null;
-	private GameController controller;
-	private BoardModel boardModel;
-	private GraphicalPiece[][] piecesArray;
-	private Group squaresGroup;
-	private Group piecesGroup;
-	private ServerHandler serverHandler;
-	private Square[][] board = new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
-
 	
-
+	
+	//TODO: Extending project to other game types.
 	/*
 	 * private void initchoosingGameStage() { choosingGameStage = new Stage();
 	 * 
@@ -111,6 +146,9 @@ public class CheckersGame extends Application implements Runnable {
 	 * } }; classicalCheckersButton.setOnAction(eventHandler_classicalcheckers); }
 	 */
 
+	/**
+	 * Method initializing window with the board.
+	 */
 	private void initBoardStage() {
 
 		boardStage = new Stage();
@@ -180,33 +218,17 @@ public class CheckersGame extends Application implements Runnable {
 
 		borderPane.setCenter(pane);
 
-		VBox vBox = new VBox();
-		textLabel = new Label("Gra: test");
-		HBox labelHBox = new HBox(textLabel);
-		labelHBox.setAlignment(Pos.CENTER);
-		labelHBox.setSpacing(Config.GAP);
-		vBox.getChildren().addAll(labelHBox);
-		vBox.setAlignment(Pos.CENTER);
-		vBox.setSpacing(Config.GAP);
 
-		borderPane.setRight(vBox);
 
 		VBox lVBox = new VBox();
 
-		sendingField = new TextField();
-		HBox textFieldHBox = new HBox(sendingField);
-		textFieldHBox.setAlignment(Pos.CENTER);
-		textFieldHBox.setSpacing(Config.GAP);
-		confirmButton = new Button("wyslij");
-		HBox buttonHBox = new HBox(confirmButton);
-		buttonHBox.setAlignment(Pos.CENTER);
-		buttonHBox.setSpacing(Config.GAP);
 
 		turnLabel = new Label("Status:");
+		turnLabel.setPrefWidth(100);
 		HBox messageLabelHBox = new HBox(turnLabel);
 		messageLabelHBox.setAlignment(Pos.CENTER);
 		messageLabelHBox.setSpacing(Config.GAP);
-		lVBox.getChildren().addAll(textFieldHBox, buttonHBox, messageLabelHBox);
+		lVBox.getChildren().addAll(messageLabelHBox);
 		lVBox.setAlignment(Pos.CENTER);
 		lVBox.setSpacing(Config.GAP);
 
@@ -215,15 +237,8 @@ public class CheckersGame extends Application implements Runnable {
 		Scene boardScene = new Scene(borderPane, Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
 		boardStage.setScene(boardScene);
 		boardStage.show();
-		// choosingGameStage.close();
+		
 
-		EventHandler<ActionEvent> sendingMessageHandler = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				// sendMessage();
-
-			}
-		};
-		confirmButton.setOnAction(sendingMessageHandler);
 
 		boardStage.setOnCloseRequest(event -> serverHandler.sendMessage("bye"));
 
@@ -231,6 +246,19 @@ public class CheckersGame extends Application implements Runnable {
 
 
 
+	/**
+	 * Make initializing graphical pieces.
+	 *
+	 * @param color the color of the piece
+	 * @param x the x coordinate of
+	 * initial position of the piece
+	 * @param y the y coordinate of
+	 * initial position of the piece
+	 * @param isQueen the flag storing
+	 * information whether the piece
+	 * is queen
+	 * @return created graphicalPiece
+	 */
 	private GraphicalPiece makeGraphicalPiece(PieceColor color, int x, int y, boolean isQueen) {
 
 		GraphicalPiece graphicalPiece;
@@ -254,11 +282,18 @@ public class CheckersGame extends Application implements Runnable {
 		return graphicalPiece;
 	}
 
-	public void setLabelText(String text) {
-		textLabel.setText(text);
-	}
 
 
+	/**
+	 * Method determining who is the first player
+	 * and who is the second player
+	 * according to who has connected first
+	 * with the server.
+	 *
+	 * @return int information if player
+	 * playing from this window is first
+	 * or second player.
+	 */
 	private int receiveInitFromServer() {
 		try {
 			int player = serverHandler.receiveInitFromServer();
@@ -267,7 +302,6 @@ public class CheckersGame extends Application implements Runnable {
 
 			} else {
 				Platform.runLater(() -> turnLabel.setText("Opposite turn"));
-				Platform.runLater(() -> confirmButton.setDisable(true));
 			}
 			return player;
 		} catch (IOException e) {
@@ -277,26 +311,39 @@ public class CheckersGame extends Application implements Runnable {
 		}
 	}
 
-	public void getSendingText() {
-	}
+	
 
+	/**
+	 * Method starting thread of the game
+	 * of player playing from this window.
+	 */
 	private void startThread() {
 		Thread gTh = new Thread(this);
 		gTh.start();
 	}
 
+	/**
+	 * method responsible for running player's thread
+	 */
 	@Override
 	public void run() {
-		/*
-		 * if (player==PLAYER1) { f1(); } else{ f2(); }
-		 */
-		// Mozna zrobic w jednej metodzie. Zostawiam
-		// dla potrzeb prezentacji
+		
 		int player = controller.getPlayer();
 		f(player);
 	}
 
-	// Jedna metoda dla kazdego Playera
+	/**
+	 * Method delegating performing game's operation
+	 * according to if it is this player's turn or
+	 * opposite player's turn.
+	 * If it is this player's turn
+	 * it waits for his move if not
+	 * it delegates performing
+	 * enemy's move.
+	 *
+	 * @param iPlayer number of the player
+	 * playing from this windows.
+	 */
 	void f(int iPlayer) {
 		while (true) {
 			synchronized (this) {
@@ -319,6 +366,14 @@ public class CheckersGame extends Application implements Runnable {
 		}
 	}
 
+	/**
+	 * Method initializing model of the game
+	 * and controller of player playing
+	 * from this window.
+	 *
+	 * @param player the player playing 
+	 * from this window
+	 */
 	private void initMVC(int player) {
 		this.boardModel = new BoardModel(player);
 		System.out.println(player);
@@ -329,6 +384,9 @@ public class CheckersGame extends Application implements Runnable {
 		controller.setActualPlayer(Config.PLAYER1);
 	}
 
+	/**
+	 * Method initializing proxy to the server.
+	 */
 	private void initServerHandler() {
 		try {
 			this.serverHandler = new ServerHandler(Config.LOCALHOST_ADDRESS, Config.PORT);
@@ -343,10 +401,20 @@ public class CheckersGame extends Application implements Runnable {
 
 	}
 
+	/**
+	 * Method of class CheckersGame initializing 
+	 * window of the application.
+	 *
+	 * @param arg0 the top level 
+	 * container of this application
+	 * @throws Exception the exception thrown
+	 * when it occurs an error.
+	 */
 	@Override
 	public void start(Stage arg0) throws Exception {
 		initServerHandler();
 		
+		//TODO: Extending project to other game types.
 		// TODO: wybor trybow gry z kosnoli 1, 2, 3
 		// TODO: walidacja trybow
 //		System.out.println("Podaj tryb: ");
@@ -356,17 +424,19 @@ public class CheckersGame extends Application implements Runnable {
 //		String message = Integer.toString(i);
 //		serverHandler.sendMessage(message);
 		initBoardStage();
-		
-
 		int player = receiveInitFromServer();
-
 		initMVC(player);
 		startThread();
 
 	}
 
+	/**
+	 * The main method testing CheckersGame class.
+	 *
+	 * @param args the arguments with which 
+	 * the program has been invoked.
+	 */
 	public static void main(String[] args) {
-
 		launch(args);
 
 	}
