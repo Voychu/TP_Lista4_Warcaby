@@ -1,18 +1,27 @@
 package com.example.warcabydobre.controller;
 
-public class GameRulesFactory extends AbstractFactory {
+import com.example.warcabydobre.model.BoardModel;
 
-	@Override
-	GameRules getGameRules(String type) {
-		if(type == null){
-            return null;
-        }
+/**
+ * Class of factory, it is responsible for
+ * creating GameRules object
+ *
+ */
+public class GameRulesFactory  {
 
-        /*if(type.equalsIgnoreCase("classic")){
-            return new ClassicCheckersRules();
-        }*/   
+	/**
+	 * Method using for getting object of type GameRules
+	 * @param gameType String string representing
+	 * type of the checkers' game
+	 * @param boardModel model of the game
+	 * @return rules of game object
+	 */
+	GameRules getGameRules(String gameType, BoardModel boardModel) {
+		if(gameType.equalsIgnoreCase("classic")){
+            return new ClassicCheckersRules(boardModel);
+        } 
 
-        return null;
+		else return null;
 	}
         
 }    
