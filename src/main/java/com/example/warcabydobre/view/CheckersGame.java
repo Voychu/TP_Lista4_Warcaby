@@ -31,8 +31,7 @@ public class CheckersGame extends Application implements Runnable {
 
 	
 	/** Flag representing gameType. */
-	//TODO: Extending project to other game types.
-	private int gameType;
+	private int gameId = 1;
 	
 	
 	/** The stage with the game's board. */
@@ -94,16 +93,32 @@ public class CheckersGame extends Application implements Runnable {
 	 * in the board. */
 	private Square[][] board 
 		= new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
+	
+	/**
+	 * The number of possible types
+	 * of checkers game.
+	 */
+	private final static int numOfTypes = 1;
 
+	/**
+	 * The array of possible types 
+	 * of checkers game.
+	 */
+	private final static String[] gameTypesArray =
+		{"classic"};
+	
 	
 	/**
 	 * Gets the game type.
 	 *
-	 * @return the gameType
+	 * @return String the gameType
 	 */
-	public int getGameType() {
-		return gameType;
+	public String getGameType() {
+		return gameTypesArray[gameId-1];
 	}
+	
+	
+	
 	
 	
 	//TODO: Extending project to other game types.
@@ -379,7 +394,8 @@ public class CheckersGame extends Application implements Runnable {
 		System.out.println(player);
 		String boardString = boardModel.toString();
 		System.out.println(boardString);
-		controller = new GameController(this.boardModel, piecesArray, board, serverHandler, turnLabel, piecesGroup);
+		controller = new GameController(this.boardModel, piecesArray, board, serverHandler, 
+				turnLabel, piecesGroup, this.getGameType());
 		controller.setPlayer(player);
 		controller.setActualPlayer(Config.PLAYER1);
 	}

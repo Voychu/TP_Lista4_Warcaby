@@ -73,6 +73,11 @@ public class GameController {
 	 * by other player in short period
 	 * when my message is coming to him. */
 	private int showing = Config.ACTIVE;
+	
+	/**
+	 * Type of the checkers game
+	 */
+	String gameType;
 
 	/**
 	 * Constructor of GameController
@@ -87,10 +92,12 @@ public class GameController {
 	 * on the board
 	 */
 	public GameController(BoardModel boardModel, GraphicalPiece[][] graphicalPiecesArray, Square[][] board,
-			ServerHandler serverHandler, Label turnLabel, Group piecesGroup) {
+			ServerHandler serverHandler, Label turnLabel, Group piecesGroup, String gameType) {
 		this.boardModel = boardModel;
 		this.graphicalPiecesArray = graphicalPiecesArray;
-		this.rules = new ClassicCheckersRules(boardModel);// TODO Factory
+		this.gameType = gameType;
+		GameRulesFactory gameRulesFactory = new GameRulesFactory();
+		this.rules = gameRulesFactory.getGameRules(gameType, boardModel);
 		for (int j = 0; j < Config.CLASSICAL_CHECKERS_BOARD_WIDTH; j++) {
 			for (int i = 0; i < Config.CLASSICAL_CHECKERS_BOARD_HEIGHT; i++) {
 				GraphicalPiece graphicalPiece = graphicalPiecesArray[i][j];
@@ -103,7 +110,6 @@ public class GameController {
 		}
 		this.serverHandler = serverHandler;
 		this.turnLabel = turnLabel;
-
 	}
 	
 	/**
