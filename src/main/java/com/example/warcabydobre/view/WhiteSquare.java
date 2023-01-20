@@ -2,10 +2,22 @@ package com.example.warcabydobre.view;
 import javafx.scene.paint.Color;
 
 
+
+/**
+ * The concrete implementation of Square class.
+ * It is graphical representation
+ * of white fields in the game's board.
+ * @author Wojciech Bajurny
+ *
+ */
 public class WhiteSquare extends Square{
 
-    //na tych polach nie gramy//
 
+	/**
+	 * The constructor of WhiteSquare
+	 * @param width the width of the square
+	 * @param height the height of the square
+	 */
     public WhiteSquare(double width, double height)
     {
         super(width, height);
