@@ -5,25 +5,48 @@ import java.net.Socket;
 
 import javafx.scene.control.Alert;
 
+
+/**
+ * Class of thread servicing
+ * single game player.
+ */
 public class Game implements Runnable{
 
+    /** The socket of first player. */
     private Socket firstPlayer;
+    
+    /** The socket of second player. */
     private Socket secondPlayer;
     
     
 
 
+    /** The Constant refers to first player */
     private final static int FIRST=1;
+    
+    /** The Constant refers to second player */
     private final static int SECOND=2;
+    
+    /** Flag storing information whose is turn. */
     private static int turn=FIRST;
 
 
+    /**
+     * Constructor of Game class
+     *
+     * @param firstPlayer the socket of first player
+     * @param secondPlayer the socket of second player
+     */
     public Game(Socket firstPlayer, Socket secondPlayer){
         this.firstPlayer = firstPlayer;
         this.secondPlayer= secondPlayer;
 
 
     }
+    
+    /**
+     * method responsible for running player's thread
+     */
     @Override
     public void run() {
 
@@ -53,8 +76,6 @@ public class Game implements Runnable{
                     // Odbieranie od socketa
                     line = inS.readLine();
                     if(line.equals("bye")) {
-                    	//firstPlayer.close();
-                    	//secondPlayer.close();
                     	outS.println("-> ("+" Rozlaczanie 2 gracza... "+")");
                     }
                     // Wypisywanie na serwerze
@@ -69,8 +90,6 @@ public class Game implements Runnable{
                     line = inF.readLine();
                     if(line.equals("bye")) {
                     	outF.println("-> ("+" Rozlaczanie 1 gracza... "+")");
-                    	//firstPlayer.close();
-                    	//secondPlayer.close();
                     }
                     // Wypisywanie na serwerze
                     System.out.println(line);
@@ -87,8 +106,4 @@ public class Game implements Runnable{
         }
     }
 
-    private void sendMove(DataOutputStream out, String text) throws IOException {
-        out.writeChars(text);
-
-    }
 }

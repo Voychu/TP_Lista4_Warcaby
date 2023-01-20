@@ -4,8 +4,20 @@ import java.io.*;
 import java.net.*;
 
 
+/**
+ * Class of the server with which 
+ * can connect 2 players.
+ * @author Wojciech Bajurny
+ */
 public class WinServerThread {
 
+    /**
+     * Main method of WinServerThread class
+     * servicing server activities
+     *
+     * @param args Parameters with which
+     * program is called
+     */
     public static void main(String[] args) {
 
         Socket[] players = new Socket[2];
@@ -13,22 +25,6 @@ public class WinServerThread {
 
             System.out.println("Server is listening on port 4444");
 
-            /**while (true) {
-                Socket firstClient = serverSocket.accept();
-                System.out.println("First client connected");
-                System.out.println("Waiting for the second player");
-
-
-                Socket secondClient = serverSocket.accept();
-                System.out.println("Second client connected");
-
-
-                Game g = new Game(firstClient, secondClient);
-                Thread gTh = new Thread(g);
-                gTh.start();
-
-
-            }*/
 
             for(int i=0; i<2; i++)
             {
@@ -36,7 +32,6 @@ public class WinServerThread {
                 System.out.println("Player connected");
             }
             System.out.println("Two players connected");
-            //GameData gameData = new GameData();
             Game g = new Game(players[0],players[1]);
             Thread gTh = new Thread(g);
             gTh.start();
