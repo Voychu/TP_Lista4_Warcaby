@@ -443,8 +443,8 @@ public class BoardModel {
 	
 	
 	/**
-	 * Method counting pieces on diagonal
-	 * between two fields we want to move.
+	 * Method counting pieces of passed color
+	 * on diagonal between two fields we want to move.
 	 *
 	 * @param oldX the x coordinate of
 	 * initial position of the piece
@@ -454,13 +454,16 @@ public class BoardModel {
 	 * where we want to move
 	 * @param newY x coordinate of field
 	 * where we want to move
-	 * @return int the number of pieces
-	 * situated on the diagonal 
+	 * @param color color of pieces which
+	 * we want to calculate the number
+	 * @return int the number of pieces of 
+	 * passed color situated on the diagonal 
 	 * between two fields we want to move
 	 * @throws NotDiagonalException the exception 
 	 * thrown where the two field aren't on diagonal.
 	 */
-	public int countPiecesBetween(int oldX, int oldY, int newX, int newY) throws NotDiagonalException {
+	public int countPiecesBetween(int oldX, int oldY, int newX, int newY, 
+			PieceColor color) throws NotDiagonalException {
 		if(Math.abs(newX - oldX) != Math.abs(newY - oldY)) {
 			throw new NotDiagonalException("To nie jest przekatna");
 		}
@@ -482,7 +485,8 @@ public class BoardModel {
 		currY += stepY;
 		int counter = 0;
 		while(currX != newX && currY != newY) {
-			if(this.isOccupied(currX, currY)) {
+			PieceObject currentPiece = piecesArray[currX][currY];
+			if(this.isOccupied(currX, currY) && currentPiece.getColor() == color) {
 				counter++;
 			}
 			currX += stepX;
@@ -490,6 +494,54 @@ public class BoardModel {
 		}
 		return counter;
 	}
+	
+	/**
+	 * Method deleting first piece between
+	 * two passed fields
+	 * @param oldX the x coordinate of
+	 * initial position of moving piece
+	 * @param oldY the y coordinate of
+	 * initial position of moving piece
+	 * @param newX the x coordinate of field
+	 * where we want to move
+	 * @param newY x coordinate of field
+	 * where we want to move
+	 */
+	public void deleteCapturedPiece(int oldX, int oldY, int newX, int newY) {
+		int stepX = 0, stepY = 0;
+		if(newX - oldX > 0) {
+			stepX = 1;
+		}
+		else {
+			stepX = -1;
+		}
+		if(newY - oldY > 0) {
+			stepY = 1;
+		}
+		else {
+			stepY = -1;
+		}
+		int currX = oldX, currY = oldY;
+		currX += stepX;;
+		currY += stepY;
+		while(currX != newX && currY != newY) {
+			if(this.isOccupied(currX, currY)) {
+				try {
+					deletePieceObject(currX, currY);
+				} catch (InvalidMoveException ex) {
+					System.out.println(ex.getMessage());
+				}
+				return;
+			}
+			currX += stepX;
+			currY += stepY;
+		}
+	}
+
+	
+	
+	
+	
 	
 
 	

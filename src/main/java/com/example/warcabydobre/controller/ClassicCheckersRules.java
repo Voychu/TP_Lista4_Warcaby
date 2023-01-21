@@ -6,6 +6,7 @@ import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.NotDiagonalException;
 import com.example.warcabydobre.model.PieceObject;
+import com.example.warcabydobre.view.PieceColor;
 
 /**
  * The class responsible for checking moves 
@@ -31,6 +32,38 @@ public class ClassicCheckersRules implements GameRules {
 	}
 
 	/**
+	 * Method checking if queen can
+	 * move to passed field according
+	 * to classic checkers' rules.
+	 * @param oldX x coordinate of initial position of the move
+	 * @param oldY y coordinate of initial position of the move
+	 * @param newX x coordinate of final position of the move
+	 * @param newY y coordinate of final position of the move
+	 * @return true, if queen can move to the given field
+	 * on the board
+	 */
+	private boolean isQueenDiagonalMove(int oldX, int oldY, int newX, int newY) {
+		if(!(Math.abs(newX - oldX) == Math.abs(newY - oldY))) {
+			return false;
+		}
+		try {
+			int numberOfWhite = boardModel.countPiecesBetween(oldX, oldY, newX, newY, PieceColor.WHITE);
+			int numberOfBlack = boardModel.countPiecesBetween(oldX, oldY, newX, newY, PieceColor.BLACK);
+			if(numberOfWhite + numberOfBlack == 1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		} 
+		catch (NotDiagonalException e) {
+			return false;
+		}
+	}
+
+	
+	
+	/**
 	 * Method checking if move is valid and if it is valid it returns type of the
 	 * move. It operates according to classic checkers game's rules.
 	 *
@@ -46,20 +79,30 @@ public class ClassicCheckersRules implements GameRules {
 		if (boardModel.isOccupied(newX, newY) || !boardModel.isBlackSquare(newX, newY)) {
 			return new ModelMove(MovementTypes.NONE);
 		}
-		// System.out.println(xp + ", " + yp);
 
 		PieceObject pieceObject = boardModel.getPiecesArray()[oldX][oldY];
 		if (pieceObject == null) {
 			throw new InvalidMoveException("Na tym polu nie ma pionka");
 		}
-
-		if (pieceObject.isQueen() && Math.abs(newX - oldX) == Math.abs(newY - oldY)) {
+		PieceColor oppositeColor = pieceObject.getOppositeColor();
+		PieceColor myColor = pieceObject.getColor();
+		
+		if (pieceObject.isQueen() && isQueenDiagonalMove(oldX, oldY, newX, newY)) {
 			try {
-				System.out.println(boardModel.countPiecesBetween(oldX, oldY, newX, newY));
+				int numberOfMyPieces = 
+						boardModel.countPiecesBetween(oldX, oldY, newX, newY, myColor);
+				int numberOfEnemysPieces = 
+						boardModel.countPiecesBetween(oldX, oldY, newX, newY, oppositeColor);
+				if(numberOfEnemysPieces == 1 && numberOfMyPieces == 0) {
+					return new ModelMove(MovementTypes.QUEEN_CAPTURE, oldX, oldY, newX, newY);
+				}
+				if(numberOfEnemysPieces == 0 && numberOfMyPieces == 0) {
+					return new ModelMove(MovementTypes.QUEEN_DIAGONAL, oldX, oldY, newX, newY);
+				}
 			} catch (NotDiagonalException e) {
 				System.out.println(0);
 			}
-			return new ModelMove(MovementTypes.QUEEN_DIAGONAL, oldX, oldY, newX, newY);
+			
 		}
 
 		if (Math.abs(newX - oldX) == 1 && newY - oldY == pieceObject.getMovementDirection())

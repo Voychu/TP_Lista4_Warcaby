@@ -4,6 +4,7 @@ package com.example.warcabydobre.controller;
 
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.model.PieceObject;
 import com.example.warcabydobre.model.BoardModel.Listener;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
@@ -364,28 +365,7 @@ public class GameController {
 		case QUEEN_CAPTURE:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
-				int x1 = 0;
-				int y1 = 0;
-				if(newX>oldX && newY>oldY)
-				{
-					x1 = newX-1;
-					y1 = newY-1;
-				}
-				else if(newX<oldX && newY>oldY)
-				{
-					x1 = newX+1;
-					y1 = newY-1;
-				}
-				else if(newX>oldX && newY<oldY)
-				{
-					x1 = newX-1;
-					y1 = newY+1;
-				}
-				else if(newX<oldX && newY<oldY)
-				{
-					x1 = newX+1;
-					y1 = newY-1;
-				}
+				boardModel.deleteCapturedPiece(oldX, oldY, newX, newY);
 				message = MoveConverter.convertMoveToString(modelResult);
 				serverHandler.sendMessage(message);
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
@@ -561,29 +541,7 @@ public class GameController {
 		case QUEEN_CAPTURE:
 			try {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
-				int x1 = 0;
-				int y1 = 0;
-				if(newX>oldX && newY>oldY)
-				{
-				x1 = newX-1;
-				y1 = newY-1;
-				}
-				else if(newX<oldX && newY>oldY)
-				{
-				x1 = newX+1;
-				y1 = newY-1;
-				}
-				else if(newX>oldX && newY<oldY)
-				{
-				x1 = newX-1;
-				y1 = newY+1;
-				}
-				else if(newX<oldX && newY<oldY)
-				{
-				x1 = newX+1;
-				y1 = newY-1;
-				}
-				boardModel.deletePieceObject(x1, y1);
+				boardModel.deleteCapturedPiece(oldX, oldY, newX, newY);
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
 				actualPlayer = player;
 

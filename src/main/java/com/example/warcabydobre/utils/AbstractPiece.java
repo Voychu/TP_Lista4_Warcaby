@@ -58,6 +58,21 @@ public abstract class AbstractPiece {
 	public PieceColor getColor() {
 		return color;
 	}
+	
+	
+	/**
+	 * Gets the opposite color.
+	 *
+	 * @return the opposite color
+	 */
+	public PieceColor getOppositeColor() {
+		if(color == PieceColor.WHITE) {
+			return PieceColor.BLACK;
+		}
+		else {
+			return PieceColor.BLACK;
+		}
+	}
 
 	/**
 	 * Sets the x.
