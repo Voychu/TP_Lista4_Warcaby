@@ -49,7 +49,7 @@ public class ClassicCheckersRules implements GameRules {
 		try {
 			int numberOfWhite = boardModel.countPiecesBetween(oldX, oldY, newX, newY, PieceColor.WHITE);
 			int numberOfBlack = boardModel.countPiecesBetween(oldX, oldY, newX, newY, PieceColor.BLACK);
-			if(numberOfWhite + numberOfBlack == 1) {
+			if(numberOfWhite + numberOfBlack <= 1) {
 				return true;
 			}
 			else {

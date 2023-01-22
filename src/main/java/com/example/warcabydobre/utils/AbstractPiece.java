@@ -70,7 +70,7 @@ public abstract class AbstractPiece {
 			return PieceColor.BLACK;
 		}
 		else {
-			return PieceColor.BLACK;
+			return PieceColor.WHITE;
 		}
 	}
 
