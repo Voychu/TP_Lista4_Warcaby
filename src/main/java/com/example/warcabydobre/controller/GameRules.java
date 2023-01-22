@@ -10,6 +10,19 @@ import com.example.warcabydobre.view.PieceColor;
 public interface GameRules {
 
 	/**
+	 * Method returning color of pieces
+	 * of passed player
+	 * @param player number of player in
+	 * the game
+	 * @return color of player's pieces
+	 * @throws InvalidPlayerException the exception 
+	 * thrown when player number is incorrect
+	 */
+	public PieceColor getPieceColor(int player) throws InvalidPlayerException;
+	
+	
+	
+	/**
 	 * Method checking whether player playing with pieces of passed color can move
 	 * 
 	 * @param color color of pieces of checked player

@@ -90,6 +90,13 @@ public class GameController {
 	 * on data base.
 	 */
 	private BusinessLogicIF businessLogic;
+	
+	/**
+	 * flag storing information if
+	 * player can continue game or lose
+	 * or win
+	 */
+	private GameState gameState;
 
 	/**
 	 * Constructor of GameController
@@ -123,6 +130,7 @@ public class GameController {
 		this.serverHandler = serverHandler;
 		this.turnLabel = turnLabel;
 		this.businessLogic = new BusinessLogic();
+		this.gameState = GameState.CONTINUE_GAME;
 		
 	}
 	
@@ -174,6 +182,17 @@ public class GameController {
 	}
 	
 	/**
+	 * Gets the gameState.
+	 *
+	 * @return state of the game
+	 */
+	public GameState getGameState() {
+		return gameState;
+	}
+	
+	
+	
+	/**
 	 * Gets the other player.
 	 *
 	 * @return the other player
@@ -185,6 +204,8 @@ public class GameController {
 			return Config.PLAYER1;
 		}
 	}
+	
+	
 
 	/**
 	 * Sets the message.
@@ -245,6 +266,8 @@ public class GameController {
 		return (int) (pixel + Config.SQUARE_CLASSIC_WIDTH / 2) / (int) (Config.SQUARE_CLASSIC_WIDTH);
 	}
 
+	
+	
 	/**
 	 * Checks if graphicalPiece has appropriate color
 	 * to this player.
@@ -330,7 +353,16 @@ public class GameController {
 			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 			showing = Config.ACTIVE;
 			actualPlayer = getOtherPlayer();
-
+			try {
+				int oppositePlayer = this.getOtherPlayer();
+				PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
+				boolean playerWin = !rules.canPlayerMove(oppositeColor);
+				if(playerWin) {
+					gameState = GameState.WIN;
+				}
+			} catch (InvalidPlayerException ex) {
+				System.out.println(ex.getMessage());
+			}
 			break;
 		case SINGLE_CAPTURE:
 			try {
@@ -357,6 +389,16 @@ public class GameController {
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
+				try {
+					int oppositePlayer = this.getOtherPlayer();
+					PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
+					boolean playerWin = !rules.canPlayerMove(oppositeColor);
+					if(playerWin) {
+						gameState = GameState.WIN;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
 
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
@@ -371,6 +413,16 @@ public class GameController {
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
+				try {
+					int oppositePlayer = this.getOtherPlayer();
+					PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
+					boolean playerWin = !rules.canPlayerMove(oppositeColor);
+					if(playerWin) {
+						gameState = GameState.WIN;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
@@ -384,6 +436,16 @@ public class GameController {
 				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
+				try {
+					int oppositePlayer = this.getOtherPlayer();
+					PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
+					boolean playerWin = !rules.canPlayerMove(oppositeColor);
+					if(playerWin) {
+						gameState = GameState.WIN;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
 
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
@@ -517,6 +579,15 @@ public class GameController {
 			System.out.println("OK4");
 			Platform.runLater(() -> turnLabel.setText("MyTurn"));
 			actualPlayer = player;
+			try {
+				PieceColor playerColor = rules.getPieceColor(player);
+				boolean playerLost = !rules.canPlayerMove(playerColor);
+				if(playerLost) {
+					gameState = GameState.LOST;
+				}
+			} catch (InvalidPlayerException ex) {
+				System.out.println(ex.getMessage());
+			}
 			break;
 		case SINGLE_CAPTURE:
 			try {
@@ -537,6 +608,15 @@ public class GameController {
 				}
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
 				actualPlayer = player;
+				try {
+					PieceColor playerColor = rules.getPieceColor(player);
+					boolean playerLost = !rules.canPlayerMove(playerColor);
+					if(playerLost) {
+						gameState = GameState.LOST;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
 
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());
@@ -547,6 +627,15 @@ public class GameController {
 				boardModel.movePieceObject(oldX, oldY, newX, newY);
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
 				actualPlayer = player;
+				try {
+					PieceColor playerColor = rules.getPieceColor(player);
+					boolean playerLost = !rules.canPlayerMove(playerColor);
+					if(playerLost) {
+						gameState = GameState.LOST;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
 			} catch (InvalidMoveException ex) {
 				System.out.println("Niaprawidlowy ruch");
 			}
@@ -557,6 +646,15 @@ public class GameController {
 				boardModel.deleteCapturedPiece(oldX, oldY, newX, newY);
 				Platform.runLater(() -> turnLabel.setText("MyTurn"));
 				actualPlayer = player;
+				try {
+					PieceColor playerColor = rules.getPieceColor(player);
+					boolean playerLost = !rules.canPlayerMove(playerColor);
+					if(playerLost) {
+						gameState = GameState.LOST;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
 
 			} catch (InvalidMoveException ex) {
 				System.out.println(ex.getMessage());

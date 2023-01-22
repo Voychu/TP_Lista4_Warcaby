@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 
 
 import com.example.warcabydobre.controller.GameController;
+import com.example.warcabydobre.controller.GameState;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.InvalidMoveException;
 
@@ -376,6 +377,9 @@ public class CheckersGame extends Application implements Runnable {
 					System.out.println(boardModel);
 					showing = Config.NONACTIVE;
 					controller.setShowing(showing);
+					if(controller.getGameState() == GameState.LOST) {
+						System.out.println("Gracz przegral");
+					}
 				}
 				notifyAll();
 			}

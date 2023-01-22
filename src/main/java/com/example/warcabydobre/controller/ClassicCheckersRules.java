@@ -17,6 +17,11 @@ import com.example.warcabydobre.view.PieceColor;
  */
 public class ClassicCheckersRules implements GameRules {
 
+	
+	
+	
+	
+	
 	/**
 	 * Model of the game that stores current pieces' 
 	 * positions and properties.
@@ -31,6 +36,29 @@ public class ClassicCheckersRules implements GameRules {
 	public ClassicCheckersRules(BoardModel boardModel) {
 		this.boardModel = boardModel;
 	}
+	
+	
+	/**
+	 * Method returning color of pieces
+	 * of passed player
+	 * @param player number of player in
+	 * the game
+	 * @return color of player's pieces
+	 * @throws InvalidPlayerException the exception 
+	 * thrown when player number is incorrect
+	 */
+	@Override
+	public PieceColor getPieceColor(int player) throws InvalidPlayerException {
+		if(player == Config.FIRST) {
+			return PieceColor.WHITE;
+		}
+		if(player == Config.SECOND) {
+			return PieceColor.BLACK;
+		}
+		else throw new InvalidPlayerException("Nieprawidlowy numer gracza");
+	}
+
+	
 
 	/**
 	 * Method checking if queen can
@@ -151,4 +179,5 @@ public class ClassicCheckersRules implements GameRules {
 		return new ModelMove(MovementTypes.NONE);
 	}
 
+	
 }
