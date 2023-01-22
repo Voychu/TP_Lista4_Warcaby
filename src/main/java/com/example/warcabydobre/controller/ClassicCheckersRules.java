@@ -6,6 +6,7 @@ import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.NotDiagonalException;
 import com.example.warcabydobre.model.PieceObject;
+import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.PieceColor;
 
 /**
@@ -59,6 +60,36 @@ public class ClassicCheckersRules implements GameRules {
 		catch (NotDiagonalException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Method checking whether player
+	 * playing with pieces of passed color
+	 * can move
+	 * @param color color of pieces of
+	 * checked player
+	 * @return true, if player can move
+	 */
+	@Override
+	public boolean canPlayerMove(PieceColor color) {
+		int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
+		int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
+		PieceObject[][] piecesArray = boardModel.getPiecesArray(); 
+		for(int y = 0; y < numRows; y++) {
+			for(int x = 0; x < numCols; x++) {
+				if(boardModel.isOccupied(x, y)) {
+					PieceObject currentPiece = 
+							piecesArray[x][y];
+					if(currentPiece.getColor() == color) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+		//TODO:Poprawa metody, aby uwzgledniala ona, ze
+		//gracz moze byc zablokowany
+		
 	}
 
 	
