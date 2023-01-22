@@ -2,6 +2,8 @@ package com.example.warcabydobre.controller;
 
 
 
+import com.example.warcabydobre.db.BusinessLogic;
+import com.example.warcabydobre.db.BusinessLogicIF;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.MovementTypes;
 import com.example.warcabydobre.model.PieceObject;
@@ -78,7 +80,16 @@ public class GameController {
 	/**
 	 * Type of the checkers game
 	 */
-	String gameType;
+	private String gameType;
+	
+	/**
+	 * Object of business logic,
+	 * according to instructions from application
+	 * it calls methods
+	 * performing operations 
+	 * on data base.
+	 */
+	private BusinessLogicIF businessLogic;
 
 	/**
 	 * Constructor of GameController
@@ -111,6 +122,8 @@ public class GameController {
 		}
 		this.serverHandler = serverHandler;
 		this.turnLabel = turnLabel;
+		this.businessLogic = new BusinessLogic();
+		
 	}
 	
 	/**
@@ -552,6 +565,18 @@ public class GameController {
 		default:
 			break;
 
+		}
+	}
+	
+	/**
+	 * Method inserting new game into data base
+	 * if player is first player
+	 * @param gameTypeId the typeId of the
+	 * game
+	 */
+	public void insertNewGameIntoDataBase(int gameTypeId) {
+		if(player == Config.FIRST) {
+			businessLogic.insertGame(gameTypeId);
 		}
 	}
 

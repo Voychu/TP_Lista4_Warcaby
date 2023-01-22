@@ -360,6 +360,7 @@ public class CheckersGame extends Application implements Runnable {
 	 * playing from this windows.
 	 */
 	void f(int iPlayer) {
+		controller.insertNewGameIntoDataBase(iPlayer);
 		while (true) {
 			synchronized (this) {
 				int actualPlayer = controller.getPlayer();
