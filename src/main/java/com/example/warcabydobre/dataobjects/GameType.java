@@ -1,4 +1,4 @@
-package com.example.warcabydobre.dbdata;
+package com.example.warcabydobre.dataobjects;
 
 /**
  * The Class representing type
@@ -16,12 +16,9 @@ public class GameType {
 	/**
 	 * Instantiates a new game type.
 	 *
-	 * @param gameTypeId the game type id
 	 * @param gameTypeName the game type name
 	 */
-	public GameType(int gameTypeId, String gameTypeName) {
-		super();
-		this.gameTypeId = gameTypeId;
+	public GameType(String gameTypeName) {
 		this.gameTypeName = gameTypeName;
 	}
 

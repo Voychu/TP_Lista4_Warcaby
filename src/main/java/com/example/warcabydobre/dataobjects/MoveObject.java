@@ -1,4 +1,4 @@
-package com.example.warcabydobre.dbdata;
+package com.example.warcabydobre.dataobjects;
 
 import com.example.warcabydobre.srv.Commands;
 
