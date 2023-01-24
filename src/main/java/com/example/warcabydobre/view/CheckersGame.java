@@ -372,6 +372,9 @@ public class CheckersGame extends Application implements Runnable {
 					}
 				}
 				int showing = controller.getShowing();
+				if(controller.getGameState() == GameState.WIN) {
+					System.out.println("Gracz wygral");
+				}
 				if (showing == Config.ACTIVE) {
 					controller.makeEnemyMove();
 					System.out.println(boardModel);
