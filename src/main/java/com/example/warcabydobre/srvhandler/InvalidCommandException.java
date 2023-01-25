@@ -3,7 +3,8 @@ package com.example.warcabydobre.srvhandler;
 public class InvalidCommandException extends Exception {
 
 	/**
-	 * 
+	 * Exception thrown when opposite player
+	 * send invalid command.
 	 */
 	private static final long serialVersionUID = 1L;
 
