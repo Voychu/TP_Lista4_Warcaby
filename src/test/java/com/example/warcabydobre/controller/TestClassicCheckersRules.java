@@ -3,6 +3,7 @@ package com.example.warcabydobre.controller;
 import com.example.warcabydobre.model.*;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.view.GraphicalPiece;
+import com.example.warcabydobre.view.PieceColor;
 import com.example.warcabydobre.view.Square;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestClassicCheckersRules {
 
@@ -56,6 +58,15 @@ public class TestClassicCheckersRules {
         ModelMove modelMove2 = classicCheckersRules.tryMove(1,2,3,4);
         assertEquals(modelMove,modelMove2);
      }
+
+     @Test
+    public void CanPlayerMoveAtGameStartTest(){
+        BoardModel boardModel = new BoardModel(1);
+        ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+        assertTrue(classicCheckersRules.canPlayerMove(PieceColor.WHITE));
+        assertTrue(classicCheckersRules.canPlayerMove(PieceColor.BLACK));
+     }
+
   
 
 }

@@ -55,18 +55,26 @@ public class TestBoardModel {
         boardModel.movePieceObject(1,2,2,3);
         assertEquals(boardModel.toString(),"  b   b   b   b \nb   b   b   b   \n      b   b   b \n    b           \n                \nw   w   w   w   \n  w   w   w   w \nw   w   w   w   \n");
     }
+
     
     
     //TODO: Adjusting tests to corrected methods
-    /*@Test(expected = NotDiagonalException.class)
+    @Test(expected = NotDiagonalException.class)
     public void TestPieceCounterException() throws NotDiagonalException {
         BoardModel boardModel = new BoardModel(1);
-        //boardModel.countPiecesBetween(0,0,0,7);
+        boardModel.countPiecesBetween(0,0,0,7,PieceColor.BLACK);
     }
     @Test
     public void TestPieceCounter() throws NotDiagonalException {
         BoardModel boardModel = new BoardModel(1);
-        //assertEquals(boardModel.countPiecesBetween(7,0,0,7),4);
-    }*/
+        assertEquals(boardModel.countPiecesBetween(7,0,0,7,PieceColor.WHITE),2);
+    }
+
+    @Test
+    public void TestDeleteCapturedPiece(){
+        BoardModel boardModel = new BoardModel(1);
+        boardModel.deleteCapturedPiece(7,2,3,6);
+        assertTrue(!boardModel.isOccupied(4,5));
+    }
 
 }
