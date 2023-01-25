@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import java.net.Socket;
 import java.net.UnknownHostException;
-
+import java.util.Optional;
 
 import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.controller.GameState;
@@ -20,8 +20,12 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -59,7 +63,10 @@ public class CheckersGame extends Application implements Runnable {
 	
 	
 	/** The label displaying whose is turn. */
-	Label turnLabel;
+	private Label turnLabel;
+	
+	
+	private Alert endingGameAlert;
 	
 
 
@@ -257,6 +264,9 @@ public class CheckersGame extends Application implements Runnable {
 
 
 		boardStage.setOnCloseRequest(event -> serverHandler.sendMessage("bye"));
+		
+		
+		endingGameAlert = new Alert(AlertType.CONFIRMATION);
 
 	}
 
@@ -374,6 +384,21 @@ public class CheckersGame extends Application implements Runnable {
 				int showing = controller.getShowing();
 				if(controller.getGameState() == GameState.WIN) {
 					System.out.println("Gracz wygral");
+					Platform.runLater(() -> {
+						endingGameAlert.setTitle("Koniec gry");
+						endingGameAlert.setHeaderText("Koniec gry");
+						endingGameAlert.setContentText("Wygrales!");
+						endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+						endingGameAlert.setOnCloseRequest(event ->{
+							serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+						});
+						Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
+	                    if(clickedButton.get() == ButtonType.OK){
+	                    	serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+	                    }
+					});
 				}
 				if (showing == Config.ACTIVE) {
 					controller.makeEnemyMove();
@@ -382,6 +407,22 @@ public class CheckersGame extends Application implements Runnable {
 					controller.setShowing(showing);
 					if(controller.getGameState() == GameState.LOST) {
 						System.out.println("Gracz przegral");
+						Platform.runLater(() -> {
+							endingGameAlert.setTitle("Koniec gry");
+							endingGameAlert.setHeaderText("Koniec gry");
+							endingGameAlert.setContentText("Przegrales");
+							endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+							endingGameAlert.setOnCloseRequest(event ->{
+								serverHandler.sendMessage("bye");
+		                    	System.exit(0);
+							});
+							Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
+		                    if(clickedButton.get() == ButtonType.OK){
+		                    	serverHandler.sendMessage("bye");
+		                    	System.exit(0);
+		                    }
+						});
+						
 					}
 				}
 				notifyAll();
