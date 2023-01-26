@@ -93,21 +93,22 @@ public class TestClassicCheckersRules {
         assertTrue(classicCheckersRules.canPlayerMove(PieceColor.WHITE));
         assertTrue(classicCheckersRules.canPlayerMove(PieceColor.BLACK));
      }
-     @Test //do poprawki
+     
+     @Test
      public void CanPlayerMoveWithNoPiecesTest() throws InvalidMoveException {
          BoardModel boardModel = new BoardModel(1);
          for(int y = 0; y<3; y++)
          {
              for(int x=0; x<8; x++)
              {
-                 if(x+y%2 == 1)
+                 if((x+y)%2 == 1)
                      boardModel.deletePieceObject(x,y);
              }
          }
          ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
-
-         System.out.println(classicCheckersRules.canPlayerMove(PieceColor.BLACK));
-        // assertTrue(!classicCheckersRules.canPlayerMove(PieceColor.BLACK));
+         
+         
+         assertTrue(!classicCheckersRules.canPlayerMove(PieceColor.BLACK));
      }
      @Test
     public void IsQueenDiagonalMoveTest(){
