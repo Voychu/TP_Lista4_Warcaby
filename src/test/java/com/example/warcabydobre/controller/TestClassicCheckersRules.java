@@ -11,8 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestClassicCheckersRules {
 
@@ -60,13 +59,56 @@ public class TestClassicCheckersRules {
      }
 
      @Test
+     public void TryQueenCaptureTest() throws InvalidMoveException{
+         BoardModel boardModel = new BoardModel(1);
+         ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+         PieceObject[][] pieceObjects = boardModel.getPiecesArray();
+         pieceObjects[1][2].setQueen(true);
+         boardModel.movePieceObject(4,5,3,4);
+         ModelMove modelMove = new ModelMove(MovementTypes.QUEEN_CAPTURE,1,2,4,5);
+         ModelMove resultMove = classicCheckersRules.tryMove(1,2,4,5);
+         MovementTypes expectedType = modelMove.getMovementType();
+         MovementTypes resultType = resultMove.getMovementType();
+         assertEquals(expectedType, resultType);
+     }
+     @Test
+    public void QueenCantJumpOverOwnPieceToCaptureTest() throws InvalidMoveException{
+        BoardModel boardModel = new BoardModel(1);
+        ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+        PieceObject[][] pieceObjects = boardModel.getPiecesArray();
+        pieceObjects[0][1].setQueen(true);
+        boardModel.movePieceObject(4,5,3,4);
+        ModelMove modelMove = new ModelMove(MovementTypes.NONE,0,1,4,5);
+        ModelMove resultMove = classicCheckersRules.tryMove(0,1,4,5);
+        MovementTypes expectedType = modelMove.getMovementType();
+        MovementTypes resultType = resultMove.getMovementType();
+        assertEquals(expectedType, resultType);
+    }
+
+     @Test
     public void CanPlayerMoveAtGameStartTest(){
         BoardModel boardModel = new BoardModel(1);
         ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
         assertTrue(classicCheckersRules.canPlayerMove(PieceColor.WHITE));
         assertTrue(classicCheckersRules.canPlayerMove(PieceColor.BLACK));
      }
+     @Test //do poprawki
+     public void CanPlayerMoveWithNoPiecesTest() throws InvalidMoveException {
+         BoardModel boardModel = new BoardModel(1);
+         for(int y = 0; y<3; y++)
+         {
+             for(int x=0; x<8; x++)
+             {
+                 if(x+y%2 == 1)
+                     boardModel.deletePieceObject(x,y);
+             }
+         }
+         ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
 
-  
+         System.out.println(classicCheckersRules.canPlayerMove(PieceColor.BLACK));
+        // assertTrue(!classicCheckersRules.canPlayerMove(PieceColor.BLACK));
+     }
+
+
 
 }
