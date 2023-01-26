@@ -154,7 +154,27 @@ public class ClassicCheckersRules implements GameRules {
 		}
 		if (boardModel.isOccupied(newX, newY) || !boardModel.isBlackSquare(newX, newY)) {
 			return false;
+			
 		}
+		
+//		if(pieceObject.isQueen() && isQueenDiagonalMove(oldX, oldY, newX, newY)) {
+//			PieceColor myColor = pieceObject.getColor();
+//			PieceColor oppositeColor = pieceObject.getOppositeColor();
+//			int numberOfMyPieces;
+//			try {
+//				numberOfMyPieces = boardModel.countPiecesBetween(oldX, oldY, newX, newY, myColor);
+//				int numberOfEnemysPieces = boardModel.countPiecesBetween(oldX, oldY, newX, newY, oppositeColor);
+//				if (numberOfEnemysPieces == 1 && numberOfMyPieces == 0) {
+//					return true;
+//				}
+//			} catch (NotDiagonalException ex) {
+//				System.out.println(ex.getMessage());
+//			}
+//			
+//			return false;
+//			
+//		}
+		
 		if (Math.abs(newX - oldX) != 2 || Math.abs(newY - oldY) != 2) {
 			return false;
 		}
@@ -165,6 +185,7 @@ public class ClassicCheckersRules implements GameRules {
 		if (boardModel.isOccupied(x1, y1) && secondPiece.getColor() != pieceObject.getColor()) {
 			return true;
 		}
+		
 		
 		return false;
 	}
@@ -191,35 +212,73 @@ public class ClassicCheckersRules implements GameRules {
 		for(PieceObject piece : piecesList) {
 			int oldX = piece.getX();
 			int oldY = piece.getY();
-			int newX = oldX - 2;
-			int newY = oldY - 2;
+			int newX;
+			int newY;
+			int x1, y1;
+			/*if(piece.isQueen()) {
+				PieceColor playerColor = piece.getColor();
+				PieceColor enemysColor = piece.getOppositeColor();
+				try {
+					newX = oldX - 2;
+					newY = oldY - 2;
+					while(boardModel.countPiecesBetween(oldX, oldY, newX, newY, playerColor) < 1 &&
+							boardModel.countPiecesBetween(oldX, oldY, newX, newY, enemysColor) < 2) {
+						if(this.isCaptureMove(oldX, oldY, newX, newY)) {
+							x1 = newX + 1;
+							y1 = newY + 1;
+							PieceObject secondPiece = piecesArray[x1][y1];
+							return new ModelMove(MovementTypes.QUEEN_CAPTURE, secondPiece, oldX, oldY, newX, newY);
+						}
+						newX--;
+						newY--;
+					}
+					newX = oldX - 2;
+					newY = oldY + 2;
+					while(boardModel.countPiecesBetween(oldX, oldY, newX, newY, playerColor) < 1 &&
+							boardModel.countPiecesBetween(oldX, oldY, newX, newY, enemysColor) < 2) {
+						if(this.isCaptureMove(oldX, oldY, newX, newY)) {
+							x1 = newX - 1;
+							y1 = newY - 1;
+							PieceObject secondPiece = piecesArray[x1][y1];
+							return new ModelMove(MovementTypes.QUEEN_CAPTURE, secondPiece, oldX, oldY, newX, newY);
+						}
+						newX--;
+						newY--;
+					}
+				} catch (NotDiagonalException ex) {
+					System.out.println(ex.getMessage());
+				}
+				continue;
+			}*/
+			newX = oldX - 2;
+			newY = oldY - 2;
 			if(isCaptureMove(oldX, oldY, newX, newY)) {
-				int x1 = oldX + (newX - oldX) / 2;
-				int y1 = oldY + (newY - oldY) / 2;
+				x1 = oldX + (newX - oldX) / 2;
+				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 				return new ModelMove(MovementTypes.SINGLE_CAPTURE, secondPiece, oldX, oldY, newX, newY);
 			}
 			newX = oldX - 2;
 			newY = oldY + 2;
 			if(isCaptureMove(oldX, oldY, newX, newY)) {
-				int x1 = oldX + (newX - oldX) / 2;
-				int y1 = oldY + (newY - oldY) / 2;
+				x1 = oldX + (newX - oldX) / 2;
+				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 				return new ModelMove(MovementTypes.SINGLE_CAPTURE, secondPiece, oldX, oldY, newX, newY);
 			}
 			newX = oldX + 2;
 			newY = oldY - 2;
 			if(isCaptureMove(oldX, oldY, newX, newY)) {
-				int x1 = oldX + (newX - oldX) / 2;
-				int y1 = oldY + (newY - oldY) / 2;
+				x1 = oldX + (newX - oldX) / 2;
+				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 				return new ModelMove(MovementTypes.SINGLE_CAPTURE, secondPiece, oldX, oldY, newX, newY);
 			}
 			newX = oldX + 2;
 			newY = oldY + 2;
 			if(isCaptureMove(oldX, oldY, newX, newY)) {
-				int x1 = oldX + (newX - oldX) / 2;
-				int y1 = oldY + (newY - oldY) / 2;
+				x1 = oldX + (newX - oldX) / 2;
+				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 				return new ModelMove(MovementTypes.SINGLE_CAPTURE, secondPiece, oldX, oldY, newX, newY);
 			}
