@@ -68,7 +68,7 @@ public class ClassicCheckersRules implements GameRules {
 	 * @param newY y coordinate of final position of the move
 	 * @return true, if queen can move to the given field on the board
 	 */
-	private boolean isQueenDiagonalMove(int oldX, int oldY, int newX, int newY) {
+	public boolean isQueenDiagonalMove(int oldX, int oldY, int newX, int newY) {
 		if (!(Math.abs(newX - oldX) == Math.abs(newY - oldY))) {
 			return false;
 		}

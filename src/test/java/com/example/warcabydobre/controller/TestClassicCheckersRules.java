@@ -8,6 +8,7 @@ import com.example.warcabydobre.view.Square;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import org.junit.Test;
+import com.example.warcabydobre.controller.ClassicCheckersRules;
 
 import java.io.IOException;
 
@@ -108,7 +109,14 @@ public class TestClassicCheckersRules {
          System.out.println(classicCheckersRules.canPlayerMove(PieceColor.BLACK));
         // assertTrue(!classicCheckersRules.canPlayerMove(PieceColor.BLACK));
      }
-
+     @Test
+    public void IsQueenDiagonalMoveTest(){
+         BoardModel boardModel = new BoardModel(1);
+         ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+         assertFalse(classicCheckersRules.isQueenDiagonalMove(3,0,1,1));
+         assertTrue(classicCheckersRules.isQueenDiagonalMove(2,1,3,2));
+         assertFalse(classicCheckersRules.isQueenDiagonalMove(2,1,6,7));
+    }
 
 
 }
