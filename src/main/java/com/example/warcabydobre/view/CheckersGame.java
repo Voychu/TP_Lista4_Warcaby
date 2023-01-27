@@ -36,7 +36,7 @@ public class CheckersGame extends Application implements Runnable {
 
 	
 	/** Flag representing gameType. */
-	private int gameId = 1;
+	private int gameId;
 	
 	
 	/** The stage with the game's board. */
@@ -466,6 +466,11 @@ public class CheckersGame extends Application implements Runnable {
 
 	}
 
+
+
+
+
+
 	/**
 	 * Method of class CheckersGame initializing 
 	 * window of the application.
@@ -477,17 +482,19 @@ public class CheckersGame extends Application implements Runnable {
 	 */
 	@Override
 	public void start(Stage arg0) throws Exception {
+		Parameters parameters = getParameters();
+		String gameTypeId = parameters.getNamed().get("gameType");
+		try {
+			int typeId = Integer.parseInt(gameTypeId);
+			System.out.println(gameTypeId);
+			this.gameId = typeId;
+		}
+		catch(NumberFormatException ex) {
+			System.out.println(ex.getMessage());
+		}
 		initServerHandler();
 		
-		//TODO: Extending project to other game types.
-		// TODO: wybor trybow gry z kosnoli 1, 2, 3
-		// TODO: walidacja trybow
-//		System.out.println("Podaj tryb: ");
-//		System.out.print("-> ");
-//		Scanner sc = new Scanner(System.in);
-//		int i = sc.nextInt();
-//		String message = Integer.toString(i);
-//		serverHandler.sendMessage(message);
+		
 		initBoardStage();
 		int player = receiveInitFromServer();
 		initMVC(player);
@@ -502,8 +509,8 @@ public class CheckersGame extends Application implements Runnable {
 	 * the program has been invoked.
 	 */
 	public static void main(String[] args) {
-		launch(args);
-
+		Application.launch(CheckersGame.class,
+				"--gameType=1");
 	}
 
 }
