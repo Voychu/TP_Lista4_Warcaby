@@ -113,7 +113,7 @@ public class CheckersGame extends Application implements Runnable {
 	 * of checkers game.
 	 */
 	private final static String[] gameTypesArray =
-		{"classic"};
+		{"classic", "second"};
 	
 	
 	/**
@@ -510,7 +510,7 @@ public class CheckersGame extends Application implements Runnable {
 	 */
 	public static void main(String[] args) {
 		Application.launch(CheckersGame.class,
-				"--gameType=1");
+				"--gameType=" + args[0]);
 	}
 
 }
