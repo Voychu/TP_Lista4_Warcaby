@@ -586,7 +586,12 @@ public class ClassicCheckersRules implements GameRules {
 		return new ModelMove(MovementTypes.NONE);
 
 	}
-
+	
+	/**
+	 * Method checking whether player can capture
+	 * @param color player's pieces color
+	 * @return true if player can capture
+	 */
 	private boolean canPlayerCapture(PieceColor color) {
 		ModelMove optimalCapture = getOptimalCapture(color);
 		if (optimalCapture.getMovementType() == MovementTypes.SINGLE_CAPTURE) {
