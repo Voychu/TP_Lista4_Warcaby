@@ -91,7 +91,7 @@ public class ClassicCheckersRules implements GameRules {
 	 * @param piece passed piece
 	 * @return true, if piece can move
 	 */
-	public boolean canPieceMove(PieceObject piece) {
+	private boolean canPieceMove(PieceObject piece) {
 		int pieceX = piece.getX();
 		int pieceY = piece.getY();
 		int possibleX;
@@ -112,6 +112,7 @@ public class ClassicCheckersRules implements GameRules {
 		}
 		return true;
 	}
+	
 
 	/**
 	 * Method checking whether player playing with pieces of passed color can move
@@ -139,6 +140,24 @@ public class ClassicCheckersRules implements GameRules {
 		// gracz moze byc zablokowany
 
 	}
+	
+	@Override
+	public boolean playerWin(PieceColor color) {
+		PieceColor oppositeColor;
+		if(color == PieceColor.WHITE) {
+			oppositeColor = PieceColor.BLACK;
+		}
+		else {
+			oppositeColor = PieceColor.WHITE;
+		}
+		return !canPlayerMove(oppositeColor);
+	}
+	
+	@Override
+	public boolean playerLost(PieceColor color) {
+		return !canPlayerMove(color);
+	}
+	
 
 	private boolean isCaptureMove(int oldX, int oldY, int newX, int newY) {
 		if (newX < 0 || newX >= numCols || newY < 0 || newY >= numRows) {

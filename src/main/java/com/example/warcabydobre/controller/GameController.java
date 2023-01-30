@@ -354,10 +354,8 @@ public class GameController {
 			showing = Config.ACTIVE;
 			actualPlayer = getOtherPlayer();
 			try {
-				int oppositePlayer = this.getOtherPlayer();
-				PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
-				boolean playerWin = !rules.canPlayerMove(oppositeColor);
-				if(playerWin) {
+				PieceColor color = rules.getPieceColor(player);
+				if(rules.playerWin(color)) {
 					gameState = GameState.WIN;
 				}
 			} catch (InvalidPlayerException ex) {
@@ -390,10 +388,8 @@ public class GameController {
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
 				try {
-					int oppositePlayer = this.getOtherPlayer();
-					PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
-					boolean playerWin = !rules.canPlayerMove(oppositeColor);
-					if(playerWin) {
+					PieceColor color = rules.getPieceColor(player);
+					if(rules.playerWin(color)) {
 						gameState = GameState.WIN;
 					}
 				} catch (InvalidPlayerException ex) {
@@ -414,10 +410,8 @@ public class GameController {
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
 				try {
-					int oppositePlayer = this.getOtherPlayer();
-					PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
-					boolean playerWin = !rules.canPlayerMove(oppositeColor);
-					if(playerWin) {
+					PieceColor color = rules.getPieceColor(player);
+					if(rules.playerWin(color)) {
 						gameState = GameState.WIN;
 					}
 				} catch (InvalidPlayerException ex) {
@@ -437,10 +431,8 @@ public class GameController {
 				showing = Config.ACTIVE;
 				actualPlayer = getOtherPlayer();
 				try {
-					int oppositePlayer = this.getOtherPlayer();
-					PieceColor oppositeColor = rules.getPieceColor(oppositePlayer);
-					boolean playerWin = !rules.canPlayerMove(oppositeColor);
-					if(playerWin) {
+					PieceColor color = rules.getPieceColor(player);
+					if(rules.playerWin(color)) {
 						gameState = GameState.WIN;
 					}
 				} catch (InvalidPlayerException ex) {
@@ -581,8 +573,7 @@ public class GameController {
 			actualPlayer = player;
 			try {
 				PieceColor playerColor = rules.getPieceColor(player);
-				boolean playerLost = !rules.canPlayerMove(playerColor);
-				if(playerLost) {
+				if(rules.playerLost(playerColor)) {
 					gameState = GameState.LOST;
 				}
 			} catch (InvalidPlayerException ex) {
@@ -610,8 +601,7 @@ public class GameController {
 				actualPlayer = player;
 				try {
 					PieceColor playerColor = rules.getPieceColor(player);
-					boolean playerLost = !rules.canPlayerMove(playerColor);
-					if(playerLost) {
+					if(rules.playerLost(playerColor)) {
 						gameState = GameState.LOST;
 					}
 				} catch (InvalidPlayerException ex) {
@@ -629,8 +619,7 @@ public class GameController {
 				actualPlayer = player;
 				try {
 					PieceColor playerColor = rules.getPieceColor(player);
-					boolean playerLost = !rules.canPlayerMove(playerColor);
-					if(playerLost) {
+					if(rules.playerLost(playerColor)) {
 						gameState = GameState.LOST;
 					}
 				} catch (InvalidPlayerException ex) {
@@ -648,8 +637,7 @@ public class GameController {
 				actualPlayer = player;
 				try {
 					PieceColor playerColor = rules.getPieceColor(player);
-					boolean playerLost = !rules.canPlayerMove(playerColor);
-					if(playerLost) {
+					if(rules.playerLost(playerColor)) {
 						gameState = GameState.LOST;
 					}
 				} catch (InvalidPlayerException ex) {
