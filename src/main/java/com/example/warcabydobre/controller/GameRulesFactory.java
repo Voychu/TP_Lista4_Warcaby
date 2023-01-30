@@ -23,6 +23,9 @@ public class GameRulesFactory  {
 		if(gameType.equalsIgnoreCase("second")){
             return new SecondCheckersRules(boardModel);
         } 
+		if(gameType.equalsIgnoreCase("anti")){
+            return new SecondCheckersRules(boardModel);
+        } 
 
 		else return null;
 	}

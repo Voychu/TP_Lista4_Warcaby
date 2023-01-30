@@ -354,7 +354,7 @@ public class ClassicCheckersRules implements GameRules {
 				if (boardModel.isOccupied(x, y)) {
 					PieceObject currentPiece = piecesArray[x][y];
 					if (currentPiece.getColor() == color &&
-							possibleMoves(currentPiece) != null) {
+							!possibleMoves(currentPiece).isEmpty()) {
 						return true;
 					}
 				}
