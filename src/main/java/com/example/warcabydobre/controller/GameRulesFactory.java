@@ -19,6 +19,9 @@ public class GameRulesFactory  {
 	GameRules getGameRules(String gameType, BoardModel boardModel) {
 		if(gameType.equalsIgnoreCase("classic")){
             return new ClassicCheckersRules(boardModel);
+        }
+		if(gameType.equalsIgnoreCase("second")){
+            return new SecondCheckersRules(boardModel);
         } 
 
 		else return null;

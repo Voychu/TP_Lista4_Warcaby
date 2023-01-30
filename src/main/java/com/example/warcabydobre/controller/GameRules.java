@@ -44,11 +44,19 @@ public interface GameRules {
 	public ModelMove tryMove(int oldX, int oldY, int newX, int newY) throws InvalidMoveException;
 
 
-
+	/**
+	 * Method checking if player wins
+	 * @param color of player's pieces
+	 * @return true if the player wins 
+	 */
 	boolean playerWin(PieceColor color);
 
 
-
+	/**
+	 * Method checking if player lost.
+	 *@param color of player's pieces
+	 * @return true if the player lost 
+	 */
 	boolean playerLost(PieceColor color);
 
 }

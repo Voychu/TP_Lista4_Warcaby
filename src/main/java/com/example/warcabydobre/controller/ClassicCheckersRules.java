@@ -84,36 +84,16 @@ public class ClassicCheckersRules implements GameRules {
 		}
 	}
 
-	// TODO: implmentcja metody
-	/**
-	 * Method checking whether piece can move
-	 * 
-	 * @param piece passed piece
-	 * @return true, if piece can move
-	 */
-	private boolean canPieceMove(PieceObject piece) {
-		int pieceX = piece.getX();
-		int pieceY = piece.getY();
-		int possibleX;
-		int possibleY;
-		if (piece.isQueen()) {
-
-		} else {
-			int stepY = piece.getMovementDirection();
-			possibleY = pieceY + stepY;
-			if (!boardModel.isOccupied(pieceX + 1, possibleY)) {
-				return true;
-			}
-			if (!boardModel.isOccupied(pieceX - 1, possibleY)) {
-				return true;
-			}
-			// if((!boardModel.isOccupied(pieceX - 2, pieceY - 2)) )
-
-		}
-		return true;
-	}
 
 	
+	/**
+	 * Method returning all possible queen piece's
+	 * capture moves
+	 * @param piece passed piece object
+	 * @return if piece is queen list
+	 * of all possibles queen's capture moves
+	 * otherwise empty list
+	 */
 	private LinkedList<ModelMove> possibleQueensCaptures(PieceObject piece){
 		int oldX = piece.getX();
 		int oldY = piece.getY();
@@ -210,7 +190,14 @@ public class ClassicCheckersRules implements GameRules {
 		return posMoves;
 	}
 	
-	//nie bicia
+	/**
+	 * Method returning all possible queen piece's
+	 * non-capture moves moves
+	 * @param piece passed piece object
+	 * @return if piece is queen list
+	 * of all possibles queen's non-capture moves
+	 * otherwise empty list
+	 */
 	private LinkedList<ModelMove> possibleQueensMoves(PieceObject piece){
 		int oldX = piece.getX();
 		int oldY = piece.getY();
@@ -285,7 +272,13 @@ public class ClassicCheckersRules implements GameRules {
 		return posMoves;
 	}
 	
-	
+	/**
+	 * method returning list of all possibles moves
+	 * of passed piece
+	 * @param piece passed piece object
+	 * @return list of all possibles
+	 * piece's moves
+	 */
 	public LinkedList<ModelMove> possibleMoves(PieceObject piece) {
 		int oldX = piece.getX();
 		int oldY = piece.getY();
@@ -370,8 +363,13 @@ public class ClassicCheckersRules implements GameRules {
 		return false;
 
 	}
-
+	
 	@Override
+	/**
+	 * Method checking if player wins
+	 * @param color of player's pieces
+	 * @return true if the player wins 
+	 */
 	public boolean playerWin(PieceColor color) {
 		PieceColor oppositeColor;
 		if (color == PieceColor.WHITE) {
@@ -383,10 +381,28 @@ public class ClassicCheckersRules implements GameRules {
 	}
 
 	@Override
+	/**
+	 * Method checking if player lost.
+	 *@param color of player's pieces
+	 * @return true if the player lost 
+	 */
 	public boolean playerLost(PieceColor color) {
 		return !canPlayerMove(color);
 	}
 
+	/**
+	 * Method checking if passed move is capture move
+	 * @param oldX the x coordinate of initial
+	 * position of the piece
+	 * @param oldY the y coordinate of initial
+	 * position of the piece
+	 * @param newX the x coordinate of final
+	 * position of the piece
+	 * @param newY the x coordinate of final
+	 * position of the piece
+	 * @return true if move with passed
+	 * coordinates is capture move
+	 */
 	private boolean isCaptureMove(int oldX, int oldY, int newX, int newY) {
 		if (newX < 0 || newX >= numCols || newY < 0 || newY >= numRows) {
 			return false;
@@ -435,6 +451,8 @@ public class ClassicCheckersRules implements GameRules {
 		return false;
 	}
 
+	//TODO:Method returns first in turn capture
+	//Optimal capture has not been implemented yet.
 	/**
 	 * Method returning optimal capture
 	 * 
@@ -604,7 +622,6 @@ public class ClassicCheckersRules implements GameRules {
 		PieceColor oppositeColor = pieceObject.getOppositeColor();
 		PieceColor myColor = pieceObject.getColor();
 
-		ModelMove optimalCapture = getOptimalCapture(myColor);
 
 		if (pieceObject.isQueen() && isQueenDiagonalMove(oldX, oldY, newX, newY)) {
 			try {
