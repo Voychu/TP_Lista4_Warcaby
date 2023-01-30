@@ -24,7 +24,7 @@ public class GameRulesFactory  {
             return new SecondCheckersRules(boardModel);
         } 
 		if(gameType.equalsIgnoreCase("anti")){
-            return new SecondCheckersRules(boardModel);
+            return new AntiCheckersRules(boardModel);
         } 
 
 		else return null;

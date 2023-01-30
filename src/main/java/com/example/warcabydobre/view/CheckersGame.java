@@ -106,14 +106,14 @@ public class CheckersGame extends Application implements Runnable {
 	 * The number of possible types
 	 * of checkers game.
 	 */
-	private final static int numOfTypes = 1;
+	private final static int numOfTypes = 3;
 
 	/**
 	 * The array of possible types 
 	 * of checkers game.
 	 */
 	private final static String[] gameTypesArray =
-		{"classic", "second"};
+		{"classic", "second", "anti"};
 	
 	
 	/**
@@ -445,6 +445,7 @@ public class CheckersGame extends Application implements Runnable {
 		System.out.println(boardString);
 		controller = new GameController(this.boardModel, piecesArray, board, serverHandler, 
 				turnLabel, piecesGroup, this.getGameType());
+		System.out.println(this.getGameType());
 		controller.setPlayer(player);
 		controller.setActualPlayer(Config.PLAYER1);
 	}

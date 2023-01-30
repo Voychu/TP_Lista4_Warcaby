@@ -358,6 +358,9 @@ public class GameController {
 				if(rules.playerWin(color)) {
 					gameState = GameState.WIN;
 				}
+				if(rules.playerLost(color)) {
+					gameState = GameState.LOST;
+				}
 			} catch (InvalidPlayerException ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -392,6 +395,9 @@ public class GameController {
 					if(rules.playerWin(color)) {
 						gameState = GameState.WIN;
 					}
+					if(rules.playerLost(color)) {
+						gameState = GameState.LOST;
+					}
 				} catch (InvalidPlayerException ex) {
 					System.out.println(ex.getMessage());
 				}
@@ -414,6 +420,9 @@ public class GameController {
 					if(rules.playerWin(color)) {
 						gameState = GameState.WIN;
 					}
+					if(rules.playerLost(color)) {
+						gameState = GameState.LOST;
+					}
 				} catch (InvalidPlayerException ex) {
 					System.out.println(ex.getMessage());
 				}
@@ -434,6 +443,9 @@ public class GameController {
 					PieceColor color = rules.getPieceColor(player);
 					if(rules.playerWin(color)) {
 						gameState = GameState.WIN;
+					}
+					if(rules.playerLost(color)) {
+						gameState = GameState.LOST;
 					}
 				} catch (InvalidPlayerException ex) {
 					System.out.println(ex.getMessage());
@@ -576,6 +588,9 @@ public class GameController {
 				if(rules.playerLost(playerColor)) {
 					gameState = GameState.LOST;
 				}
+				if(rules.playerWin(playerColor)) {
+					gameState = GameState.WIN;
+				}
 			} catch (InvalidPlayerException ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -604,6 +619,9 @@ public class GameController {
 					if(rules.playerLost(playerColor)) {
 						gameState = GameState.LOST;
 					}
+					if(rules.playerWin(playerColor)) {
+						gameState = GameState.WIN;
+					}
 				} catch (InvalidPlayerException ex) {
 					System.out.println(ex.getMessage());
 				}
@@ -622,6 +640,9 @@ public class GameController {
 					if(rules.playerLost(playerColor)) {
 						gameState = GameState.LOST;
 					}
+					if(rules.playerWin(playerColor)) {
+						gameState = GameState.WIN;
+					}
 				} catch (InvalidPlayerException ex) {
 					System.out.println(ex.getMessage());
 				}
@@ -639,6 +660,9 @@ public class GameController {
 					PieceColor playerColor = rules.getPieceColor(player);
 					if(rules.playerLost(playerColor)) {
 						gameState = GameState.LOST;
+					}
+					if(rules.playerWin(playerColor)) {
+						gameState = GameState.WIN;
 					}
 				} catch (InvalidPlayerException ex) {
 					System.out.println(ex.getMessage());
