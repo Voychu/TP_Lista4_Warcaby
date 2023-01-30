@@ -24,7 +24,6 @@ public class ClassicCheckersRules implements GameRules {
 	/** The Constant numRows number of rows in board */
 	private static final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
 
-
 	/**
 	 * Model of the game that stores current pieces' positions and properties.
 	 */
@@ -140,12 +139,12 @@ public class ClassicCheckersRules implements GameRules {
 		// gracz moze byc zablokowany
 
 	}
-	
+
 	private boolean isCaptureMove(int oldX, int oldY, int newX, int newY) {
-		if(newX < 0 || newX >= numCols || newY < 0 || newY >= numRows) {
+		if (newX < 0 || newX >= numCols || newY < 0 || newY >= numRows) {
 			return false;
 		}
-		if(oldX < 0 || oldX >= numCols || oldY < 0 || oldY >= numRows) {
+		if (oldX < 0 || oldX >= numCols || oldY < 0 || oldY >= numRows) {
 			return false;
 		}
 		PieceObject pieceObject = boardModel.getPiecesArray()[oldX][oldY];
@@ -154,42 +153,40 @@ public class ClassicCheckersRules implements GameRules {
 		}
 		if (boardModel.isOccupied(newX, newY) || !boardModel.isBlackSquare(newX, newY)) {
 			return false;
-			
+
 		}
-		
-//		if(pieceObject.isQueen() && isQueenDiagonalMove(oldX, oldY, newX, newY)) {
-//			PieceColor myColor = pieceObject.getColor();
-//			PieceColor oppositeColor = pieceObject.getOppositeColor();
-//			int numberOfMyPieces;
-//			try {
-//				numberOfMyPieces = boardModel.countPiecesBetween(oldX, oldY, newX, newY, myColor);
-//				int numberOfEnemysPieces = boardModel.countPiecesBetween(oldX, oldY, newX, newY, oppositeColor);
-//				if (numberOfEnemysPieces == 1 && numberOfMyPieces == 0) {
-//					return true;
-//				}
-//			} catch (NotDiagonalException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//			
-//			return false;
-//			
-//		}
-		
+
+		if (pieceObject.isQueen() && isQueenDiagonalMove(oldX, oldY, newX, newY)) {
+			PieceColor myColor = pieceObject.getColor();
+			PieceColor oppositeColor = pieceObject.getOppositeColor();
+			int numberOfMyPieces;
+			try {
+				numberOfMyPieces = boardModel.countPiecesBetween(oldX, oldY, newX, newY, myColor);
+				int numberOfEnemysPieces = boardModel.countPiecesBetween(oldX, oldY, newX, newY, oppositeColor);
+				if (numberOfEnemysPieces == 1 && numberOfMyPieces == 0) {
+					return true;
+				}
+			} catch (NotDiagonalException ex) {
+				System.out.println(ex.getMessage());
+			}
+
+			return false;
+
+		}
+
 		if (Math.abs(newX - oldX) != 2 || Math.abs(newY - oldY) != 2) {
 			return false;
 		}
-		
+
 		int x1 = oldX + (newX - oldX) / 2;
 		int y1 = oldY + (newY - oldY) / 2;
 		PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
 		if (boardModel.isOccupied(x1, y1) && secondPiece.getColor() != pieceObject.getColor()) {
 			return true;
 		}
-		
-		
+
 		return false;
 	}
-	
 
 	/**
 	 * Method returning optimal capture
@@ -203,56 +200,94 @@ public class ClassicCheckersRules implements GameRules {
 		for (int y = 0; y < numRows; y++) {
 			for (int x = 0; x < numCols; x++) {
 				PieceObject currPiece = piecesArray[x][y];
-				if(boardModel.isOccupied(x, y) && currPiece.getColor() == color) {
+				if (boardModel.isOccupied(x, y) && currPiece.getColor() == color) {
 					piecesList.add(currPiece);
 				}
-					
+
 			}
 		}
-		for(PieceObject piece : piecesList) {
+		for (PieceObject piece : piecesList) {
 			int oldX = piece.getX();
 			int oldY = piece.getY();
 			int newX;
 			int newY;
 			int x1, y1;
-			/*if(piece.isQueen()) {
+			if (piece.isQueen()) {
 				PieceColor playerColor = piece.getColor();
 				PieceColor enemysColor = piece.getOppositeColor();
-				try {
-					newX = oldX - 2;
-					newY = oldY - 2;
-					while(boardModel.countPiecesBetween(oldX, oldY, newX, newY, playerColor) < 1 &&
-							boardModel.countPiecesBetween(oldX, oldY, newX, newY, enemysColor) < 2) {
-						if(this.isCaptureMove(oldX, oldY, newX, newY)) {
-							x1 = newX + 1;
-							y1 = newY + 1;
-							PieceObject secondPiece = piecesArray[x1][y1];
-							return new ModelMove(MovementTypes.QUEEN_CAPTURE, secondPiece, oldX, oldY, newX, newY);
-						}
-						newX--;
-						newY--;
+				newX = oldX - 2;
+				newY = oldY - 2;
+				int playerPieces = 0;
+				int enemysPieces = 0;
+				while (playerPieces < 1 && enemysPieces < 2 && newX >= 0 && newY >=0 ) {
+					if (this.isCaptureMove(oldX, oldY, newX, newY)) {
+						return new ModelMove(MovementTypes.QUEEN_CAPTURE, oldX, oldY, newX, newY);
 					}
-					newX = oldX - 2;
-					newY = oldY + 2;
-					while(boardModel.countPiecesBetween(oldX, oldY, newX, newY, playerColor) < 1 &&
-							boardModel.countPiecesBetween(oldX, oldY, newX, newY, enemysColor) < 2) {
-						if(this.isCaptureMove(oldX, oldY, newX, newY)) {
-							x1 = newX - 1;
-							y1 = newY - 1;
-							PieceObject secondPiece = piecesArray[x1][y1];
-							return new ModelMove(MovementTypes.QUEEN_CAPTURE, secondPiece, oldX, oldY, newX, newY);
-						}
-						newX--;
-						newY--;
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == playerColor) {
+						playerPieces++;
 					}
-				} catch (NotDiagonalException ex) {
-					System.out.println(ex.getMessage());
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == enemysColor) {
+						enemysPieces++;
+					}
+					newX--;
+					newY--;
+				}
+				newX = oldX - 2;
+				newY = oldY + 2;
+				playerPieces = 0;
+				enemysPieces = 0;
+				while (playerPieces < 1 && enemysPieces < 2 && newX >= 0 && newY < numRows ) {
+					if (this.isCaptureMove(oldX, oldY, newX, newY)) {
+						return new ModelMove(MovementTypes.QUEEN_CAPTURE, oldX, oldY, newX, newY);
+					}
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == playerColor) {
+						playerPieces++;
+					}
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == enemysColor) {
+						enemysPieces++;
+					}
+					newX--;
+					newY++;
+				}
+				newX = oldX + 2;
+				newY = oldY - 2;
+				playerPieces = 0;
+				enemysPieces = 0;
+				while (playerPieces < 1 && enemysPieces < 2 && newX < numCols && newY >= 0 ) {
+					if (this.isCaptureMove(oldX, oldY, newX, newY)) {
+						return new ModelMove(MovementTypes.QUEEN_CAPTURE, oldX, oldY, newX, newY);
+					}
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == playerColor) {
+						playerPieces++;
+					}
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == enemysColor) {
+						enemysPieces++;
+					}
+					newX++;
+					newY--;
+				}
+				newX = oldX + 2;
+				newY = oldY + 2;
+				playerPieces = 0;
+				enemysPieces = 0;
+				while (playerPieces < 1 && enemysPieces < 2 && newX < numCols && newY < numRows ) {
+					if (this.isCaptureMove(oldX, oldY, newX, newY)) {
+						return new ModelMove(MovementTypes.QUEEN_CAPTURE, oldX, oldY, newX, newY);
+					}
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == playerColor) {
+						playerPieces++;
+					}
+					if(boardModel.isOccupied(newX, newY) && piecesArray[newX][newY].getColor() == enemysColor) {
+						enemysPieces++;
+					}
+					newX++;
+					newY++;
 				}
 				continue;
-			}*/
+			}
 			newX = oldX - 2;
 			newY = oldY - 2;
-			if(isCaptureMove(oldX, oldY, newX, newY)) {
+			if (newX >=0 && newY >=0 && isCaptureMove(oldX, oldY, newX, newY)) {
 				x1 = oldX + (newX - oldX) / 2;
 				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
@@ -260,7 +295,7 @@ public class ClassicCheckersRules implements GameRules {
 			}
 			newX = oldX - 2;
 			newY = oldY + 2;
-			if(isCaptureMove(oldX, oldY, newX, newY)) {
+			if (newX>=0 && newY < numRows && isCaptureMove(oldX, oldY, newX, newY)) {
 				x1 = oldX + (newX - oldX) / 2;
 				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
@@ -268,7 +303,7 @@ public class ClassicCheckersRules implements GameRules {
 			}
 			newX = oldX + 2;
 			newY = oldY - 2;
-			if(isCaptureMove(oldX, oldY, newX, newY)) {
+			if (newX < numCols && newY >= 0 && isCaptureMove(oldX, oldY, newX, newY)) {
 				x1 = oldX + (newX - oldX) / 2;
 				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
@@ -276,7 +311,7 @@ public class ClassicCheckersRules implements GameRules {
 			}
 			newX = oldX + 2;
 			newY = oldY + 2;
-			if(isCaptureMove(oldX, oldY, newX, newY)) {
+			if (newX < numCols && newY < numRows && isCaptureMove(oldX, oldY, newX, newY)) {
 				x1 = oldX + (newX - oldX) / 2;
 				y1 = oldY + (newY - oldY) / 2;
 				PieceObject secondPiece = boardModel.getPiecesArray()[x1][y1];
@@ -286,19 +321,18 @@ public class ClassicCheckersRules implements GameRules {
 		return new ModelMove(MovementTypes.NONE);
 
 	}
-	
-	
+
 	private boolean canPlayerCapture(PieceColor color) {
 		ModelMove optimalCapture = getOptimalCapture(color);
-		if(optimalCapture.getMovementType() == MovementTypes.SINGLE_CAPTURE) {
+		if (optimalCapture.getMovementType() == MovementTypes.SINGLE_CAPTURE) {
+			return true;
+		}
+		if (optimalCapture.getMovementType() == MovementTypes.QUEEN_CAPTURE) {
 			return true;
 		}
 		return false;
 	}
 
-	
-	
-	
 	/**
 	 * Method checking if move is valid and if it is valid it returns type of the
 	 * move. It operates according to classic checkers game's rules.
@@ -322,7 +356,7 @@ public class ClassicCheckersRules implements GameRules {
 		}
 		PieceColor oppositeColor = pieceObject.getOppositeColor();
 		PieceColor myColor = pieceObject.getColor();
-		
+
 		ModelMove optimalCapture = getOptimalCapture(myColor);
 
 		if (pieceObject.isQueen() && isQueenDiagonalMove(oldX, oldY, newX, newY)) {
@@ -332,8 +366,7 @@ public class ClassicCheckersRules implements GameRules {
 				if (numberOfEnemysPieces == 1 && numberOfMyPieces == 0) {
 					return new ModelMove(MovementTypes.QUEEN_CAPTURE, oldX, oldY, newX, newY);
 				}
-				if (numberOfEnemysPieces == 0 && numberOfMyPieces == 0
-						&& !canPlayerCapture(myColor)) {
+				if (numberOfEnemysPieces == 0 && numberOfMyPieces == 0 && !canPlayerCapture(myColor)) {
 					return new ModelMove(MovementTypes.QUEEN_DIAGONAL, oldX, oldY, newX, newY);
 				}
 			} catch (NotDiagonalException e) {
