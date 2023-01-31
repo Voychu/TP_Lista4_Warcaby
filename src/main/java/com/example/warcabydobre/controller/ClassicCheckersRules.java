@@ -404,7 +404,7 @@ public class ClassicCheckersRules implements GameRules {
 	 * @return true if move with passed
 	 * coordinates is capture move
 	 */
-	private boolean isCaptureMove(int oldX, int oldY, int newX, int newY) {
+	public boolean isCaptureMove(int oldX, int oldY, int newX, int newY) {
 		if (newX < 0 || newX >= numCols || newY < 0 || newY >= numRows) {
 			return false;
 		}
