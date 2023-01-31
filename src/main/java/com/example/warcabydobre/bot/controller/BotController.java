@@ -1,5 +1,8 @@
 package com.example.warcabydobre.bot.controller;
 
+import java.util.LinkedList;
+import java.util.Random;
+
 import com.example.warcabydobre.bot.model.GameData;
 import com.example.warcabydobre.controller.GameRules;
 import com.example.warcabydobre.controller.GameRulesFactory;
@@ -10,21 +13,20 @@ import com.example.warcabydobre.db.BusinessLogicIF;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
 import com.example.warcabydobre.model.MovementTypes;
+import com.example.warcabydobre.model.PieceObject;
 import com.example.warcabydobre.srvhandler.InvalidCommandException;
 import com.example.warcabydobre.srvhandler.MoveConverter;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.PieceColor;
-import com.example.warcabydobre.view.Square;
 
 
 public class BotController {
 
-	public BotController() {
-		// TODO Auto-generated constructor stub
-	}
+	private final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
 	
+	private final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
 	/** The message sending from one player
 	 * to the other one through the server. */
 	private String message;
@@ -37,9 +39,6 @@ public class BotController {
 	 * based on the rules of chosen game type. */
 	private GameRules rules;
 	
-	/** Array of the graphicalPieces from
-	 * the board */
-	private GraphicalPiece[][] graphicalPiecesArray;
 	
 	/** Proxy to the server */
 	private ServerHandler serverHandler;
@@ -254,166 +253,171 @@ public class BotController {
 	 * @throws InvalidMoveException the exception thrown
 	 * when the move is incorrect.
 	 */
-//	public void onPieceMoved(GraphicalPiece graphicalPiece, MouseEvent event) throws InvalidMoveException {
-//		boolean appropriateColor = isAppropriateColor(graphicalPiece);
-//		if ((player != actualPlayer) || (!appropriateColor)) {
-//			graphicalPiece.abortMove();
-//			return;
-//		}
-//		System.out.println("OK1");
-//		int oldX = toBoardCoordinates(graphicalPiece.getOldX());
-//		int oldY = toBoardCoordinates(graphicalPiece.getOldY());
-//		int newX = toBoardCoordinates(graphicalPiece.getLayoutX());
-//		int newY = toBoardCoordinates(graphicalPiece.getLayoutY());
-//
-//		System.out.println("OK2");
-//
-//		ModelMove modelResult;
-//
-//		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
-//				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
-//			modelResult = new ModelMove(MovementTypes.NONE);
-//		} else {
-//
-//			modelResult = rules.tryMove(oldX, oldY, newX, newY);
-//		}
-//
-//		System.out.println("OK3");
-//		switch (modelResult.getMovementType()) {
-//		case NONE:
-//			graphicalPiece.abortMove();
-//			break;
-//		case FORWARD:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				// tworzenie damki
-//				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//
-//				}
-//
-//				// tworzenie damki
-//				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//				}
-//			} catch (InvalidMoveException ex) {
-//				System.out.println("Niaprawidlowy ruch");
-//			}
-//
-//			System.out.println("OK4");
-//			message = MoveConverter.convertMoveToString(modelResult);
-//			serverHandler.sendMessage(message);
-//			Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-//			showing = Config.ACTIVE;
-//			actualPlayer = getOtherPlayer();
-//			try {
-//				PieceColor color = rules.getPieceColor(player);
-//				if(rules.playerWin(color)) {
-//					gameState = GameState.WIN;
-//				}
-//				if(rules.playerLost(color)) {
-//					gameState = GameState.LOST;
-//				}
-//			} catch (InvalidPlayerException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//			break;
-//		case SINGLE_CAPTURE:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				int x1 = oldX + (newX - oldX) / 2;
-//				int y1 = oldY + (newY - oldY) / 2;
-//				gameData.deletePieceObject(x1, y1);
-//
-//				// tworzenie damki
-//				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//
-//				}
-//
-//				// tworzenie damki
-//				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//				}
-//
-//				message = MoveConverter.convertMoveToString(modelResult);
-//				serverHandler.sendMessage(message);
-//				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-//				showing = Config.ACTIVE;
-//				actualPlayer = getOtherPlayer();
-//				try {
-//					PieceColor color = rules.getPieceColor(player);
-//					if(rules.playerWin(color)) {
-//						gameState = GameState.WIN;
-//					}
-//					if(rules.playerLost(color)) {
-//						gameState = GameState.LOST;
-//					}
-//				} catch (InvalidPlayerException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//
-//			} catch (InvalidMoveException ex) {
-//				System.out.println("Niaprawidlowy ruch");
-//			}
-//			break;
-//		case QUEEN_DIAGONAL:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				System.out.println("OK4");
-//				message = MoveConverter.convertMoveToString(modelResult);
-//				serverHandler.sendMessage(message);
-//				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-//				showing = Config.ACTIVE;
-//				actualPlayer = getOtherPlayer();
-//				try {
-//					PieceColor color = rules.getPieceColor(player);
-//					if(rules.playerWin(color)) {
-//						gameState = GameState.WIN;
-//					}
-//					if(rules.playerLost(color)) {
-//						gameState = GameState.LOST;
-//					}
-//				} catch (InvalidPlayerException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//			} catch (InvalidMoveException ex) {
-//				System.out.println("Niaprawidlowy ruch");
-//			}
-//			break;
-//		case QUEEN_CAPTURE:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				gameData.deleteCapturedPiece(oldX, oldY, newX, newY);
-//				message = MoveConverter.convertMoveToString(modelResult);
-//				serverHandler.sendMessage(message);
-//				Platform.runLater(() -> turnLabel.setText("OppositeTurn"));
-//				showing = Config.ACTIVE;
-//				actualPlayer = getOtherPlayer();
-//				try {
-//					PieceColor color = rules.getPieceColor(player);
-//					if(rules.playerWin(color)) {
-//						gameState = GameState.WIN;
-//					}
-//					if(rules.playerLost(color)) {
-//						gameState = GameState.LOST;
-//					}
-//				} catch (InvalidPlayerException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//
-//			} catch (InvalidMoveException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//			break;
-//		default:
-//			break;
-//		}
-//	}
+	public void drawMove() {
+		LinkedList<PieceObject> piecesList = 
+				new LinkedList<>();
+		for(int y = 0; y< numRows; y++) {
+			for(int x = 0; x<numCols; x++) {
+				PieceObject currPiece = gameData.getPiecesArray()[x][y];
+				try {
+					if(gameData.isOccupied(x, y) && currPiece.getColor() == rules.getPieceColor(player)) {
+						piecesList.add(currPiece);
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
+		}
+		Random r = new Random();
+		int size = piecesList.size();
+		int pieceIdx = r.nextInt(size);
+		PieceObject randomPiece = piecesList.get(pieceIdx);
+		System.out.println(randomPiece.getX() + " " + randomPiece.getY());
+		
+		LinkedList<ModelMove> posMoves = rules.possibleMoves(randomPiece);
+		int moveSize = posMoves.size();
+		if(moveSize == 0) {
+			System.out.println("Nie mozna wykonac ruchu");
+			return;
+		}
+		System.out.println(moveSize);
+		int moveIdx = r.nextInt(moveSize);
+		ModelMove modelResult = posMoves.get(moveIdx);
+		
+		int oldX = modelResult.getOldX();
+		int oldY = modelResult.getOldY();
+		int newX = modelResult.getNewX();
+		int newY = modelResult.getNewY();
+
+		switch (modelResult.getMovementType()) {
+		case NONE:
+			break;
+		case FORWARD:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				// tworzenie damki
+				if (randomPiece.getColor() == PieceColor.WHITE && newY == 0) {
+					gameData.transformToQueen(newX, newY);
+
+				}
+
+				// tworzenie damki
+				if (randomPiece.getColor() == PieceColor.BLACK && newY == 7) {
+					gameData.transformToQueen(newX, newY);
+				}
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+
+			try {
+				message = MoveConverter.convertMoveToString(modelResult);
+			} catch (InvalidMoveException e) {
+				e.printStackTrace();
+			}
+			serverHandler.sendMessage(message);
+			showing = Config.ACTIVE;
+			actualPlayer = getOtherPlayer();
+			try {
+				PieceColor color = rules.getPieceColor(player);
+				if(rules.playerWin(color)) {
+					gameState = GameState.WIN;
+				}
+				if(rules.playerLost(color)) {
+					gameState = GameState.LOST;
+				}
+			} catch (InvalidPlayerException ex) {
+				System.out.println(ex.getMessage());
+			}
+			break;
+		case SINGLE_CAPTURE:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				int x1 = oldX + (newX - oldX) / 2;
+				int y1 = oldY + (newY - oldY) / 2;
+				gameData.deletePieceObject(x1, y1);
+
+				// tworzenie damki
+				if (randomPiece.getColor() == PieceColor.WHITE && newY == 0) {
+					gameData.transformToQueen(newX, newY);
+
+				}
+
+				// tworzenie damki
+				if (randomPiece.getColor() == PieceColor.BLACK && newY == 7) {
+					gameData.transformToQueen(newX, newY);
+				}
+
+				message = MoveConverter.convertMoveToString(modelResult);
+				serverHandler.sendMessage(message);
+				showing = Config.ACTIVE;
+				actualPlayer = getOtherPlayer();
+				try {
+					PieceColor color = rules.getPieceColor(player);
+					if(rules.playerWin(color)) {
+						gameState = GameState.WIN;
+					}
+					if(rules.playerLost(color)) {
+						gameState = GameState.LOST;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+			break;
+		case QUEEN_DIAGONAL:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				System.out.println("OK4");
+				message = MoveConverter.convertMoveToString(modelResult);
+				serverHandler.sendMessage(message);
+				showing = Config.ACTIVE;
+				actualPlayer = getOtherPlayer();
+				try {
+					PieceColor color = rules.getPieceColor(player);
+					if(rules.playerWin(color)) {
+						gameState = GameState.WIN;
+					}
+					if(rules.playerLost(color)) {
+						gameState = GameState.LOST;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+			break;
+		case QUEEN_CAPTURE:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				gameData.deleteCapturedPiece(oldX, oldY, newX, newY);
+				message = MoveConverter.convertMoveToString(modelResult);
+				serverHandler.sendMessage(message);
+				showing = Config.ACTIVE;
+				actualPlayer = getOtherPlayer();
+				try {
+					PieceColor color = rules.getPieceColor(player);
+					if(rules.playerWin(color)) {
+						gameState = GameState.WIN;
+					}
+					if(rules.playerLost(color)) {
+						gameState = GameState.LOST;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
 	
 
@@ -454,147 +458,138 @@ public class BotController {
 	 * based on enemy's move to the bordModel.
 	 *
 	 */
-//	public void makeEnemyMove() {
-//		ModelMove move = this.receiveMove();
-//		int oldX = move.getOldX();
-//		int oldY = move.getOldY();
-//		int newX = move.getNewX();
-//		int newY = move.getNewY();
-//
-//
-//		ModelMove modelResult;
-//
-//		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
-//				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
-//			modelResult = new ModelMove(MovementTypes.NONE);
-//		} else {
-//
-//			try {
-//				modelResult = rules.tryMove(oldX, oldY, newX, newY);
-//			} catch (InvalidMoveException ex) {
-//				System.out.println(ex.getMessage());
-//				return;
-//			}
-//		}
-//
-//		switch (modelResult.getMovementType()) {
-//		case NONE:
-//			break;
-//		case FORWARD:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//
-//				}
-//
-//				// tworzenie damki
-//				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//				}
-//			} catch (InvalidMoveException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//
-//			System.out.println("OK4");
-//			Platform.runLater(() -> turnLabel.setText("MyTurn"));
-//			actualPlayer = player;
-//			try {
-//				PieceColor playerColor = rules.getPieceColor(player);
-//				if(rules.playerLost(playerColor)) {
-//					gameState = GameState.LOST;
-//				}
-//				if(rules.playerWin(playerColor)) {
-//					gameState = GameState.WIN;
-//				}
-//			} catch (InvalidPlayerException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//			break;
-//		case SINGLE_CAPTURE:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				int x1 = oldX + (newX - oldX) / 2;
-//				int y1 = oldY + (newY - oldY) / 2;
-//				gameData.deletePieceObject(x1, y1);
-//				if (graphicalPiece.getColor() == PieceColor.WHITE && newY == 0) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//
-//				}
-//
-//				// tworzenie damki
-//				if (graphicalPiece.getColor() == PieceColor.BLACK && newY == 7) {
-//					gameData.transformToQueen(newX, newY);
-//					Platform.runLater(() -> initGraphicalQueen(newX, newY));
-//				}
-//				Platform.runLater(() -> turnLabel.setText("MyTurn"));
-//				actualPlayer = player;
-//				try {
-//					PieceColor playerColor = rules.getPieceColor(player);
-//					if(rules.playerLost(playerColor)) {
-//						gameState = GameState.LOST;
-//					}
-//					if(rules.playerWin(playerColor)) {
-//						gameState = GameState.WIN;
-//					}
-//				} catch (InvalidPlayerException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//
-//			} catch (InvalidMoveException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//			break;
-//		case QUEEN_DIAGONAL:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				Platform.runLater(() -> turnLabel.setText("MyTurn"));
-//				actualPlayer = player;
-//				try {
-//					PieceColor playerColor = rules.getPieceColor(player);
-//					if(rules.playerLost(playerColor)) {
-//						gameState = GameState.LOST;
-//					}
-//					if(rules.playerWin(playerColor)) {
-//						gameState = GameState.WIN;
-//					}
-//				} catch (InvalidPlayerException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//			} catch (InvalidMoveException ex) {
-//				System.out.println("Niaprawidlowy ruch");
-//			}
-//			break;
-//		case QUEEN_CAPTURE:
-//			try {
-//				gameData.movePieceObject(oldX, oldY, newX, newY);
-//				gameData.deleteCapturedPiece(oldX, oldY, newX, newY);
-//				Platform.runLater(() -> turnLabel.setText("MyTurn"));
-//				actualPlayer = player;
-//				try {
-//					PieceColor playerColor = rules.getPieceColor(player);
-//					if(rules.playerLost(playerColor)) {
-//						gameState = GameState.LOST;
-//					}
-//					if(rules.playerWin(playerColor)) {
-//						gameState = GameState.WIN;
-//					}
-//				} catch (InvalidPlayerException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//
-//			} catch (InvalidMoveException ex) {
-//				System.out.println(ex.getMessage());
-//			}
-//			break;
-//		default:
-//			break;
-//
-//		}
-//	}
+	public void makeEnemyMove() {
+		ModelMove move = this.receiveMove();
+		int oldX = move.getOldX();
+		int oldY = move.getOldY();
+		int newX = move.getNewX();
+		int newY = move.getNewY();
+		PieceObject pieceObject = gameData.getPiecesArray()[oldX][oldY];
+
+		ModelMove modelResult;
+
+		if (newX < 0 || newY < 0 || newX >= Config.CLASSICAL_CHECKERS_BOARD_WIDTH
+				|| newY >= Config.CLASSICAL_CHECKERS_BOARD_HEIGHT) {
+			modelResult = new ModelMove(MovementTypes.NONE);
+		} else {
+
+			try {
+				modelResult = rules.tryMove(oldX, oldY, newX, newY);
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+				return;
+			}
+		}
+
+		switch (modelResult.getMovementType()) {
+		case NONE:
+			break;
+		case FORWARD:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				if (pieceObject.getColor() == PieceColor.WHITE && newY == 0) {
+					gameData.transformToQueen(newX, newY);
+
+				}
+
+				// tworzenie damki
+				if (pieceObject.getColor() == PieceColor.BLACK && newY == 7) {
+					gameData.transformToQueen(newX, newY);
+				}
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+
+			actualPlayer = player;
+			try {
+				PieceColor playerColor = rules.getPieceColor(player);
+				if(rules.playerLost(playerColor)) {
+					gameState = GameState.LOST;
+				}
+				if(rules.playerWin(playerColor)) {
+					gameState = GameState.WIN;
+				}
+			} catch (InvalidPlayerException ex) {
+				System.out.println(ex.getMessage());
+			}
+			break;
+		case SINGLE_CAPTURE:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				int x1 = oldX + (newX - oldX) / 2;
+				int y1 = oldY + (newY - oldY) / 2;
+				gameData.deletePieceObject(x1, y1);
+				if (pieceObject.getColor() == PieceColor.WHITE && newY == 0) {
+					gameData.transformToQueen(newX, newY);
+
+				}
+
+				// tworzenie damki
+				if (pieceObject.getColor() == PieceColor.BLACK && newY == 7) {
+					gameData.transformToQueen(newX, newY);
+				}
+				actualPlayer = player;
+				try {
+					PieceColor playerColor = rules.getPieceColor(player);
+					if(rules.playerLost(playerColor)) {
+						gameState = GameState.LOST;
+					}
+					if(rules.playerWin(playerColor)) {
+						gameState = GameState.WIN;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+			break;
+		case QUEEN_DIAGONAL:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				actualPlayer = player;
+				try {
+					PieceColor playerColor = rules.getPieceColor(player);
+					if(rules.playerLost(playerColor)) {
+						gameState = GameState.LOST;
+					}
+					if(rules.playerWin(playerColor)) {
+						gameState = GameState.WIN;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+			} catch (InvalidMoveException ex) {
+				System.out.println("Niaprawidlowy ruch");
+			}
+			break;
+		case QUEEN_CAPTURE:
+			try {
+				gameData.movePieceObject(oldX, oldY, newX, newY);
+				gameData.deleteCapturedPiece(oldX, oldY, newX, newY);
+				actualPlayer = player;
+				try {
+					PieceColor playerColor = rules.getPieceColor(player);
+					if(rules.playerLost(playerColor)) {
+						gameState = GameState.LOST;
+					}
+					if(rules.playerWin(playerColor)) {
+						gameState = GameState.WIN;
+					}
+				} catch (InvalidPlayerException ex) {
+					System.out.println(ex.getMessage());
+				}
+
+			} catch (InvalidMoveException ex) {
+				System.out.println(ex.getMessage());
+			}
+			break;
+		default:
+			break;
+
+		}
+	}
 	
 	/**
 	 * Method inserting new game into data base

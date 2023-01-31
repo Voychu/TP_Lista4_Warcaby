@@ -1,7 +1,10 @@
 package com.example.warcabydobre.controller;
 
+import java.util.LinkedList;
+
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.ModelMove;
+import com.example.warcabydobre.model.PieceObject;
 import com.example.warcabydobre.view.PieceColor;
 
 /**
@@ -58,5 +61,13 @@ public interface GameRules {
 	 * @return true if the player lost 
 	 */
 	boolean playerLost(PieceColor color);
+	/**
+	 * method returning list of all possibles moves
+	 * of passed piece
+	 * @param piece passed piece object
+	 * @return list of all possibles
+	 * piece's moves
+	 */
+	public LinkedList<ModelMove> possibleMoves(PieceObject piece);
 
 }

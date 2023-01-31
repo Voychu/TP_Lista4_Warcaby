@@ -5,36 +5,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
+import com.example.warcabydobre.bot.controller.BotController;
+import com.example.warcabydobre.bot.model.GameData;
 import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.controller.GameState;
 import com.example.warcabydobre.model.BoardModel;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.utils.Config;
-import com.example.warcabydobre.view.BlackSquare;
-import com.example.warcabydobre.view.CheckersGame;
-import com.example.warcabydobre.view.GraphicalPiece;
-import com.example.warcabydobre.view.GraphicalQueenPiece;
-import com.example.warcabydobre.view.PieceColor;
-import com.example.warcabydobre.view.Square;
-import com.example.warcabydobre.view.WhiteSquare;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.application.Application.Parameters;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class CheckersGameBot implements Runnable{
 
@@ -42,11 +21,6 @@ public class CheckersGameBot implements Runnable{
 	private int gameId;
 	
 	
-	/** The stage with the game's board. */
-	private Stage boardStage;
-	
-	//TODO: Extending project to other game types.
-	// private Stage choosingGameStage;
 	
 	/** The Constant storing 
 	 * the number of columns. */
@@ -62,14 +36,7 @@ public class CheckersGameBot implements Runnable{
 	 * the number of rows with pieces. */
 	private static final int numRowsWithPieces 
 		= Config.CLASSICAL_CHECKERS_ROWS_WITH_PIECES;
-	
-	
-	
-	/** The label displaying whose is turn. */
-	private Label turnLabel;
-	
-	
-	private Alert endingGameAlert;
+
 	
 
 
@@ -79,44 +46,29 @@ public class CheckersGameBot implements Runnable{
 	
 	/** The controller of player
 	 * playing from this window. */
-	private GameController controller;
+	private BotController controller;
 	
 	/** The model of the game of player
 	 * playing from this windows. */
-	private BoardModel boardModel;
+	private GameData gameData;
 	
-	/** The array of graphical pieces
-	 * moving on the board. */
-	private GraphicalPiece[][] piecesArray;
-	
-	/** The group of fields in
-	 * the board. */
-	private Group squaresGroup;
-	
-	/** The group of graphical pieces
-	 * moving on the board. */
-	private Group piecesGroup;
 	
 	/** The proxy to the server. */
 	private ServerHandler serverHandler;
 	
-	/** The array of fields
-	 * in the board. */
-	private Square[][] board 
-		= new Square[Config.CLASSICAL_CHECKERS_BOARD_WIDTH][Config.CLASSICAL_CHECKERS_BOARD_HEIGHT];
 	
 	/**
 	 * The number of possible types
 	 * of checkers game.
 	 */
-	private final static int numOfTypes = 1;
+	private final static int numOfTypes = 3;
 
 	/**
 	 * The array of possible types 
 	 * of checkers game.
 	 */
 	private final static String[] gameTypesArray =
-		{"classic", "second"};
+		{"classic", "second", "anti"};
 	
 	
 	/**
@@ -197,8 +149,9 @@ public class CheckersGameBot implements Runnable{
 		controller.insertNewGameIntoDataBase(iPlayer);
 		while (true) {
 			synchronized (this) {
-				int actualPlayer = controller.getPlayer();
+				int actualPlayer = controller.getActualPlayer();
 				if (actualPlayer == iPlayer) {
+					controller.drawMove();
 					try {
 						wait(10);
 					} catch (InterruptedException e) {
@@ -206,46 +159,19 @@ public class CheckersGameBot implements Runnable{
 				}
 				int showing = controller.getShowing();
 				if(controller.getGameState() == GameState.WIN) {
-					System.out.println("Gracz wygral");
-					Platform.runLater(() -> {
-						endingGameAlert.setTitle("Koniec gry");
-						endingGameAlert.setHeaderText("Koniec gry");
-						endingGameAlert.setContentText("Wygrales!");
-						endingGameAlert.initModality(Modality.APPLICATION_MODAL);
-						endingGameAlert.setOnCloseRequest(event ->{
-							serverHandler.sendMessage("bye");
-	                    	System.exit(0);
-						});
-						Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
-	                    if(clickedButton.get() == ButtonType.OK){
-	                    	serverHandler.sendMessage("bye");
-	                    	System.exit(0);
-	                    }
-					});
+					System.out.println("Bot wygral");
+					serverHandler.sendMessage("bye");
+                	System.exit(0);
 				}
 				if (showing == Config.ACTIVE) {
 					controller.makeEnemyMove();
-					System.out.println(boardModel);
+					System.out.println(gameData);
 					showing = Config.NONACTIVE;
 					controller.setShowing(showing);
 					if(controller.getGameState() == GameState.LOST) {
-						System.out.println("Gracz przegral");
-						Platform.runLater(() -> {
-							endingGameAlert.setTitle("Koniec gry");
-							endingGameAlert.setHeaderText("Koniec gry");
-							endingGameAlert.setContentText("Przegrales");
-							endingGameAlert.initModality(Modality.APPLICATION_MODAL);
-							endingGameAlert.setOnCloseRequest(event ->{
-								serverHandler.sendMessage("bye");
-		                    	System.exit(0);
-							});
-							Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
-		                    if(clickedButton.get() == ButtonType.OK){
-		                    	serverHandler.sendMessage("bye");
-		                    	System.exit(0);
-		                    }
-						});
-						
+						System.out.println("Bot przegral");
+						serverHandler.sendMessage("bye");
+                    	System.exit(0);
 					}
 				}
 				notifyAll();
@@ -262,12 +188,12 @@ public class CheckersGameBot implements Runnable{
 	 * from this window
 	 */
 	private void initMVC(int player) {
-		this.boardModel = new BoardModel(player);
+		this.gameData = new GameData(player);
 		System.out.println(player);
-		String boardString = boardModel.toString();
+		String boardString = gameData.toString();
 		System.out.println(boardString);
-		controller = new GameController(this.boardModel, piecesArray, board, serverHandler, 
-				turnLabel, piecesGroup, this.getGameType());
+		controller = new BotController(this.gameData, serverHandler, 
+				this.getGameType());
 		controller.setPlayer(player);
 		controller.setActualPlayer(Config.PLAYER1);
 	}
@@ -304,17 +230,6 @@ public class CheckersGameBot implements Runnable{
 	 * when it occurs an error.
 	 */
 	public CheckersGameBot(int gameType) throws Exception {
-//		Parameters parameters = getParameters();
-//		String gameTypeId = parameters.getNamed().get("gameType");
-//		String gameTypeId = args[0];
-//		try {
-//			int typeId = Integer.parseInt(gameTypeId);
-//			System.out.println(gameTypeId);
-//			this.gameId = typeId;
-//		}
-//		catch(NumberFormatException ex) {
-//			System.out.println(ex.getMessage());
-//		}
 		this.gameId = gameType;
 		initServerHandler();
 		
@@ -342,27 +257,6 @@ public class CheckersGameBot implements Runnable{
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		
-//		Application.launch(CheckersGame.class,
-//				"--gameType=" + args[0]);
-		//Parameters parameters = getParameters(args[0]);
-		//String gameTypeId = parameters.getNamed().get("gameType");
-//		String gameTypeId = args[0];
-//		try {
-//			int typeId = Integer.parseInt(gameTypeId);
-//			System.out.println(gameTypeId);
-//			this.gameId = typeId;
-//		}
-//		catch(NumberFormatException ex) {
-//			System.out.println(ex.getMessage());
-//		}
-//		initServerHandler();
-//		
-//		
-//		initBoardStage();
-//		int player = receiveInitFromServer();
-//		initMVC(player);
-//		startThread();
 	}
 
 }

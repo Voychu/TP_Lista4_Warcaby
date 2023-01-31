@@ -260,6 +260,7 @@ public class SecondCheckersRules implements GameRules {
 	 * @param piece passed piece object
 	 * @return list of all possibles piece's moves
 	 */
+	@Override
 	public LinkedList<ModelMove> possibleMoves(PieceObject piece) {
 		int oldX = piece.getX();
 		int oldY = piece.getY();

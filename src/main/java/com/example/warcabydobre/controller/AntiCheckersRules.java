@@ -274,6 +274,7 @@ public class AntiCheckersRules implements GameRules{
 	 * @return list of all possibles
 	 * piece's moves
 	 */
+	@Override
 	public LinkedList<ModelMove> possibleMoves(PieceObject piece) {
 		int oldX = piece.getX();
 		int oldY = piece.getY();

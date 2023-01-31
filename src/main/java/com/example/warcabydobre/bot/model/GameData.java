@@ -1,13 +1,9 @@
 package com.example.warcabydobre.bot.model;
 
-import java.util.LinkedList;
 
-import com.example.warcabydobre.controller.GameController;
 import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.model.NotDiagonalException;
 import com.example.warcabydobre.model.PieceObject;
-import com.example.warcabydobre.model.BoardModel.Listener;
-import com.example.warcabydobre.model.BoardModel.PieceListener;
 import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.PieceColor;
 
