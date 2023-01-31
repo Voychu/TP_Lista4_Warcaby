@@ -374,7 +374,7 @@ public class CheckersGame extends Application implements Runnable {
 		controller.insertNewGameIntoDataBase(iPlayer);
 		while (true) {
 			synchronized (this) {
-				int actualPlayer = controller.getPlayer();
+				int actualPlayer = controller.getActualPlayer();
 				if (actualPlayer == iPlayer) {
 					try {
 						wait(10);
