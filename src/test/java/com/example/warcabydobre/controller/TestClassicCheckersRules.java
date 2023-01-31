@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.example.warcabydobre.controller.ClassicCheckersRules;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
@@ -109,6 +110,7 @@ public class TestClassicCheckersRules {
          
          
          assertTrue(!classicCheckersRules.canPlayerMove(PieceColor.BLACK));
+         assertTrue(classicCheckersRules.canPlayerMove(PieceColor.WHITE));
      }
      @Test
     public void IsQueenDiagonalMoveTest(){
@@ -119,5 +121,58 @@ public class TestClassicCheckersRules {
          assertFalse(classicCheckersRules.isQueenDiagonalMove(2,1,6,7));
     }
 
+    @Test
+    public void isCaptureMoveTest() throws InvalidMoveException {
+        BoardModel boardModel = new BoardModel(1);
+        ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+        assertFalse(classicCheckersRules.isCaptureMove(1,2,3,4));
+        assertFalse(classicCheckersRules.isCaptureMove(1,2,-1,4));
+
+        boardModel.movePieceObject(4,5,2,3);
+        assertTrue(classicCheckersRules.isCaptureMove(1,2,3,4));
+        boardModel.deletePieceObject(1,2);
+        assertFalse(classicCheckersRules.isCaptureMove(1,2,3,4));
+
+        assertFalse(classicCheckersRules.isCaptureMove(7,2,6,4));
+
+        PieceObject[][] pieceObjects = boardModel.getPiecesArray();
+        pieceObjects[7][2].setQueen(true);
+        assertFalse(classicCheckersRules.isCaptureMove(7,2,2,7));
+        boardModel.deletePieceObject(2,7);
+        assertTrue(classicCheckersRules.isCaptureMove(7,2,2,7));
+
+        pieceObjects[6][1].setQueen(true);
+        boardModel.deletePieceObject(1,6);
+        assertFalse(classicCheckersRules.isCaptureMove(6,1,1,6));
+    }
+
+    @Test
+    public void PossibleMovesTest() throws InvalidMoveException {
+        BoardModel boardModel = new BoardModel(1);
+        ClassicCheckersRules classicCheckersRules = new ClassicCheckersRules(boardModel);
+        PieceObject[][] pieceObjects = boardModel.getPiecesArray();
+        LinkedList<ModelMove> modelMoves = classicCheckersRules.possibleMoves(pieceObjects[1][2]);
+        System.out.println(modelMoves);
+        assertEquals(modelMoves.size(),2);
+        assertEquals(modelMoves.get(0).getMovementType(),MovementTypes.FORWARD);
+
+        boardModel.movePieceObject(4,5,2,3);
+        modelMoves = classicCheckersRules.possibleMoves(pieceObjects[1][2]);
+        System.out.println(modelMoves);
+        assertEquals(modelMoves.size(),1);
+        assertEquals(modelMoves.getFirst().getMovementType(),MovementTypes.SINGLE_CAPTURE);
+
+        boardModel.movePieceObject(2,3,4,5);
+        pieceObjects[1][2].setQueen(true);
+        modelMoves = classicCheckersRules.possibleMoves(pieceObjects[1][2]);
+        System.out.println(modelMoves);
+        assertEquals(modelMoves.size(),3);
+        assertEquals(modelMoves.getFirst().getMovementType(),MovementTypes.QUEEN_DIAGONAL);
+
+        boardModel.movePieceObject(4,5,3,4);
+        modelMoves = classicCheckersRules.possibleMoves(pieceObjects[1][2]);
+        assertEquals(modelMoves.size(),1);
+        assertEquals(modelMoves.getFirst().getMovementType(),MovementTypes.QUEEN_CAPTURE);
+    }
 
 }
