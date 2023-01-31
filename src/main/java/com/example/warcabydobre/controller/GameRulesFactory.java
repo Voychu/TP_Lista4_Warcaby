@@ -1,5 +1,7 @@
 package com.example.warcabydobre.controller;
 
+import com.example.warcabydobre.bot.controller.BotClassicCheckersRules;
+import com.example.warcabydobre.bot.model.GameData;
 import com.example.warcabydobre.model.BoardModel;
 
 /**
@@ -16,7 +18,7 @@ public class GameRulesFactory  {
 	 * @param boardModel model of the game
 	 * @return rules of game object
 	 */
-	GameRules getGameRules(String gameType, BoardModel boardModel) {
+	public GameRules getGameRules(String gameType, BoardModel boardModel) {
 		if(gameType.equalsIgnoreCase("classic")){
             return new ClassicCheckersRules(boardModel);
         }
@@ -26,6 +28,28 @@ public class GameRulesFactory  {
 		if(gameType.equalsIgnoreCase("anti")){
             return new AntiCheckersRules(boardModel);
         } 
+
+		else return null;
+	}
+	
+	
+	/**
+	 * Method using for getting object of type GameRules
+	 * @param gameType String string representing
+	 * type of the checkers' game
+	 * @param boardModel model of the game
+	 * @return rules of game object
+	 */
+	public GameRules getGameRules(String gameType, GameData gameData) {
+		if(gameType.equalsIgnoreCase("classic")){
+            return new BotClassicCheckersRules(gameData);
+        }
+//		if(gameType.equalsIgnoreCase("second")){
+//            return new SecondCheckersRules(boardModel);
+//        } 
+//		if(gameType.equalsIgnoreCase("anti")){
+//            return new AntiCheckersRules(boardModel);
+//        } 
 
 		else return null;
 	}
