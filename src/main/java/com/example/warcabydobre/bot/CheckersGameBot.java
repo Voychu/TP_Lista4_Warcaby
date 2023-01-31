@@ -146,10 +146,20 @@ public class CheckersGameBot implements Runnable{
 	 * playing from this windows.
 	 */
 	void f(int iPlayer) {
-		controller.insertNewGameIntoDataBase(iPlayer);
+		//controller.insertNewGameIntoDataBase(iPlayer);
 		while (true) {
 			synchronized (this) {
 				int actualPlayer = controller.getActualPlayer();
+				if(controller.getGameState() == GameState.WIN) {
+					System.out.println("Bot wygral");
+					serverHandler.sendMessage("bye");
+                	System.exit(0);
+				}
+				if(controller.getGameState() == GameState.LOST) {
+					System.out.println("Bot przegral");
+					serverHandler.sendMessage("bye");
+                	System.exit(0);
+				}
 				if (actualPlayer == iPlayer) {
 					controller.drawMove();
 					try {
