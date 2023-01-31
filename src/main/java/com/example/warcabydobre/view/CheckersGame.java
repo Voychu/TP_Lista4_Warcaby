@@ -375,6 +375,43 @@ public class CheckersGame extends Application implements Runnable {
 		while (true) {
 			synchronized (this) {
 				int actualPlayer = controller.getActualPlayer();
+				if(controller.getGameState() == GameState.WIN) {
+					System.out.println("Gracz wygral");
+					Platform.runLater(() -> {
+						endingGameAlert.setTitle("Koniec gry");
+						endingGameAlert.setHeaderText("Koniec gry");
+						endingGameAlert.setContentText("Wygrales!");
+						endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+						endingGameAlert.setOnCloseRequest(event ->{
+							serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+						});
+						Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
+	                    if(clickedButton.get() == ButtonType.OK){
+	                    	serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+	                    }
+					});
+				}
+				if(controller.getGameState() == GameState.LOST) {
+					System.out.println("Gracz przegral");
+					Platform.runLater(() -> {
+						endingGameAlert.setTitle("Koniec gry");
+						endingGameAlert.setHeaderText("Koniec gry");
+						endingGameAlert.setContentText("Przegrales");
+						endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+						endingGameAlert.setOnCloseRequest(event ->{
+							serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+						});
+						Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
+	                    if(clickedButton.get() == ButtonType.OK){
+	                    	serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+	                    }
+					});
+					
+				}
 				if (actualPlayer == iPlayer) {
 					try {
 						wait(10);
@@ -399,6 +436,25 @@ public class CheckersGame extends Application implements Runnable {
 	                    	System.exit(0);
 	                    }
 					});
+				}
+				if(controller.getGameState() == GameState.LOST) {
+					System.out.println("Gracz przegral");
+					Platform.runLater(() -> {
+						endingGameAlert.setTitle("Koniec gry");
+						endingGameAlert.setHeaderText("Koniec gry");
+						endingGameAlert.setContentText("Przegrales");
+						endingGameAlert.initModality(Modality.APPLICATION_MODAL);
+						endingGameAlert.setOnCloseRequest(event ->{
+							serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+						});
+						Optional<ButtonType> clickedButton  = endingGameAlert.showAndWait();
+	                    if(clickedButton.get() == ButtonType.OK){
+	                    	serverHandler.sendMessage("bye");
+	                    	System.exit(0);
+	                    }
+					});
+					
 				}
 				if (showing == Config.ACTIVE) {
 					controller.makeEnemyMove();
