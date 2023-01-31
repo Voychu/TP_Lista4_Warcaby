@@ -260,7 +260,8 @@ public class BotController {
 			for(int x = 0; x<numCols; x++) {
 				PieceObject currPiece = gameData.getPiecesArray()[x][y];
 				try {
-					if(gameData.isOccupied(x, y) && currPiece.getColor() == rules.getPieceColor(player)) {
+					if(gameData.isOccupied(x, y) && currPiece.getColor() == rules.getPieceColor(player)
+							&& !rules.possibleMoves(currPiece).isEmpty()) {
 						piecesList.add(currPiece);
 					}
 				} catch (InvalidPlayerException ex) {
