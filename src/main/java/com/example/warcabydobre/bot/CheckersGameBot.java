@@ -14,7 +14,10 @@ import com.example.warcabydobre.model.InvalidMoveException;
 import com.example.warcabydobre.srvhandler.ServerHandler;
 import com.example.warcabydobre.utils.Config;
 
-
+/**
+ * Class of Checkers Game Bot
+ *
+ */
 public class CheckersGameBot implements Runnable{
 
 	/** Flag representing gameType. */
@@ -231,11 +234,11 @@ public class CheckersGameBot implements Runnable{
 
 
 	/**
-	 * Method of class CheckersGame initializing 
-	 * window of the application.
+	 * Method of class CheckersGameBot initializing 
+	 * bot object
 	 *
-	 * @param arg0 the top level 
-	 * container of this application
+	 * @param gameType type of the game
+	 * in which bot is playing
 	 * @throws Exception the exception thrown
 	 * when it occurs an error.
 	 */
@@ -250,7 +253,7 @@ public class CheckersGameBot implements Runnable{
 	}
 
 	/**
-	 * The main method testing CheckersGame class.
+	 * The main method testing CheckersGameBot class.
 	 *
 	 * @param args the arguments with which 
 	 * the program has been invoked.

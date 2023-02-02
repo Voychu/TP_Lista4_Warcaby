@@ -8,12 +8,16 @@ import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.PieceColor;
 
 
+/**
+ * The Class GameData. It is model of the game.
+ * It stores current pieces' positions and properties.
+ */
 public class GameData {
 
-	/** The Constant numCols number of columns in board*/
+	/** The Constant numCols number of columns on the board*/
 	private static final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
 	
-	/** The Constant numRows number of rows in board*/
+	/** The Constant numRows number of rows on the board*/
 	private static final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
     
     /** The Constant numRowsWithPieces. 

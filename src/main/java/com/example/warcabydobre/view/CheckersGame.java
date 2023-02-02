@@ -42,8 +42,6 @@ public class CheckersGame extends Application implements Runnable {
 	/** The stage with the game's board. */
 	private Stage boardStage;
 	
-	//TODO: Extending project to other game types.
-	// private Stage choosingGameStage;
 	
 	/** The Constant storing 
 	 * the number of columns. */
@@ -129,45 +127,6 @@ public class CheckersGame extends Application implements Runnable {
 	
 	
 	
-	//TODO: Extending project to other game types.
-	/*
-	 * private void initchoosingGameStage() { choosingGameStage = new Stage();
-	 * 
-	 * choosingGameStage.setTitle(Config.APPLICATION_TITLE_TXT); VBox vBox = new
-	 * VBox(); Label classicalCheckersLabel = new
-	 * Label(Config.CLASSICAL_CHECKERS_LABEL_TXT); double size1 =
-	 * classicalCheckersLabel.getMaxWidth(); Label secondCheckersLabel = new
-	 * Label(Config.SECOND_CHECKERS_LABEL_TXT); double size2 =
-	 * secondCheckersLabel.getPrefWidth(); HBox labelsHBox = new
-	 * HBox(classicalCheckersLabel, secondCheckersLabel);
-	 * labelsHBox.setAlignment(Pos.CENTER); labelsHBox.setSpacing(Config.GAP);
-	 * Button classicalCheckersButton = new
-	 * Button(Config.CLASSICAL_CHECKERS_BUTTON_TXT);
-	 * classicalCheckersButton.setPrefWidth(size1); Button secondCheckersButton =
-	 * new Button(Config.SECOND_CHECKERS_BUTTON_TXT);
-	 * secondCheckersButton.setPrefWidth(size2); HBox buttonsHBox = new
-	 * HBox(classicalCheckersButton, secondCheckersButton);
-	 * buttonsHBox.setAlignment(Pos.CENTER); buttonsHBox.setSpacing(Config.GAP);
-	 * vBox.getChildren().addAll(labelsHBox, buttonsHBox);
-	 * vBox.setAlignment(Pos.CENTER); vBox.setSpacing(Config.GAP);
-	 * choosingGameStage.setResizable(true); Scene windowScene = new Scene(vBox,
-	 * Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
-	 * choosingGameStage.setScene(windowScene); choosingGameStage.show();
-	 * 
-	 * 
-	 * 
-	 * 
-	 * EventHandler<ActionEvent> eventHandler_classicalcheckers = new
-	 * EventHandler<ActionEvent>() { public void handle(ActionEvent event) {
-	 * listenSocket(); //receiveInitFromServer(); //startThread();
-	 * 
-	 * initBoardStage();
-	 * 
-	 * 
-	 * 
-	 * 
-	 * } }; classicalCheckersButton.setOnAction(eventHandler_classicalcheckers); }
-	 */
 
 	/**
 	 * Method initializing window with the board.

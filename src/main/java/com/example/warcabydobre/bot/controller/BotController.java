@@ -21,11 +21,21 @@ import com.example.warcabydobre.utils.Config;
 import com.example.warcabydobre.view.GraphicalPiece;
 import com.example.warcabydobre.view.PieceColor;
 
-
+/**
+ * Class of controller. MVC design pattern. 
+ * It is responsible for
+ * controlling bot. It delegates performing 
+ * actions on the basis of drawn move.
+ * @author Jan Poreba
+ */
 public class BotController {
-
+	/**
+	 * The Constant numCols number of columns on the board
+	 */
 	private final int numCols = Config.CLASSICAL_CHECKERS_BOARD_WIDTH;
-	
+	/**
+	 * The Constant numRows number of rows on the board
+	 */
 	private final int numRows = Config.CLASSICAL_CHECKERS_BOARD_HEIGHT;
 	/** The message sending from one player
 	 * to the other one through the server. */
@@ -80,7 +90,7 @@ public class BotController {
 	private GameState gameState;
 
 	/**
-	 * Constructor of GameController
+	 * Constructor of BotController
 	 *
 	 * @param gameData model storing data of the game
 	 * @param graphicalPiecesArray array of the graphicalPieces 
@@ -241,17 +251,8 @@ public class BotController {
 	}
 
 	/**
-	 * Method performing actions based on player's
-	 * move. It delegates checking whether
-	 * the move was correct and 
-	 * aborts move or delegates operations
-	 * based on player's move to the bordModel.
-	 *
-	 * @param graphicalPiece graphical piece which has moved
-	 * @param event event which has happened on the
-	 * graphical board.
-	 * @throws InvalidMoveException the exception thrown
-	 * when the move is incorrect.
+	 * Method drawing move and sending
+	 * it to other player
 	 */
 	public void drawMove() {
 		LinkedList<PieceObject> piecesList = 
